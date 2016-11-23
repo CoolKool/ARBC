@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pic_view_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100">
+
+        <ImageView
+            android:id="@+id/imageViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_view_title_testreport" />
+
+        <ImageView
+            android:id="@+id/imageViewTester"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageViewTitle"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="40dp"
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_view_tester" />
+
+        <TextView
+            android:id="@+id/textViewTester"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageViewTester"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/imageViewTester"
+            android:layout_toStartOf="@id/imageViewTitle"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            tools:text="测试员：张三" />
+
+        <ImageButton
+            android:id="@+id/imageButtonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="5dp"
+            android:background="@color/colorTransparent"
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_button_cancel" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="600"
+        android:paddingEnd="40dp"
+        android:paddingStart="40dp">
+
+        <Button
+            android:id="@+id/buttonHandIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorGreen"
+            android:paddingEnd="80dp"
+            android:paddingStart="80dp"
+            android:text="@string/hand_in"
+            android:textColor="@color/colorWhite"
+            android:textSize="25sp" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFormTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorDarkBlue"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="100"
+                android:gravity="center"
+                android:text="@string/serial_number"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="200"
+                android:gravity="center"
+                android:text="@string/test_item"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="200"
+                android:gravity="center"
+                android:text="@string/manage"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="800"
+                android:gravity="center"
+                android:text="@string/explain_of_breakdown"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <ScrollView
+            style="@android:style/Widget.Material.Light.ScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/linearLayoutFormTitle"
+            android:layout_above="@id/buttonHandIn"
+            android:layout_marginBottom="30dp"
+            android:scrollbarStyle="insideOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+                <!-- there are all the test items -->
+
+                <!-- 1主箱电机 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/main_box_electromotor_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_1"
+                        android:labelFor="@id/editTextExplain_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 2背部箱电机 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/back_box_electromotor_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_2"
+                        android:labelFor="@id/editTextExplain_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 3前左加热板 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num3"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/heat_board_test_fl"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_3"
+                        android:labelFor="@id/editTextExplain_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 4前右加热板 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num4"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/heat_board_test_fr"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_4"
+                        android:labelFor="@id/editTextExplain_4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 5后左加热板 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num5"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/heat_board_test_bl"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_5"
+                        android:labelFor="@id/editTextExplain_5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 6后右加热板 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num6"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/heat_board_test_br"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_6"
+                        android:labelFor="@id/editTextExplain_6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 7前左艾草箱点燃 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num7"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/raw_box_ignite_test_fl"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_7"
+                        android:labelFor="@id/editTextExplain_7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 8前右艾草箱点燃 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num8"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/raw_box_ignite_test_fr"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_8"
+                        android:labelFor="@id/editTextExplain_8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 9后左艾草箱点燃 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num9"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/raw_box_ignite_test_bl"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_9"
+                        android:labelFor="@id/editTextExplain_9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 10后右艾草箱点燃 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num10"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/raw_box_ignite_test_br"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_10"
+                        android:labelFor="@id/editTextExplain_10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 11水泵 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num11"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/pump_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_11"
+                        android:labelFor="@id/editTextExplain_11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 12风扇 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorHalfTransparent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num12"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/fan_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_12"
+                        android:labelFor="@id/editTextExplain_12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 13温度传感器 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num13"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/temperature_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_13"
+                        android:labelFor="@id/editTextExplain_13"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 14湿度传感器 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:gravity="center"
+                        android:text="@string/num14"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:text="@string/humidity_test"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="200"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonGood_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/state_good"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonBad_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/state_bad"
+                            android:textSize="15sp"
+                            android:textColor="@color/colorBlack"/>
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/editTextExplain_14"
+                        android:labelFor="@id/editTextExplain_14"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="800"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="68"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copyright"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

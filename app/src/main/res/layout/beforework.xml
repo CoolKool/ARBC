@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/pic_view_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/pic_view_title_start"
+            android:contentDescription="@string/nothing"/>
+
+        <ImageButton
+            android:id="@+id/imageButtonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/pic_button_cancel"
+            android:contentDescription="@string/nothing"
+            android:background="@color/colorTransparent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="600">
+
+        <TextView
+            android:id="@+id/textViewRawNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/raw_num"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"/>
+
+        <Spinner
+            android:id="@+id/spinnerRawNum"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewRawNum"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:padding="10dp"
+            android:background="@color/colorHalfTransparent"/>
+
+        <TextView
+            android:id="@+id/textViewHeatBoardSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/textViewRawNum"
+            android:layout_below="@id/textViewRawNum"
+            android:layout_marginTop="50dp"
+            android:text="@string/heat_board_switch"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxHeatBoardSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewHeatBoardSwitch"
+            android:layout_alignBottom="@id/textViewHeatBoardSwitch"
+            android:layout_marginStart="25dp"
+            android:checked="true"
+            android:button="@drawable/checkbox"
+            android:text="@string/open_all"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHeatFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/spinnerRawNum"
+            android:layout_below="@id/textViewHeatBoardSwitch"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonHeatFL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/front_left"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHeatFR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutHeatFL"
+            android:layout_below="@id/textViewHeatBoardSwitch"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutHeatFL"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonHeatFR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="90"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/front_right"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHeatBL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutHeatFL"
+            android:layout_below="@id/textViewHeatBoardSwitch"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutHeatFR"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonHeatBL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="-90"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back_left"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHeatBR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutHeatFL"
+            android:layout_below="@id/textViewHeatBoardSwitch"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutHeatBL"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonHeatBR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="180"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back_right"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewRawBoxIgnite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/textViewRawNum"
+            android:layout_below="@id/textViewHeatBoardSwitch"
+            android:layout_marginTop="150dp"
+            android:text="@string/raw_box_ignite"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite" />
+
+        <CheckBox
+            android:id="@+id/checkBoxRawBoxIgnite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/textViewRawBoxIgnite"
+            android:layout_toEndOf="@id/textViewRawBoxIgnite"
+            android:layout_alignStart="@id/checkBoxHeatBoardSwitch"
+            android:checked="true"
+            android:button="@drawable/checkbox"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/open_all"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutIgniteFL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/spinnerRawNum"
+            android:layout_below="@id/textViewRawBoxIgnite"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonIgniteFL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/front_left"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutIgniteFR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutIgniteFL"
+            android:layout_below="@id/textViewRawBoxIgnite"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutIgniteFL"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonIgniteFR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="90"
+                android:contentDescription="@string/nothing"
+                android:background="@color/colorTransparent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/front_right"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutIgniteBL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutIgniteFL"
+            android:layout_below="@id/textViewRawBoxIgnite"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutIgniteFR"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonIgniteBL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="-90"
+                android:background="@color/colorTransparent"
+                android:contentDescription="@string/nothing" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back_left"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutIgniteBR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/linearLayoutIgniteFL"
+            android:layout_below="@id/textViewRawBoxIgnite"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/linearLayoutIgniteBL"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageButton
+                android:id="@+id/imageButtonIgniteBR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/pic_button_leftup"
+                android:rotation="180"
+                android:background="@color/colorTransparent"
+                android:contentDescription="@string/nothing" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back_right"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/textViewRawNum"
+            android:layout_below="@id/textViewRawBoxIgnite"
+            android:layout_marginTop="150dp"
+            android:text="@string/user"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"/>
+
+        <EditText
+            android:id="@+id/editTextUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewUser"
+            android:layout_alignBottom="@id/textViewUser"
+            android:layout_alignStart="@id/spinnerRawNum"
+            android:layout_alignEnd="@id/linearLayoutIgniteBR"
+            android:background="@color/colorHalfTransparent"
+            android:hint="@string/guest"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            android:inputType="number"
+            android:padding="10dp"
+            android:lines="1"
+            android:maxWidth="280dp"
+            android:labelFor="@id/editTextUser"/>
+<!--
+        <ImageButton
+            android:id="@+id/imageButtonAddUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/editTextUser"
+            android:layout_alignBottom="@id/editTextUser"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/pic_button_adduser"
+            android:contentDescription="@string/nothing"
+            android:background="@color/colorTransparent"/>
+-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextUser"
+            android:layout_alignStart="@id/editTextUser"
+            android:layout_marginTop="10dp"
+            android:text="@string/id_or_phonenumber"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"/>
+
+        <Button
+            android:id="@+id/buttonOpen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/open"
+            android:textSize="25sp"
+            android:paddingStart="100dp"
+            android:paddingEnd="100dp"
+            android:background="@color/colorGreen" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="68"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copyright"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+</LinearLayout>
