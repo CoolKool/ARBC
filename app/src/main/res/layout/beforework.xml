@@ -355,8 +355,8 @@
             android:textSize="20sp"
             android:textColor="@color/colorWhite"/>
 
-        <EditText
-            android:id="@+id/editTextUser"
+        <AutoCompleteTextView
+            android:id="@+id/AutoCompleteTextViewCustomer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/textViewUser"
@@ -371,7 +371,7 @@
             android:padding="10dp"
             android:lines="1"
             android:maxWidth="280dp"
-            android:labelFor="@id/editTextUser"/>
+            android:labelFor="@id/AutoCompleteTextViewCustomer"/>
 <!--
         <ImageButton
             android:id="@+id/imageButtonAddUser"
@@ -387,8 +387,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editTextUser"
-            android:layout_alignStart="@id/editTextUser"
+            android:layout_below="@id/AutoCompleteTextViewCustomer"
+            android:layout_alignStart="@id/AutoCompleteTextViewCustomer"
             android:layout_marginTop="10dp"
             android:text="@string/id_or_phonenumber"
             android:textSize="15sp"

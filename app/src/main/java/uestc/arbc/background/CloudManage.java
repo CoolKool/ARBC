@@ -496,4 +496,20 @@ public class CloudManage {
 
         upload(jsonObject);
     }
+
+    public JSONObject getCustomers (int id) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            //TODO 获取客户的的指令
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_MatchCustomer");
+            data.put("id",id);
+            jsonObject.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
 }

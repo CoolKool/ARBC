@@ -42,9 +42,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 case ManageApplication.MESSAGE_TIME:
                     textViewTime.setText(msg.obj.toString());
                     break;
-                case ManageApplication.MESSAGE_NETWORK_BAD:
-                    Toast.makeText(WorkMainActivity.this,getString(R.string.message_network_not_available),Toast.LENGTH_SHORT).show();
-                    break;
                 case ManageApplication.MESSAGE_SERVER_CONNECTED:
                     if (null != dialogCloud) {
                         dialogCloud.dismiss();
@@ -121,7 +118,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         Log.i(TAG,"time init done");
 
         //关闭按钮
-        findViewById(R.id.imageButtonCancel).setOnClickListener(this);;
+        findViewById(R.id.imageButtonCancel).setOnClickListener(this);
 
         //暂停按钮
         findViewById(R.id.buttonPause).setOnClickListener(this);
