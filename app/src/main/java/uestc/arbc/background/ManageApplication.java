@@ -22,9 +22,9 @@ public class ManageApplication extends Application {
 
     public final static int MESSAGE_SERVER_CONNECTED = 4;//云端连接
     public final static int MESSAGE_SERVER_DISCONNECTED = 5;//云端断连
-    public final static int MESSAGE_MACHINE_CONNECTED = 6;//艾灸机连接
-    public final static int MESSAGE_MACHINE_DISCONNECTED = 7;//艾灸机断连
-    public final static int MESSAGE_MACHINE_STATE = 8;//艾炙机传感器数据
+    public final static int MESSAGE_DEVICE_CONNECTED = 6;//艾灸机连接
+    public final static int MESSAGE_DEVICE_DISCONNECTED = 7;//艾灸机断连
+    public final static int MESSAGE_DEVICE_STATE = 8;//艾炙机传感器数据
 
     //定义请求码和结果码，用于activity间startActivityForResult()
     public final static int REQUEST_CODE_DEVICE_SIGN = 1;

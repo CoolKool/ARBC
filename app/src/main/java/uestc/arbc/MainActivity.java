@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     private MyHandler handler = new MyHandler(TAG) {
 
         private boolean isServerConnected = false;
-        private boolean isMachineConnected = false;
+        private boolean isDeviceConnected = false;
 
         @Override
         public void handleMessage(Message msg) {
@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
                     if (!isServerConnected) {
                         textViewCloudConnect.setText(getString(R.string.cloud_connect_successful));
                         isServerConnected = true;
-                        if (isMachineConnected) {
+                        if (isDeviceConnected) {
                             buttonStart.setEnabled(true);
                         }
                     }
@@ -64,19 +64,19 @@ public class MainActivity extends Activity {
                         buttonStart.setEnabled(false);
                     }
                     break;
-                case ManageApplication.MESSAGE_MACHINE_CONNECTED:
-                    if (!isMachineConnected) {
+                case ManageApplication.MESSAGE_DEVICE_CONNECTED:
+                    if (!isDeviceConnected) {
                         textViewLocalConnect.setText(getString(R.string.local_connect_successful));
-                        isMachineConnected = true;
+                        isDeviceConnected = true;
                         if (isServerConnected) {
                             buttonStart.setEnabled(true);
                         }
                     }
                     break;
-                case ManageApplication.MESSAGE_MACHINE_DISCONNECTED:
-                    if (isMachineConnected) {
+                case ManageApplication.MESSAGE_DEVICE_DISCONNECTED:
+                    if (isDeviceConnected) {
                         textViewLocalConnect.setText(getString(R.string.local_connect_failed));
-                        isMachineConnected = false;
+                        isDeviceConnected = false;
                         buttonStart.setEnabled(false);
                         break;
                     }
@@ -102,9 +102,9 @@ public class MainActivity extends Activity {
                 if (null != data) {
                     Message msg = new Message();
                     if (data.getInt("boardConnect") == 0) {
-                        msg.what = ManageApplication.MESSAGE_MACHINE_CONNECTED;
+                        msg.what = ManageApplication.MESSAGE_DEVICE_CONNECTED;
                     } else {
-                        msg.what = ManageApplication.MESSAGE_MACHINE_DISCONNECTED;
+                        msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                     }
                     handler.sendMessage(msg);
 
@@ -296,10 +296,10 @@ public class MainActivity extends Activity {
                 break;
             case ManageApplication.RESULT_CODE_SUCCEED:
                 Message msg = new Message();
-                if (ManageApplication.getInstance().getCloudManage().isMachineConnected()) {
-                    msg.what = ManageApplication.MESSAGE_MACHINE_CONNECTED;
+                if (ManageApplication.getInstance().getCloudManage().isDeviceConnected()) {
+                    msg.what = ManageApplication.MESSAGE_DEVICE_CONNECTED;
                 } else {
-                    msg.what = ManageApplication.MESSAGE_MACHINE_DISCONNECTED;
+                    msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                 }
                 handler.sendMessage(msg);
                 break;

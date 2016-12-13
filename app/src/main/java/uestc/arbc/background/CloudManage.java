@@ -361,13 +361,13 @@ public class CloudManage {
 
                             if (require.equals("SERVER_MachineIsConnected")) {
                                 Message msg = new Message();
-                                msg.what = ManageApplication.MESSAGE_MACHINE_CONNECTED;
+                                msg.what = ManageApplication.MESSAGE_DEVICE_CONNECTED;
                                 ManageApplication.getInstance().sendMessage(msg);
                             }
 
                             if (require.equals("SERVER_MachineIsDisconnected")) {
                                 Message msg = new Message();
-                                msg.what = ManageApplication.MESSAGE_MACHINE_DISCONNECTED;
+                                msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                                 ManageApplication.getInstance().sendMessage(msg);
                             }
 
@@ -463,7 +463,7 @@ public class CloudManage {
     }
 
     //艾灸机是否在线
-    public boolean isMachineConnected() {
+    public boolean isDeviceConnected() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("token",deviceID);
@@ -487,7 +487,7 @@ public class CloudManage {
     }
 
     //获取艾灸机设备的传感器数据
-    public JSONObject getMachineState() {
+    public JSONObject getDeviceState() {
         JSONObject jsonObject = new JSONObject();
 
         try {

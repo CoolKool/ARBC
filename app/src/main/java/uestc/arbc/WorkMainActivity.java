@@ -8,7 +8,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +44,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 case ManageApplication.MESSAGE_SERVER_CONNECTED:
                     if (null != dialogCloud) {
                         dialogCloud.dismiss();
+                        dialogCloud = null;
                     }
                     break;
                 case ManageApplication.MESSAGE_SERVER_DISCONNECTED:
@@ -55,12 +55,13 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                             .setCancelable(false).create();
                     dialogCloud.show();
                     break;
-                case ManageApplication.MESSAGE_MACHINE_CONNECTED:
+                case ManageApplication.MESSAGE_DEVICE_CONNECTED:
                     if (null != dialogLocal) {
                         dialogLocal.dismiss();
+                        dialogLocal = null;
                     }
                     break;
-                case ManageApplication.MESSAGE_MACHINE_DISCONNECTED:
+                case ManageApplication.MESSAGE_DEVICE_DISCONNECTED:
                     dialogLocal = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
 
                             .setMessage("云端连接异常")//设置显示的内容
@@ -68,13 +69,13 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                             .setCancelable(false).create();
                     dialogLocal.show();
                     break;
-                case ManageApplication.MESSAGE_MACHINE_STATE:
+                case ManageApplication.MESSAGE_DEVICE_STATE:
                     JSONObject json = null;
                     try {
                         json =  new JSONObject(msg.obj.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.i(TAG,"MESSAGE_MACHINE_STATE json error");
+                        Log.i(TAG,"MESSAGE_DEVICE_STATE json error");
                     }
                     if (null != json) {
                         updateDeviceState(json);
@@ -154,10 +155,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         public void run() {
             JSONObject jsonObjectDeviceState;
             while (getDeviceState) {
-                jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getMachineState();
+                jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
                 if (null != jsonObjectDeviceState) {
                     Message message = new Message();
-                    message.what = ManageApplication.MESSAGE_MACHINE_STATE;
+                    message.what = ManageApplication.MESSAGE_DEVICE_STATE;
                     message.obj = jsonObjectDeviceState.toString();
                     handler.sendMessage(message);
                 }
