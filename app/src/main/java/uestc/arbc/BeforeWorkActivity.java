@@ -199,12 +199,12 @@ public class BeforeWorkActivity extends Activity {
     View.OnClickListener heatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == view.getTag()) {
+            if (1 == (int)view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxHeatBoardSwitch.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if (1 == imageButtonHeatFL.getTag() && 1 == imageButtonHeatFR.getTag() && 1 == imageButtonHeatBL.getTag() && 1 ==  imageButtonHeatBR.getTag()) {
+                if (1 == (int)imageButtonHeatFL.getTag() && 1 == (int)imageButtonHeatFR.getTag() && 1 == (int)imageButtonHeatBL.getTag() && 1 ==  (int)imageButtonHeatBR.getTag()) {
                     checkBoxHeatBoardSwitch.setChecked(true);
                 }
             }
@@ -214,12 +214,12 @@ public class BeforeWorkActivity extends Activity {
     View.OnClickListener igniteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == view.getTag()) {
+            if (1 == (int)view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxRawBoxIgnite.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if (1 == imageButtonIgniteFL.getTag() && 1 == imageButtonIgniteFR.getTag() && 1 == imageButtonIgniteBL.getTag() && 1 == imageButtonIgniteBR.getTag()) {
+                if (1 == (int)imageButtonIgniteFL.getTag() && 1 == (int)imageButtonIgniteFR.getTag() && 1 == (int)imageButtonIgniteBL.getTag() && 1 == (int)imageButtonIgniteBR.getTag()) {
                     checkBoxRawBoxIgnite.setChecked(true);
                 }
             }

@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
+    private DataSQL dataSQL;
     private MyHandler handler = new MyHandler(TAG) {
 
         private boolean isServerConnected = false;
@@ -48,38 +49,42 @@ public class MainActivity extends Activity {
                     textViewTime.setText(msg.obj.toString());
                     break;
                 case ManageApplication.MESSAGE_SERVER_CONNECTED:
-                    if (!isServerConnected) {
-                        textViewCloudConnect.setText(getString(R.string.cloud_connect_successful));
-                        isServerConnected = true;
-                        if (isDeviceConnected) {
-                            buttonStart.setEnabled(true);
+                    textViewCloudConnect.setText(getString(R.string.cloud_connect_successful));
+                    isServerConnected = true;
+                    if (isDeviceConnected) {
+                        buttonStart.setEnabled(true);
+                    }
+
+                    //如果DeviceId不存在则需要登录
+                    if (null != dataSQL) {
+                        if (!dataSQL.isTableExists("deviceInfo")) {
+                            Intent intent = new Intent();
+                            Log.i(TAG, "deviceInfo is not exist");
+                            intent.setClass(MainActivity.this, LoginActivity.class);
+                            intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_DEVICE_SIGN);
+                            startActivityForResult(intent, ManageApplication.REQUEST_CODE_DEVICE_SIGN);
+                        } else {
+                            getMainInfo();
                         }
                     }
-                    getMainInfo();
                     break;
                 case ManageApplication.MESSAGE_SERVER_DISCONNECTED:
-                    if (isServerConnected) {
-                        textViewCloudConnect.setText(getString(R.string.cloud_connect_failed));
-                        isServerConnected = false;
-                        buttonStart.setEnabled(false);
-                    }
+                    textViewCloudConnect.setText(getString(R.string.cloud_connect_failed));
+                    isServerConnected = false;
+                    buttonStart.setEnabled(false);
                     break;
                 case ManageApplication.MESSAGE_DEVICE_CONNECTED:
-                    if (!isDeviceConnected) {
-                        textViewLocalConnect.setText(getString(R.string.local_connect_successful));
-                        isDeviceConnected = true;
-                        if (isServerConnected) {
-                            buttonStart.setEnabled(true);
-                        }
+                    textViewLocalConnect.setText(getString(R.string.local_connect_successful));
+                    isDeviceConnected = true;
+                    if (isServerConnected) {
+                        buttonStart.setEnabled(true);
                     }
                     break;
                 case ManageApplication.MESSAGE_DEVICE_DISCONNECTED:
-                    if (isDeviceConnected) {
-                        textViewLocalConnect.setText(getString(R.string.local_connect_failed));
-                        isDeviceConnected = false;
-                        buttonStart.setEnabled(false);
-                        break;
-                    }
+                    textViewLocalConnect.setText(getString(R.string.local_connect_failed));
+                    isDeviceConnected = false;
+                    buttonStart.setEnabled(false);
+                    break;
                 default:
                     break;
             }
@@ -107,6 +112,7 @@ public class MainActivity extends Activity {
                         msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                     }
                     handler.sendMessage(msg);
+                    //TODO
 
                 } else {
                     Log.i(TAG,"getMainInfo failed:data null");
@@ -160,8 +166,7 @@ public class MainActivity extends Activity {
         //发送handler
         ((ManageApplication) getApplication()).setCurrentActivityHandler(handler);
 
-        //如果DeviceId不存在则需要登录
-        DataSQL dataSQL = ((ManageApplication) getApplication()).getDataSQL();
+        dataSQL = ((ManageApplication) getApplication()).getDataSQL();
         if (null == dataSQL) {
             new AlertDialog.Builder(MainActivity.this).setTitle("系统提示")//设置对话框标题
 
@@ -175,24 +180,8 @@ public class MainActivity extends Activity {
                         }
                     }).show();
             finish();
-            return;
         }
-        if (!dataSQL.isTableExists("deviceInfo")) {
-            Intent intent = new Intent();
-            Log.i(TAG,"deviceInfo is not exist");
-            intent.setClass(this,LoginActivity.class);
-            intent.putExtra("RequestCode",ManageApplication.REQUEST_CODE_DEVICE_SIGN);
-            startActivityForResult(intent,ManageApplication.REQUEST_CODE_DEVICE_SIGN);
-        } else {
-            JSONObject jsonObject = dataSQL.getJson("deviceInfo");
-            int deviceID = 0;
-            try {
-                deviceID = jsonObject.getInt("deviceID");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            ManageApplication.getInstance().getCloudManage().setDeviceID(deviceID);
-        }
+
     }
 
     @Override
@@ -295,6 +284,7 @@ public class MainActivity extends Activity {
                 finish();
                 break;
             case ManageApplication.RESULT_CODE_SUCCEED:
+                /*
                 Message msg = new Message();
                 if (ManageApplication.getInstance().getCloudManage().isDeviceConnected()) {
                     msg.what = ManageApplication.MESSAGE_DEVICE_CONNECTED;
@@ -302,8 +292,10 @@ public class MainActivity extends Activity {
                     msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                 }
                 handler.sendMessage(msg);
+                */
                 break;
             default:
+                finish();
                 break;
         }
     }

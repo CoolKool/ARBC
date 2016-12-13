@@ -1,7 +1,6 @@
 package uestc.arbc.background;
 
 
-
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
@@ -13,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -39,13 +39,10 @@ public class CloudManage {
 
     private String SERVER_IP_ADDRESS = null;
     private final static int SERVER_PORT = 6680;
-    private final static int BROADCAST_PORT = 6688;
+    private final static int BROADCAST_PORT = 61688;
 
     private final static int LOCAL_SERVER_PORT = 6681;
     private final static int TIME_OUT = 1000;
-
-    //deviceID 为0表示还没有注册
-    private int deviceID = 0;
 
     //整个CloudManage继续运行的标志
     private volatile boolean cloudManageKeepRunning = true;
@@ -104,30 +101,39 @@ public class CloudManage {
 
             try {
                 udpSocket = new DatagramSocket(BROADCAST_PORT);
-                udpPacket = new DatagramPacket(data,data.length);
+                udpPacket = new DatagramPacket(data, data.length);
             } catch (SocketException e) {
                 e.printStackTrace();
-                Log.i(TAG,"udp init failed");
+                Log.i(TAG, "udp init failed");
                 return;
             }
             connectionStateWatcher();
+            Log.i(TAG, "udp watcher is running");
             while (cloudManageKeepRunning) {
                 try {
                     udpSocket.receive(udpPacket);
                 } catch (IOException e) {
+                    Log.i(TAG, "IOException while receiving udpPacket");
+                    e.printStackTrace();
+                    break;
+                }
+
+                try {
+                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + "data is:" + new String(data, "UTF-8"));
+
+                    String string = new String(data, "UTF-8");
+                    String[] strings = string.split(" ");
+                    if (strings.length == 2) {
+                        //获取服务器ip地址
+                        SERVER_IP_ADDRESS = udpPacket.getAddress().toString();
+                        Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
+                        Log.i(TAG, "cloud broadcast data is:" + string);
+                        //表示云端连接正常
+                        isServerConnected = true;
+                    }
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                //获取服务器ip地址
-                SERVER_IP_ADDRESS = udpPacket.getAddress().toString();
-                Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
-
-                //表示云端连接正常
-                isServerConnected = true;
-
-                String string = new String(data);
-                String[] s = string.split(" ");
-                Log.i(TAG, "cloud said its ip is:" + s[1]);
-
             }
             isRunning = false;
         }
@@ -203,9 +209,9 @@ public class CloudManage {
                 Socket socket = new Socket();
                 try {
                     //连接服务器 并设置连接超时//
-                    Log.i(TAG,"upload(): Connecting to Server");
+                    Log.i(TAG, "upload(): Connecting to Server");
                     socket.connect(new InetSocketAddress(SERVER_IP_ADDRESS, SERVER_PORT), TIME_OUT);
-                    Log.i(TAG,"upload(): Server Connected");
+                    Log.i(TAG, "upload(): Server Connected");
                     ////
 
                     //获取输入输出流//
@@ -214,11 +220,11 @@ public class CloudManage {
                     ////
 
                     //发出信息//
-                    Log.i(TAG,"upload(): message sending");
+                    Log.i(TAG, "upload(): message sending");
                     byte[] jsonBytes = jsonObject.toString().getBytes("UTF-8");//使用UTF-8编码
                     dataOutputStream.write(jsonBytes);
                     dataOutputStream.flush();
-                    Log.i(TAG,"upload(): message sent");
+                    Log.i(TAG, "upload(): message sent");
                     socket.shutdownOutput();
                     ////
 
@@ -226,30 +232,29 @@ public class CloudManage {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     byte[] bytes = new byte[2048];
                     int len;
-                    Log.i(TAG,"upload(): receiving message");
-                    while((len = dataInputStream.read(bytes)) != -1 ) {
-                        byteArrayOutputStream.write(bytes,0,len);
+                    Log.i(TAG, "upload(): receiving message");
+                    while ((len = dataInputStream.read(bytes)) != -1) {
+                        byteArrayOutputStream.write(bytes, 0, len);
                     }
                     ////
 
                     //将接收的数据转化为String//
                     String strReceived = byteArrayOutputStream.toString("UTF-8");
-                    Log.i(TAG,"收到服务器消息:" + strReceived);
+                    Log.i(TAG, "收到服务器消息:" + strReceived);
                     try {
                         jsonReturn = new JSONObject(strReceived);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    Log.i(TAG,"upload(): finished succeed");
+                    Log.i(TAG, "upload(): finished succeed");
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    Log.i(TAG,"upload(): timeout，ConnectException");
+                    Log.i(TAG, "upload(): timeout，ConnectException");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.i(TAG,"upload(): failed，IOException");
-                }
-                finally {
+                    Log.i(TAG, "upload(): failed，IOException");
+                } finally {
                     isUploadDone = true;
 
                     try {
@@ -265,7 +270,7 @@ public class CloudManage {
         };
         new Thread(runnable).start();
 
-        while(!isUploadDone) {
+        while (!isUploadDone) {
             SystemClock.sleep(50);
         }
 
@@ -283,10 +288,9 @@ public class CloudManage {
     }
 
     //关闭cloudManage
-    void close () {
+    void close() {
         cloudManageKeepRunning = false;
     }
-
 
 
     //服务端线程，保持运行，随cloudManage结束而结束
@@ -308,9 +312,9 @@ public class CloudManage {
                     //若serverKeepRun为true就一直运行，外界可以通过改变该值通知服务端线程结束运行
                     while (cloudManageKeepRunning && localServerKeepRunning) {
                         //等待连接
-                        Log.i(TAG,"LocalServer: waiting for connect");
+                        Log.i(TAG, "LocalServer: waiting for connect");
                         Socket clientSocket = localServerSocket.accept();
-                        Log.i(TAG,"LocalServer: client connected - InetAddress:" + clientSocket.getInetAddress().toString());
+                        Log.i(TAG, "LocalServer: client connected - InetAddress:" + clientSocket.getInetAddress().toString());
 
                         //获得输入输出流
                         DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
@@ -322,11 +326,11 @@ public class CloudManage {
                         byte[] bytesReceive = new byte[2048];//储存接收的字节流
                         int len;//记录每次读取的字节流长度
 
-                        Log.i(TAG,"LocalServer: reading message");
-                        while((len = dataInputStream.read(bytesReceive)) != -1) {
-                            byteArrayOutputStream.write(bytesReceive,0,len);
+                        Log.i(TAG, "LocalServer: reading message");
+                        while ((len = dataInputStream.read(bytesReceive)) != -1) {
+                            byteArrayOutputStream.write(bytesReceive, 0, len);
                         }
-                        Log.i(TAG,"LocalServer: message received");
+                        Log.i(TAG, "LocalServer: message received");
                         ////
 
 
@@ -334,14 +338,14 @@ public class CloudManage {
                         try {
                             JSONObject jsonSend = new JSONObject();
 
-                            jsonSend.put("response","message received");//TODO 回复给客户端的消息
+                            jsonSend.put("response", "message received");//TODO 回复给客户端的消息
 
                             byte[] bytesResponse = jsonSend.toString().getBytes("UTF-8");//储存将要发送的字节流
                             dataOutputStream.write(bytesResponse);
                             clientSocket.shutdownOutput();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.i(TAG,"LocalServer: failed to response : JSONException");
+                            Log.i(TAG, "LocalServer: failed to response : JSONException");
                         }
                         ////
 
@@ -355,7 +359,7 @@ public class CloudManage {
                         try {
                             JSONObject jsonReceived = new JSONObject(strReceived);
                             //TODO 根据获取的数据采取相应操作
-                            Log.i(TAG,"LocalServer: 接收到客户端消息:" + jsonReceived.toString());
+                            Log.i(TAG, "LocalServer: 接收到客户端消息:" + jsonReceived.toString());
 
                             String require = jsonReceived.getString("require");
 
@@ -374,25 +378,25 @@ public class CloudManage {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.i(TAG,"LocalServer: failed while converting String to JSONObject : JSONException");
+                            Log.i(TAG, "LocalServer: failed while converting String to JSONObject : JSONException");
                         }
                         ////
 
                         //关闭该连接//
-                        Log.i(TAG,"LocalServer: closing clientSocket");
+                        Log.i(TAG, "LocalServer: closing clientSocket");
                         clientSocket.close();
-                        Log.i(TAG,"LocalServer: clientSocket closed");
+                        Log.i(TAG, "LocalServer: clientSocket closed");
                         ////
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.i(TAG,"LocalServer: LocalServer will close itself because of IOException");
+                    Log.i(TAG, "LocalServer: LocalServer will close itself because of IOException");
                 } finally {
                     //关闭服务端
                     localServerKeepRunning = false;
                     //表明服务端已经结束运行
                     isLocalServerRunning = false;
-                    Log.i(TAG,"LocalServer: LocalServer is closed");
+                    Log.i(TAG, "LocalServer: LocalServer is closed");
                 }
                 SystemClock.sleep(500);//若非正常退出，则延迟500ms后重启服务端
             }
@@ -414,15 +418,6 @@ public class CloudManage {
         new CloudBroadcastReceiver().start();
     }
 
-    public void setDeviceID (int deviceID) {
-        this.deviceID = deviceID;
-    }
-
-    public int getDeviceID() {
-        return deviceID;
-    }
-
-
     //获取主界面信息
     public JSONObject getMainInfo() {
         JSONObject jsonObject = new JSONObject();
@@ -430,17 +425,17 @@ public class CloudManage {
         JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
 
         try {
-            jsonObject.put("token",0);
-            jsonObject.put("require","PAD_Main_Info");
-            data.put("storeID",deviceInfo.getInt("storeID"));
-            data.put("storeID",deviceInfo.getInt("bedID"));
-            data.put("code",deviceInfo.getString("password"));
-            jsonObject.put("data",data);
+            jsonObject.put("token", 0);
+            jsonObject.put("require", "PAD_Main_Info");
+            data.put("storeID", deviceInfo.getInt("storeID"));
+            data.put("storeID", deviceInfo.getInt("bedID"));
+            data.put("code", deviceInfo.getString("password"));
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return  upload(jsonObject);
+        return upload(jsonObject);
     }
 
     //启动请求
@@ -450,24 +445,24 @@ public class CloudManage {
         JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
 
         try {
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_Main_Start");
-            data.put("storeID",deviceInfo.getInt("storeID"));
-            data.put("storeID",deviceInfo.getInt("bedID"));
-            jsonObject.put("data",data);
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Main_Start");
+            data.put("storeID", deviceInfo.getInt("storeID"));
+            data.put("storeID", deviceInfo.getInt("bedID"));
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return  upload(jsonObject);
+        return upload(jsonObject);
     }
 
     //艾灸机是否在线
     public boolean isDeviceConnected() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("token",deviceID);
-            jsonObject.put("require","PAD_IsMachineConnected");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_IsMachineConnected");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -492,25 +487,25 @@ public class CloudManage {
 
         try {
             //TODO 获取设备传感器数据的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_GetMachineState");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_GetMachineState");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return  upload(jsonObject);
+        return upload(jsonObject);
     }
 
-    public void mainBoxCtrlUp () {
+    public void mainBoxCtrlUp() {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 主箱向上的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_MachineControl");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();
-            data.put("cmd","MainBoxUp");
-            jsonObject.put("data",data);
+            data.put("cmd", "MainBoxUp");
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -518,16 +513,16 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void mainBoxCtrlDown () {
+    public void mainBoxCtrlDown() {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 主箱向下的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_MachineControl");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();
-            data.put("cmd","MainBoxDown");
-            jsonObject.put("data",data);
+            data.put("cmd", "MainBoxDown");
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -535,16 +530,16 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void backBoxCtrlUp () {
+    public void backBoxCtrlUp() {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 背部箱向上的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_MachineControl");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();
-            data.put("cmd","BackBoxUp");
-            jsonObject.put("data",data);
+            data.put("cmd", "BackBoxUp");
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -552,16 +547,16 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void backBoxCtrlDown () {
+    public void backBoxCtrlDown() {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 背部箱向下的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_MachineControl");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();
-            data.put("cmd","BackBoxDown");
-            jsonObject.put("data",data);
+            data.put("cmd", "BackBoxDown");
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -569,12 +564,12 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void heatBoardCtrl (String whichOne) {
+    public void heatBoardCtrl(String whichOne) {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 切换某个加热板开启状态的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("deviceInfo", "hh");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -582,12 +577,12 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void devicePause () {
+    public void devicePause() {
         JSONObject jsonObject = new JSONObject();
 
         try {
             //TODO 切换运行/暂停的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("deviceInfo", "hh");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -595,15 +590,15 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public JSONObject getCustomers (int id) {
+    public JSONObject getCustomers(int id) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
             //TODO 获取客户的的指令
-            jsonObject.put("token","0");
-            jsonObject.put("require","PAD_User_Info");
-            data.put("phone",id);
-            jsonObject.put("data",data);
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_User_Info");
+            data.put("phone", id);
+            jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
