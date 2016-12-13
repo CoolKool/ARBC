@@ -58,35 +58,75 @@ public class CloudManage {
     //服务端是否正在运行的标志
     private volatile boolean isLocalServerRunning = false;
 
-    private volatile boolean isServerConnected = false;
+    private class CloudBroadcastReceiver extends Thread {
+        private String TAG = "CloudBroadcastReceiver";
+        private volatile boolean isRunning = true;
+        private volatile boolean isServerConnected = false;
 
-    private void connectionStateWatcher() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                int time = 0;
-                Message disconnected = new Message();
-                disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
-                Message connected = new Message();
-                connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
+        private void connectionStateWatcher() {
 
-                while (cloudManageKeepRunning) {
-                    if (isServerConnected) {
-                        time = 0;
-                        isServerConnected = false;
-                        ManageApplication.getInstance().sendMessage(connected);
-                    } else {
-                        time += 5000;
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    int time = 0;
+                    Message disconnected = new Message();
+                    disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
+                    Message connected = new Message();
+                    connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
+
+                    while (isRunning) {
+
+                        if (isServerConnected) {
+                            time = 0;
+                            isServerConnected = false;
+                            ManageApplication.getInstance().sendMessage(connected);
+                        } else {
+                            time += 5000;
+                        }
+                        if (time > 15000) {
+                            ManageApplication.getInstance().sendMessage(disconnected);
+                        }
+                        SystemClock.sleep(5000);
                     }
-                    if (time > 15000) {
-                        ManageApplication.getInstance().sendMessage(disconnected);
-                    }
-                    SystemClock.sleep(5000);
                 }
+            };
+            new Thread(runnable).start();
+        }
+
+        @Override
+        public void run() {
+            DatagramSocket udpSocket;
+            DatagramPacket udpPacket;
+            byte[] data = new byte[256];
+
+            try {
+                udpSocket = new DatagramSocket(BROADCAST_PORT);
+                udpPacket = new DatagramPacket(data,data.length);
+            } catch (SocketException e) {
+                e.printStackTrace();
+                Log.i(TAG,"udp init failed");
+                return;
             }
-        };
-        new Thread(runnable).start();
+            connectionStateWatcher();
+            while (cloudManageKeepRunning) {
+                try {
+                    udpSocket.receive(udpPacket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //获取服务器ip地址
+                SERVER_IP_ADDRESS = udpPacket.getAddress().toString();
+                Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
+
+                //表示云端连接正常
+                isServerConnected = true;
+
+            }
+            isRunning = false;
+        }
     }
+
+
 
     //获取广播地址
     private static InetAddress getBroadcastAddress() throws UnknownHostException {
@@ -236,7 +276,7 @@ public class CloudManage {
     }
 
     //关闭cloudManage
-    public void close () {
+    void close () {
         cloudManageKeepRunning = false;
     }
 
@@ -282,12 +322,6 @@ public class CloudManage {
                         Log.i(TAG,"LocalServer: message received");
                         ////
 
-                        //获取服务器ip地址
-                        SERVER_IP_ADDRESS = clientSocket.getInetAddress().getHostAddress();
-                        Log.i(TAG, SERVER_IP_ADDRESS);
-
-                        //表示云端连接正常
-                        isServerConnected = true;
 
                         //发送回复信息//
                         try {
@@ -368,9 +402,9 @@ public class CloudManage {
     }
 
 
-    public void init() {
+    void init() {
         startLocalServer();
-        connectionStateWatcher();
+        new CloudBroadcastReceiver().start();
     }
 
     public void setDeviceID (int deviceID) {
@@ -411,7 +445,8 @@ public class CloudManage {
 
         try {
             //TODO 获取设备传感器数据的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_GetMachineState");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -424,7 +459,11 @@ public class CloudManage {
 
         try {
             //TODO 主箱向上的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_MachineControl");
+            JSONObject data = new JSONObject();
+            data.put("cmd","MainBoxUp");
+            jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -437,7 +476,11 @@ public class CloudManage {
 
         try {
             //TODO 主箱向下的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_MachineControl");
+            JSONObject data = new JSONObject();
+            data.put("cmd","MainBoxDown");
+            jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -450,7 +493,11 @@ public class CloudManage {
 
         try {
             //TODO 背部箱向上的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_MachineControl");
+            JSONObject data = new JSONObject();
+            data.put("cmd","BackBoxUp");
+            jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -463,7 +510,11 @@ public class CloudManage {
 
         try {
             //TODO 背部箱向下的指令
-            jsonObject.put("deviceInfo","hh");
+            jsonObject.put("token",deviceID);
+            jsonObject.put("require","PAD_MachineControl");
+            JSONObject data = new JSONObject();
+            data.put("cmd","BackBoxDown");
+            jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
         }
