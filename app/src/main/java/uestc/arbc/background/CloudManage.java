@@ -1,9 +1,7 @@
 package uestc.arbc.background;
 
 
-import android.content.Context;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
+
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
@@ -18,13 +16,17 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+/*
 import java.net.UnknownHostException;
-
+import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
+import java.net.InetAddress;
+*/
 
 /**
  * manage cloud connection
@@ -127,53 +129,53 @@ public class CloudManage {
     }
 
 
-
-    //获取广播地址
-    private static InetAddress getBroadcastAddress() throws UnknownHostException {
-        WifiManager wifi = (WifiManager) ManageApplication.getInstance().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        DhcpInfo dhcp = wifi.getDhcpInfo();
-        if(dhcp==null) {
-            return InetAddress.getByName("255.255.255.255");
+    /*
+        //获取广播地址
+        private static InetAddress getBroadcastAddress() throws UnknownHostException {
+            WifiManager wifi = (WifiManager) ManageApplication.getInstance().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            DhcpInfo dhcp = wifi.getDhcpInfo();
+            if(dhcp==null) {
+                return InetAddress.getByName("255.255.255.255");
+            }
+            int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+            byte[] quads = new byte[4];
+            for (int k = 0; k < 4; k ++)
+                quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+          return InetAddress.getByAddress(quads);
         }
-        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-        byte[] quads = new byte[4];
-        for (int k = 0; k < 4; k ++)
-            quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-        return InetAddress.getByAddress(quads);
-    }
+    /*
+        //广播本机
+        private void broadcast () {
+            DatagramSocket socket;
+            InetAddress addr;
+            try {
+                socket = new DatagramSocket();
+                socket.setBroadcast(true);
+            } catch (SocketException e) {
+                e.printStackTrace();
+                Log.i(TAG,"broadcast():create socket failed of SocketException");
+                return;
+            }
 
-    //广播本机
-    private void broadcast () {
-        DatagramSocket socket;
-        InetAddress addr;
-        try {
-            socket = new DatagramSocket();
-            socket.setBroadcast(true);
-        } catch (SocketException e) {
-            e.printStackTrace();
-            Log.i(TAG,"broadcast():create socket failed of SocketException");
-            return;
+            try {
+                addr = getBroadcastAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                Log.i(TAG,"broadcast():getBroadcastAddress() failed of UnknownHostException");
+                return;
+            }
+            byte[] buffer = "Hello Server".getBytes();
+            DatagramPacket packet = new DatagramPacket(buffer,buffer.length);
+            packet.setAddress(addr);
+            packet.setPort(BROADCAST_PORT);
+            try {
+                socket.send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i(TAG,"broadcast():send() failed of IOException");
+            }
         }
-
-        try {
-            addr = getBroadcastAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            Log.i(TAG,"broadcast():getBroadcastAddress() failed of UnknownHostException");
-            return;
-        }
-        byte[] buffer = "Hello Server".getBytes();
-        DatagramPacket packet = new DatagramPacket(buffer,buffer.length);
-        packet.setAddress(addr);
-        packet.setPort(BROADCAST_PORT);
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i(TAG,"broadcast():send() failed of IOException");
-        }
-    }
-
+    */
     //向服务器上传数据 参数为JSONObject，成功返回true，失败返回false
     public synchronized JSONObject upload(final JSONObject jsonObject) {
 
@@ -296,7 +298,7 @@ public class CloudManage {
                     //服务端的监听端口
                     ServerSocket localServerSocket = new ServerSocket(LOCAL_SERVER_PORT);
 
-                    broadcast();//广播
+                    //broadcast();//广播自己
 
                     //若serverKeepRun为true就一直运行，外界可以通过改变该值通知服务端线程结束运行
                     while (cloudManageKeepRunning && localServerKeepRunning) {
