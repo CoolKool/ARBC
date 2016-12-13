@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
                             buttonStart.setEnabled(true);
                         }
                     }
+                    getMainInfo();
                     break;
                 case ManageApplication.MESSAGE_SERVER_DISCONNECTED:
                     if (isServerConnected) {
@@ -84,6 +85,37 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+    private void getMainInfo() {
+        //TODO
+        JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
+        JSONObject data;
+        if (null == jsonObjectMainInfo) {
+            Log.i(TAG,"getMainInfo failed:return null");
+            return;
+        }
+        try {
+            if (jsonObjectMainInfo.getInt("errorCode") == -1)  {
+                Toast.makeText(this,jsonObjectMainInfo.getString("message"),Toast.LENGTH_LONG).show();
+            } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
+                data = jsonObjectMainInfo.optJSONObject("data");
+                if (null != data) {
+                    Message msg = new Message();
+                    if (data.getInt("boardConnect") == 0) {
+                        msg.what = ManageApplication.MESSAGE_MACHINE_CONNECTED;
+                    } else {
+                        msg.what = ManageApplication.MESSAGE_MACHINE_DISCONNECTED;
+                    }
+                    handler.sendMessage(msg);
+
+                } else {
+                    Log.i(TAG,"getMainInfo failed:data null");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +175,7 @@ public class MainActivity extends Activity {
                         }
                     }).show();
             finish();
+            return;
         }
         if (!dataSQL.isTableExists("deviceInfo")) {
             Intent intent = new Intent();
@@ -221,8 +254,36 @@ public class MainActivity extends Activity {
     //"启动/start"被按下时
     public void start() {
         Intent intent = new Intent();
-        intent.setClass(this,LoginActivity.class);
-        intent.putExtra("RequestCode",ManageApplication.REQUEST_CODE_USER_LOGIN);
+        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().mainStart();
+        if (null == jsonObject) {
+            Toast.makeText(this,"通信失败",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            if (jsonObject.getInt("errorCode") == -1) {
+                Toast.makeText(this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                return;
+            } else if (jsonObject.getInt("errorCode") == 0) {
+                JSONObject data = jsonObject.optJSONObject("data");
+                if (null == data) {
+                    Toast.makeText(this,"数据错误",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (data.getInt("state") == 0) {
+                    intent.setClass(this,LoginActivity.class);
+                    intent.putExtra("RequestCode",ManageApplication.REQUEST_CODE_USER_LOGIN);
+                } else if (data.getInt("state") == 1) {
+                    intent.setClass(this,WorkMainActivity.class);
+                } else {
+                    Toast.makeText(this,"数据错误",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i(TAG,"start failed:json error");
+        }
+
         startActivity(intent);
     }
 

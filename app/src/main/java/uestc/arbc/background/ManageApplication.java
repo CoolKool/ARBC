@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.Message;
 import android.util.Log;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -104,6 +106,8 @@ public class ManageApplication extends Application {
         timeThread.start();
     }
 
+
+
     //关闭更新时间线程
     private void closeTimeThread() {
         if (null != timeThread) {
@@ -119,4 +123,25 @@ public class ManageApplication extends Application {
        }
     }
 
+    public static String string2MD5(String string) {
+        String reStr;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] bytes = md5.digest(string.getBytes());
+            StringBuilder stringBuilder = new StringBuilder();
+            for (byte b : bytes){
+                int bt = b&0xff;
+                if (bt < 16){
+                    stringBuilder.append(0);
+                }
+                stringBuilder.append(Integer.toHexString(bt));
+            }
+            reStr = stringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            reStr = "MD5 error";
+            Log.i(TAG,"make MD5 error");
+        }
+        return reStr;
+    }
 }

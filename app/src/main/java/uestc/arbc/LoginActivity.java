@@ -71,7 +71,7 @@ public class LoginActivity extends Activity {
             editTextAccount.setHint("请输入艾灸床号");
         } else {
             textViewTitle.setText("工作人员登录");
-            editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
+            editTextAccount.setInputType(InputType.TYPE_CLASS_NUMBER);
             editTextAccount.setHint("请输入帐号");
 
 
@@ -118,13 +118,14 @@ public class LoginActivity extends Activity {
 
         JSONObject data = new JSONObject();
         JSONObject jsonObject = new JSONObject();
+        int account = Integer.parseInt(stringAccount);
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
             Log.v(TAG, "device sign");
 
-            int account = Integer.parseInt(stringAccount);
+
             try {
-                data.put("deviceID", account);
-                data.put("password", stringPassword);
+                data.put("account", account);
+                data.put("code", stringPassword);
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_DeviceSign");
                 jsonObject.put("data", data);
@@ -136,10 +137,10 @@ public class LoginActivity extends Activity {
             Log.v(TAG, "user login");
 
             try {
-                data.put("account", stringAccount);
-                data.put("password", stringPassword);
-                jsonObject.put("token", ManageApplication.getInstance().getCloudManage().getDeviceID());
-                jsonObject.put("require", "PAD_UserLogin");
+                data.put("account",account);
+                data.put("code", ManageApplication.string2MD5(stringPassword));
+                jsonObject.put("token", 0);
+                jsonObject.put("require", "PAD_Start_Login");
                 jsonObject.put("data", data);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -209,7 +210,13 @@ public class LoginActivity extends Activity {
                         //设备注册成功
                         //此处保存设备信息
                         dataSQL.createJsonTable("deviceInfo");
+
                         JSONObject jsonData = jsonObjectResponse.optJSONObject("data");
+                        try {
+                            jsonData.put("password",ManageApplication.string2MD5(stringPassword));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         dataSQL.pushJson("deviceInfo", jsonData);
 
                         setResult(ManageApplication.RESULT_CODE_SUCCEED, null);

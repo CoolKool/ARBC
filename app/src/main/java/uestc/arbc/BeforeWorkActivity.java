@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -190,22 +189,22 @@ public class BeforeWorkActivity extends Activity {
     private void setState(ImageButton imageButton, Boolean state) {
         if (state) {
             imageButton.setBackgroundResource(R.color.colorYellow);
-            imageButton.setTag(true);
+            imageButton.setTag(1);
         } else {
             imageButton.setBackgroundResource(R.color.colorTransparent);
-            imageButton.setTag(false);
+            imageButton.setTag(0);
         }
     }
 
     View.OnClickListener heatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if ((Boolean) view.getTag()) {
+            if (1 == view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxHeatBoardSwitch.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if ((Boolean) imageButtonHeatFL.getTag() && (Boolean) imageButtonHeatFR.getTag() && (Boolean) imageButtonHeatBL.getTag() && (Boolean) imageButtonHeatBR.getTag()) {
+                if (1 == imageButtonHeatFL.getTag() && 1 == imageButtonHeatFR.getTag() && 1 == imageButtonHeatBL.getTag() && 1 ==  imageButtonHeatBR.getTag()) {
                     checkBoxHeatBoardSwitch.setChecked(true);
                 }
             }
@@ -215,12 +214,12 @@ public class BeforeWorkActivity extends Activity {
     View.OnClickListener igniteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if ((Boolean) view.getTag()) {
+            if (1 == view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxRawBoxIgnite.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if ((Boolean) imageButtonIgniteFL.getTag() && (Boolean) imageButtonIgniteFR.getTag() && (Boolean) imageButtonIgniteBL.getTag() && (Boolean) imageButtonIgniteBR.getTag()) {
+                if (1 == imageButtonIgniteFL.getTag() && 1 == imageButtonIgniteFR.getTag() && 1 == imageButtonIgniteBL.getTag() && 1 == imageButtonIgniteBR.getTag()) {
                     checkBoxRawBoxIgnite.setChecked(true);
                 }
             }
@@ -262,25 +261,16 @@ public class BeforeWorkActivity extends Activity {
                             Log.i(TAG,"autoCompleteCustomer:data is null");
                             return;
                         }
+                        //TODO
 
-                        int i;
-                        int totalCustomers = jsonData.getInt("totalCustomers");
-                        if (0 == totalCustomers) {
-                            Log.i(TAG,"autoCompleteCustomer:no match");
-                            return;
-                        }
-                        if (1 == totalCustomers && editable.toString().equals(jsonData.optJSONObject("customer1").getInt("id")+"")) {
+                        if (editable.toString().equals(jsonData.getInt("userPhone") + "")) {
                             Log.i(TAG,"autoCompleteCustomer:no need to change");
                             return;
                         }
 
 
-                        String[] strings = new String[totalCustomers];
-                        JSONObject customer;
-                        for (i=0;i<totalCustomers;i++) {
-                            customer = jsonData.optJSONObject("customer" + i + 1);
-                            strings[i] = customer.getInt("id")+"";
-                        }
+                        String[] strings = new String[1];
+                        strings[0] = jsonData.getInt("userPhone") + "";
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(BeforeWorkActivity.this, android.R.layout.simple_dropdown_item_1line,strings);
                         autoCompleteTextViewCustomer.setAdapter(adapter);
 
@@ -297,20 +287,20 @@ public class BeforeWorkActivity extends Activity {
     private JSONObject getStartSetting() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("rawNum", rawNum);
-            jsonObject.put("heatboardFL", (boolean) imageButtonHeatFL.getTag());
-            jsonObject.put("heatboardFR", (boolean) imageButtonHeatFR.getTag());
-            jsonObject.put("heatboardBL", (boolean) imageButtonHeatBL.getTag());
-            jsonObject.put("heatboardBR", (boolean) imageButtonHeatBR.getTag());
-            jsonObject.put("rawBoxIgniteFL", (boolean) imageButtonIgniteFL.getTag());
-            jsonObject.put("rawBoxIgniteFR", (boolean) imageButtonIgniteFR.getTag());
-            jsonObject.put("rawBoxIgniteBL", (boolean) imageButtonIgniteBL.getTag());
-            jsonObject.put("rawBoxIgniteBR", (boolean) imageButtonIgniteBR.getTag());
-            if (autoCompleteTextViewCustomer.getText().toString().isEmpty()) {
-                jsonObject.put("customer", 0);
-            } else {
-                jsonObject.put("customer", Integer.parseInt(autoCompleteTextViewCustomer.getText().toString()));
-            }
+            //TODO
+            jsonObject.put("num", rawNum);
+            jsonObject.put("userPhone", Integer.parseInt(autoCompleteTextViewCustomer.getText().toString()));
+            jsonObject.put("userName", "unknown");
+            jsonObject.put("userSex", "unknown");
+            jsonObject.put("userAge", "unknown");
+            jsonObject.put("heatboardFL", (int) imageButtonHeatFL.getTag());
+            jsonObject.put("heatboardFR", (int) imageButtonHeatFR.getTag());
+            jsonObject.put("heatboardBL", (int) imageButtonHeatBL.getTag());
+            jsonObject.put("heatboardBR", (int) imageButtonHeatBR.getTag());
+            jsonObject.put("rawBoxIgniteFL", (int) imageButtonIgniteFL.getTag());
+            jsonObject.put("rawBoxIgniteFR", (int) imageButtonIgniteFR.getTag());
+            jsonObject.put("rawBoxIgniteBL", (int) imageButtonIgniteBL.getTag());
+            jsonObject.put("rawBoxIgniteBR", (int) imageButtonIgniteBR.getTag());
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -322,8 +312,8 @@ public class BeforeWorkActivity extends Activity {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonData;
         try {
-            jsonObject.put("token", ManageApplication.getInstance().getCloudManage().getDeviceID());
-            jsonObject.put("require", "PAD_StartMachine");
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Start_Set");
             jsonData = getStartSetting();
             if (null == jsonData) {
                 Log.i(TAG, "启动数据获取失败");

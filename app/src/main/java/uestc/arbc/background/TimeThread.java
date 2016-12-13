@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 
 
-public class TimeThread extends Thread {
+class TimeThread extends Thread {
 
     private volatile boolean keepRunning = true;
 
@@ -43,7 +43,7 @@ public class TimeThread extends Thread {
         return time;
     }
 
-    public void close() {
+    void close() {
         keepRunning = false;
     }
 

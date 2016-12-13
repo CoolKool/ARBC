@@ -39,7 +39,7 @@ public class CloudManage {
 
     private String SERVER_IP_ADDRESS = null;
     private final static int SERVER_PORT = 6680;
-    private final static int BROADCAST_PORT = 6682;
+    private final static int BROADCAST_PORT = 6688;
 
     private final static int LOCAL_SERVER_PORT = 6681;
     private final static int TIME_OUT = 1000;
@@ -83,12 +83,13 @@ public class CloudManage {
                             isServerConnected = false;
                             ManageApplication.getInstance().sendMessage(connected);
                         } else {
-                            time += 5000;
+                            time += 1000;
                         }
-                        if (time > 15000) {
+                        if (time > 3000) {
                             ManageApplication.getInstance().sendMessage(disconnected);
+                            time = 0;
                         }
-                        SystemClock.sleep(5000);
+                        SystemClock.sleep(1000);
                     }
                 }
             };
@@ -99,7 +100,7 @@ public class CloudManage {
         public void run() {
             DatagramSocket udpSocket;
             DatagramPacket udpPacket;
-            byte[] data = new byte[256];
+            byte[] data = new byte[100];
 
             try {
                 udpSocket = new DatagramSocket(BROADCAST_PORT);
@@ -122,6 +123,10 @@ public class CloudManage {
 
                 //表示云端连接正常
                 isServerConnected = true;
+
+                String string = new String(data);
+                String[] s = string.split(" ");
+                Log.i(TAG, "cloud said its ip is:" + s[1]);
 
             }
             isRunning = false;
@@ -417,6 +422,46 @@ public class CloudManage {
         return deviceID;
     }
 
+
+    //获取主界面信息
+    public JSONObject getMainInfo() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
+
+        try {
+            jsonObject.put("token",0);
+            jsonObject.put("require","PAD_Main_Info");
+            data.put("storeID",deviceInfo.getInt("storeID"));
+            data.put("storeID",deviceInfo.getInt("bedID"));
+            data.put("code",deviceInfo.getString("password"));
+            jsonObject.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return  upload(jsonObject);
+    }
+
+    //启动请求
+    public JSONObject mainStart() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
+
+        try {
+            jsonObject.put("token",0);
+            jsonObject.put("require","PAD_Main_Start");
+            data.put("storeID",deviceInfo.getInt("storeID"));
+            data.put("storeID",deviceInfo.getInt("bedID"));
+            jsonObject.put("data",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return  upload(jsonObject);
+    }
+
     //艾灸机是否在线
     public boolean isMachineConnected() {
         JSONObject jsonObject = new JSONObject();
@@ -555,9 +600,9 @@ public class CloudManage {
         JSONObject data = new JSONObject();
         try {
             //TODO 获取客户的的指令
-            jsonObject.put("token",deviceID);
-            jsonObject.put("require","PAD_MatchCustomer");
-            data.put("id",id);
+            jsonObject.put("token",0);
+            jsonObject.put("require","PAD_User_Info");
+            data.put("phone",id);
             jsonObject.put("data",data);
         } catch (JSONException e) {
             e.printStackTrace();
