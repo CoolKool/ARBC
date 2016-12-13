@@ -145,7 +145,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         //传递handler给ManageApplication
         ManageApplication.getInstance().setCurrentActivityHandler(handler);
         //开始周期性获取艾灸机数据
-        //TODO new GetDeviceStateThread().start();
+        new GetDeviceStateThread().start();
 
     }
 

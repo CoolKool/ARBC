@@ -450,7 +450,7 @@ public class CloudManage {
         JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
 
         try {
-            jsonObject.put("token",0);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_Main_Start");
             data.put("storeID",deviceInfo.getInt("storeID"));
             data.put("storeID",deviceInfo.getInt("bedID"));
@@ -492,7 +492,7 @@ public class CloudManage {
 
         try {
             //TODO 获取设备传感器数据的指令
-            jsonObject.put("token",deviceID);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_GetMachineState");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -506,7 +506,7 @@ public class CloudManage {
 
         try {
             //TODO 主箱向上的指令
-            jsonObject.put("token",deviceID);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_MachineControl");
             JSONObject data = new JSONObject();
             data.put("cmd","MainBoxUp");
@@ -523,7 +523,7 @@ public class CloudManage {
 
         try {
             //TODO 主箱向下的指令
-            jsonObject.put("token",deviceID);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_MachineControl");
             JSONObject data = new JSONObject();
             data.put("cmd","MainBoxDown");
@@ -540,7 +540,7 @@ public class CloudManage {
 
         try {
             //TODO 背部箱向上的指令
-            jsonObject.put("token",deviceID);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_MachineControl");
             JSONObject data = new JSONObject();
             data.put("cmd","BackBoxUp");
@@ -557,7 +557,7 @@ public class CloudManage {
 
         try {
             //TODO 背部箱向下的指令
-            jsonObject.put("token",deviceID);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_MachineControl");
             JSONObject data = new JSONObject();
             data.put("cmd","BackBoxDown");
@@ -600,7 +600,7 @@ public class CloudManage {
         JSONObject data = new JSONObject();
         try {
             //TODO 获取客户的的指令
-            jsonObject.put("token",0);
+            jsonObject.put("token","0");
             jsonObject.put("require","PAD_User_Info");
             data.put("phone",id);
             jsonObject.put("data",data);

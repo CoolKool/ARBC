@@ -139,7 +139,7 @@ public class LoginActivity extends Activity {
             try {
                 data.put("account",account);
                 data.put("code", ManageApplication.string2MD5(stringPassword));
-                jsonObject.put("token", 0);
+                jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_Start_Login");
                 jsonObject.put("data", data);
             } catch (JSONException e) {
