@@ -37,10 +37,11 @@ public class MainActivity extends Activity {
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
     private DataSQL dataSQL;
+
+    private boolean isServerConnected = false;
+    private boolean isDeviceConnected = false;
     private MyHandler handler = new MyHandler(TAG) {
 
-        private boolean isServerConnected = false;
-        private boolean isDeviceConnected = false;
 
         @Override
         public void handleMessage(Message msg) {
@@ -95,23 +96,29 @@ public class MainActivity extends Activity {
         //TODO
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
         JSONObject data;
+        Log.i(TAG,"getMainInfo() running");
         if (null == jsonObjectMainInfo) {
             Log.i(TAG,"getMainInfo failed:return null");
             return;
         }
         try {
             if (jsonObjectMainInfo.getInt("errorCode") == -1)  {
-                Toast.makeText(this,jsonObjectMainInfo.getString("message"),Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,jsonObjectMainInfo.getString("message"),Toast.LENGTH_LONG).show();
             } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
                 data = jsonObjectMainInfo.optJSONObject("data");
                 if (null != data) {
-                    Message msg = new Message();
                     if (data.getInt("boardConnect") == 0) {
-                        msg.what = ManageApplication.MESSAGE_DEVICE_CONNECTED;
+                        textViewLocalConnect.setText(getString(R.string.local_connect_successful));
+                        isDeviceConnected = true;
+                        if (isServerConnected) {
+                            buttonStart.setEnabled(true);
+                        }
                     } else {
-                        msg.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
+                        textViewLocalConnect.setText(getString(R.string.local_connect_failed));
+                        isDeviceConnected = false;
+                        buttonStart.setEnabled(false);
                     }
-                    handler.sendMessage(msg);
+
                     //TODO
 
                 } else {
@@ -121,6 +128,7 @@ public class MainActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.i(TAG,"getMainInfo() finished");
     }
 
     @Override

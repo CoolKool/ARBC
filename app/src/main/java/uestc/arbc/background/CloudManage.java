@@ -68,21 +68,23 @@ public class CloudManage {
                 @Override
                 public void run() {
                     int time = 0;
-                    Message disconnected = new Message();
-                    disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
-                    Message connected = new Message();
-                    connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
+
+
 
                     while (isRunning) {
 
                         if (isServerConnected) {
                             time = 0;
                             isServerConnected = false;
+                            Message connected = new Message();
+                            connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
                             ManageApplication.getInstance().sendMessage(connected);
                         } else {
                             time += 1000;
                         }
                         if (time > 3000) {
+                            Message disconnected = new Message();
+                            disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
                             ManageApplication.getInstance().sendMessage(disconnected);
                             time = 0;
                         }
@@ -119,15 +121,15 @@ public class CloudManage {
                 }
 
                 try {
-                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + "data is:" + new String(data, "UTF-8"));
-
-                    String string = new String(data, "UTF-8");
+                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(),0,udpPacket.getLength()-1));
+                    String string = new String(udpPacket.getData(), 0, udpPacket.getLength()-1, "UTF-8");
                     String[] strings = string.split(" ");
-                    if (strings.length == 2) {
+                    //TODO 广播处理
+                    if (strings.length == 4) {
                         //获取服务器ip地址
-                        SERVER_IP_ADDRESS = udpPacket.getAddress().toString();
-                        Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
-                        Log.i(TAG, "cloud broadcast data is:" + string);
+                        SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
+                        //Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
+                        //Log.i(TAG, "cloud broadcast data is:" + string);
                         //表示云端连接正常
                         isServerConnected = true;
                     }
@@ -135,6 +137,8 @@ public class CloudManage {
                     e.printStackTrace();
                 }
             }
+
+            udpSocket.close();
             isRunning = false;
         }
     }
@@ -233,14 +237,14 @@ public class CloudManage {
                     byte[] bytes = new byte[2048];
                     int len;
                     Log.i(TAG, "upload(): receiving message");
-                    while ((len = dataInputStream.read(bytes)) != -1) {
-                        byteArrayOutputStream.write(bytes, 0, len);
+                    while ((len = dataInputStream.read(bytes)) > 0 ) {
+                        byteArrayOutputStream.write(bytes, 0, len-1);
                     }
                     ////
 
                     //将接收的数据转化为String//
                     String strReceived = byteArrayOutputStream.toString("UTF-8");
-                    Log.i(TAG, "收到服务器消息:" + strReceived);
+                    Log.i(TAG, "upload() 收到服务器消息:" + strReceived);
                     try {
                         jsonReturn = new JSONObject(strReceived);
                     } catch (JSONException e) {
@@ -457,7 +461,7 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
-    //艾灸机是否在线
+    //TODO 艾灸机是否在线
     public boolean isDeviceConnected() {
         JSONObject jsonObject = new JSONObject();
         try {

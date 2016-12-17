@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -286,25 +287,77 @@ public class BeforeWorkActivity extends Activity {
 
     private JSONObject getStartSetting() {
         JSONObject jsonObject = new JSONObject();
+        JSONArray hotSet = new JSONArray();
+        JSONArray fireSet = new JSONArray();
+        JSONObject jsonTemp;
+
+        int bedID = 0;
+        try {
+            bedID = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo").getInt("bedID");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             //TODO
+            jsonObject.put("bedID",bedID);
             jsonObject.put("num", rawNum);
-            jsonObject.put("userPhone", Integer.parseInt(autoCompleteTextViewCustomer.getText().toString()));
-            jsonObject.put("userName", "unknown");
-            jsonObject.put("userSex", "unknown");
-            jsonObject.put("userAge", "unknown");
-            jsonObject.put("heatboardFL", (int) imageButtonHeatFL.getTag());
-            jsonObject.put("heatboardFR", (int) imageButtonHeatFR.getTag());
-            jsonObject.put("heatboardBL", (int) imageButtonHeatBL.getTag());
-            jsonObject.put("heatboardBR", (int) imageButtonHeatBR.getTag());
-            jsonObject.put("rawBoxIgniteFL", (int) imageButtonIgniteFL.getTag());
-            jsonObject.put("rawBoxIgniteFR", (int) imageButtonIgniteFR.getTag());
-            jsonObject.put("rawBoxIgniteBL", (int) imageButtonIgniteBL.getTag());
-            jsonObject.put("rawBoxIgniteBR", (int) imageButtonIgniteBR.getTag());
+            if (!autoCompleteTextViewCustomer.getText().toString().isEmpty()) {
+                jsonObject.put("userID", Integer.parseInt(autoCompleteTextViewCustomer.getText().toString()));
+            } else {
+                jsonObject.put("userID", 0);
+            }
+
+            jsonObject.put("herbID", 0);
+            jsonObject.put("consumeID", 0);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 1);
+            jsonTemp.put("state", (int) imageButtonHeatFL.getTag());
+            hotSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 2);
+            jsonTemp.put("state", (int) imageButtonHeatFR.getTag());
+            hotSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 3);
+            jsonTemp.put("state", (int) imageButtonHeatBL.getTag());
+            hotSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 4);
+            jsonTemp.put("state", (int) imageButtonHeatBR.getTag());
+            hotSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 1);
+            jsonTemp.put("state", (int) imageButtonIgniteFL.getTag());
+            fireSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 2);
+            jsonTemp.put("state", (int) imageButtonIgniteFR.getTag());
+            fireSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 3);
+            jsonTemp.put("state", (int) imageButtonIgniteBL.getTag());
+            fireSet.put(jsonTemp);
+
+            jsonTemp = new JSONObject();
+            jsonTemp.put("switchID", 4);
+            jsonTemp.put("state", (int) imageButtonIgniteBR.getTag());
+            fireSet.put(jsonTemp);
+
+            jsonObject.put("hotSet",hotSet);
+            jsonObject.put("fireSet",fireSet);
+
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
+        Log.i("TAG","device setting json data is:" + jsonObject.toString());
         return jsonObject;
     }
 
