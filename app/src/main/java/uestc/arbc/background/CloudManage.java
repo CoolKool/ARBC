@@ -110,7 +110,7 @@ public class CloudManage {
                 return;
             }
             connectionStateWatcher();
-            Log.i(TAG, "udp watcher is running");
+            Log.i(TAG, "udp listener is running");
             while (cloudManageKeepRunning) {
                 try {
                     udpSocket.receive(udpPacket);
@@ -121,13 +121,14 @@ public class CloudManage {
                 }
 
                 try {
-                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(),0,udpPacket.getLength()-1));
+                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(),0,udpPacket.getLength() - 1));
                     String string = new String(udpPacket.getData(), 0, udpPacket.getLength()-1, "UTF-8");
                     String[] strings = string.split(" ");
                     //TODO 广播处理
-                    if (strings.length == 4) {
+                    if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
                         //获取服务器ip地址
                         SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
+                        //int storeID = Integer.parseInt(strings[1]);
                         //Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
                         //Log.i(TAG, "cloud broadcast data is:" + string);
                         //表示云端连接正常

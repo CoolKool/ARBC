@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
 
                     //如果DeviceId不存在则需要登录
                     if (null != dataSQL) {
-                        if (!dataSQL.isTableExists("deviceInfo")) {
+                        if (!dataSQL.isTableExists(ManageApplication.TABLE_NAME_DEVICE_INFO)) {
                             Intent intent = new Intent();
                             Log.i(TAG, "deviceInfo is not exist");
                             intent.setClass(MainActivity.this, LoginActivity.class);

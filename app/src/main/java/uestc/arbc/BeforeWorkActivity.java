@@ -293,7 +293,7 @@ public class BeforeWorkActivity extends Activity {
 
         int bedID = 0;
         try {
-            bedID = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo").getInt("bedID");
+            bedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
         } catch (JSONException e) {
             e.printStackTrace();
         }

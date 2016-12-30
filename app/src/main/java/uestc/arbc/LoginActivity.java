@@ -209,7 +209,7 @@ public class LoginActivity extends Activity {
                     if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
                         //设备注册成功
                         //此处保存设备信息
-                        dataSQL.createJsonTable("deviceInfo");
+                        dataSQL.createJsonTable(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
                         JSONObject jsonData = jsonObjectResponse.optJSONObject("data");
                         try {
@@ -217,7 +217,7 @@ public class LoginActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        dataSQL.pushJson("deviceInfo", jsonData);
+                        dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
 
                         setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         finish();
