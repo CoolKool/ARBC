@@ -362,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/textViewRawType"
                     android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@id/textViewRawNum"
+                    android:layout_toEndOf="@id/textViewRawType"
                     android:background="@color/colorHalfTransparent"
                     android:padding="10dp" />
 

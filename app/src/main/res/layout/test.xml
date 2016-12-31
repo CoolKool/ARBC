@@ -103,7 +103,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
-                    android:src="@drawable/pic_button_mainbox_up" />
+                    android:src="@drawable/pic_button_mainbox_up_released" />
 
                 <ImageButton
                     android:id="@+id/imageButtonMainBoxCtrlDown"
@@ -115,7 +115,7 @@
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
                     android:rotation="180"
-                    android:src="@drawable/pic_button_mainbox_up" />
+                    android:src="@drawable/pic_button_mainbox_up_released" />
 
 
                 <View
@@ -146,7 +146,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
-                    android:src="@drawable/pic_button_backbox_up" />
+                    android:src="@drawable/pic_button_backbox_up_released" />
 
                 <ImageButton
                     android:id="@+id/imageButtonBackBoxCtrlDown"
@@ -158,7 +158,7 @@
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
                     android:rotation="180"
-                    android:src="@drawable/pic_button_backbox_up" />
+                    android:src="@drawable/pic_button_backbox_up_released" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -230,7 +230,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="90"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -259,7 +259,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -288,7 +288,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="180"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -340,7 +340,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -369,7 +369,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="90"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -398,7 +398,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -427,7 +427,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="180"
-                        android:src="@drawable/pic_button_leftup" />
+                        android:src="@drawable/pic_button_leftup_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -545,7 +545,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/pic_view_rawboxposition"
+                    android:src="@drawable/pic_view_position"
                     android:contentDescription="@string/nothing"
                     android:id="@+id/imageViewRawBoxPosition"/>
 
@@ -556,7 +556,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:id="@+id/textViewRawBoxPositionHint"
-                    android:text="@string/raw_box_position"
+                    android:text="@string/main_box_position"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
@@ -635,7 +635,7 @@
                     android:layout_toEndOf="@id/imageViewTemperature"
                     android:layout_alignBottom="@id/textViewTemperatureFLHint"
                     android:layout_marginStart="250dp"
-                    android:text="@string/temperature_fr"
+                    android:text="@string/front_right"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
@@ -667,7 +667,7 @@
                     android:layout_alignStart="@id/textViewTemperatureFLHint"
                     android:layout_marginTop="30dp"
                     android:id="@+id/textViewTemperatureBLHint"
-                    android:text="@string/temperature_bl"
+                    android:text="@string/back_left"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
@@ -698,7 +698,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/textViewTemperatureFRHint"
                     android:layout_alignBottom="@id/textViewTemperatureBLHint"
-                    android:text="@string/temperature_br"
+                    android:text="@string/back_right"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
