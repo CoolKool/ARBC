@@ -3,413 +3,458 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pic_view_background"
     android:gravity="center"
-    android:orientation="vertical"
-    android:background="@drawable/pic_view_background">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relativeLayoutTitle"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_alignParentTop="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/pic_view_title_start"
-            android:contentDescription="@string/nothing"/>
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_view_title_start" />
 
         <ImageButton
             android:id="@+id/imageButtonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/pic_button_cancel"
+            android:background="@color/colorTransparent"
             android:contentDescription="@string/nothing"
-            android:background="@color/colorTransparent" />
+            android:src="@drawable/pic_button_cancel" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutPanel"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="470dp"
         android:layout_below="@id/relativeLayoutTitle"
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textViewHeatBoardSwitch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/textViewRawNum"
-                android:layout_below="@id/textViewRawNum"
-                android:layout_marginTop="50dp"
-                android:text="@string/heat_board_switch"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"/>
-
-            <CheckBox
-                android:id="@+id/checkBoxHeatBoardSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewHeatBoardSwitch"
-                android:layout_alignBottom="@id/textViewHeatBoardSwitch"
-                android:layout_marginStart="25dp"
-                android:checked="true"
-                android:button="@drawable/checkbox"
-                android:text="@string/open_all"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textSize="15sp"
-                android:textColor="@color/colorWhite"/>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutHeatFL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/spinnerRawNum"
-                android:layout_below="@id/textViewHeatBoardSwitch"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonHeatFL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent"/>
+                android:layout_centerInParent="true">
 
                 <TextView
+                    android:id="@+id/textViewHeatBoardSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/front_left"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    android:layout_alignParentStart="true"
+                    android:text="@string/heat_board_switch"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutHeatFR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutHeatFL"
-                android:layout_below="@id/textViewHeatBoardSwitch"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutHeatFL"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonHeatFR"
+                <CheckBox
+                    android:id="@+id/checkBoxHeatBoardSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="90"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent" />
+                    android:layout_alignBottom="@id/textViewHeatBoardSwitch"
+                    android:layout_toEndOf="@id/textViewHeatBoardSwitch"
+                    android:button="@drawable/checkbox"
+                    android:checked="true"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/select_all"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutHeatFL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/textViewHeatBoardSwitch"
+                    android:layout_below="@id/textViewHeatBoardSwitch"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonHeatFL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:src="@drawable/pic_button_leftup_released" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/front_left"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutHeatFR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/linearLayoutHeatFL"
+                    android:layout_below="@id/textViewHeatBoardSwitch"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutHeatFL"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonHeatFR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="90"
+                        android:src="@drawable/pic_button_leftup_released" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/front_right"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutHeatBL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/linearLayoutHeatFL"
+                    android:layout_below="@id/textViewHeatBoardSwitch"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutHeatFR"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonHeatBL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="-90"
+                        android:src="@drawable/pic_button_leftup_released" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/back_left"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutHeatBR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/linearLayoutHeatFL"
+                    android:layout_below="@id/textViewHeatBoardSwitch"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutHeatBL"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonHeatBR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="180"
+                        android:src="@drawable/pic_button_leftup_released" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/back_right"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/textViewRawBoxIgnite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/front_right"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    android:layout_alignStart="@id/textViewHeatBoardSwitch"
+                    android:layout_below="@id/textViewHeatBoardSwitch"
+                    android:layout_marginTop="150dp"
+                    android:text="@string/raw_box_ignite"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutHeatBL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutHeatFL"
-                android:layout_below="@id/textViewHeatBoardSwitch"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutHeatFR"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonHeatBL"
+                <CheckBox
+                    android:id="@+id/checkBoxRawBoxIgnite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="-90"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent" />
+                    android:layout_alignBottom="@id/textViewRawBoxIgnite"
+                    android:layout_alignStart="@id/checkBoxHeatBoardSwitch"
+                    android:layout_toEndOf="@id/textViewRawBoxIgnite"
+                    android:button="@drawable/checkbox"
+                    android:checked="true"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="@string/select_all"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/linearLayoutIgniteFL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/back_left"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    android:layout_alignStart="@id/textViewRawBoxIgnite"
+                    android:layout_below="@id/textViewRawBoxIgnite"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
 
-            <LinearLayout
-                android:id="@+id/linearLayoutHeatBR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutHeatFL"
-                android:layout_below="@id/textViewHeatBoardSwitch"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutHeatBL"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
+                    <ImageButton
+                        android:id="@+id/imageButtonIgniteFL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:src="@drawable/pic_button_leftup_released" />
 
-                <ImageButton
-                    android:id="@+id/imageButtonHeatBR"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/front_left"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutIgniteFR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="180"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent" />
+                    android:layout_alignTop="@id/linearLayoutIgniteFL"
+                    android:layout_below="@id/textViewRawBoxIgnite"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutIgniteFL"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
 
-                <TextView
+                    <ImageButton
+                        android:id="@+id/imageButtonIgniteFR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="90"
+                        android:src="@drawable/pic_button_leftup_released" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/front_right"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutIgniteBL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/back_right"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    android:layout_alignTop="@id/linearLayoutIgniteFL"
+                    android:layout_below="@id/textViewRawBoxIgnite"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutIgniteFR"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
 
-            <TextView
-                android:id="@+id/textViewRawBoxIgnite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/textViewRawNum"
-                android:layout_below="@id/textViewHeatBoardSwitch"
-                android:layout_marginTop="150dp"
-                android:text="@string/raw_box_ignite"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite" />
+                    <ImageButton
+                        android:id="@+id/imageButtonIgniteBL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="-90"
+                        android:src="@drawable/pic_button_leftup_released" />
 
-            <CheckBox
-                android:id="@+id/checkBoxRawBoxIgnite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/textViewRawBoxIgnite"
-                android:layout_toEndOf="@id/textViewRawBoxIgnite"
-                android:layout_alignStart="@id/checkBoxHeatBoardSwitch"
-                android:checked="true"
-                android:button="@drawable/checkbox"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:text="@string/open_all"
-                android:textSize="15sp"
-                android:textColor="@color/colorWhite"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/back_left"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayoutIgniteFL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/spinnerRawNum"
-                android:layout_below="@id/textViewRawBoxIgnite"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonIgniteFL"
+                <LinearLayout
+                    android:id="@+id/linearLayoutIgniteBR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent" />
+                    android:layout_alignTop="@id/linearLayoutIgniteFL"
+                    android:layout_below="@id/textViewRawBoxIgnite"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/linearLayoutIgniteBL"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/front_left"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/imageButtonIgniteBR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:rotation="180"
+                        android:src="@drawable/pic_button_leftup_released" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutIgniteFR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutIgniteFL"
-                android:layout_below="@id/textViewRawBoxIgnite"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutIgniteFL"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonIgniteFR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="90"
-                    android:contentDescription="@string/nothing"
-                    android:background="@color/colorTransparent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/front_right"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutIgniteBL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutIgniteFL"
-                android:layout_below="@id/textViewRawBoxIgnite"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutIgniteFR"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonIgniteBL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="-90"
-                    android:background="@color/colorTransparent"
-                    android:contentDescription="@string/nothing" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/back_left"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutIgniteBR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/linearLayoutIgniteFL"
-                android:layout_below="@id/textViewRawBoxIgnite"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/linearLayoutIgniteBL"
-                android:gravity="center"
-                android:orientation="vertical"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageButton
-                    android:id="@+id/imageButtonIgniteBR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/pic_button_leftup_released"
-                    android:rotation="180"
-                    android:background="@color/colorTransparent"
-                    android:contentDescription="@string/nothing" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/back_right"
-                    android:layout_marginTop="15dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/back_right"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
-
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/textViewRawNum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/raw_num"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"/>
-            <Spinner
-                android:id="@+id/spinnerRawNum"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewRawNum"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:padding="10dp"
-                android:background="@color/colorHalfTransparent"/>
+                android:layout_centerInParent="true">
 
-            <TextView
-                android:id="@+id/textViewUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/textViewRawNum"
-                android:layout_below="@id/textViewRawBoxIgnite"
-                android:layout_marginTop="150dp"
-                android:text="@string/user"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"/>
+                <TextView
+                    android:id="@+id/textViewRawType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/raw_type"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
 
-            <AutoCompleteTextView
-                android:id="@+id/AutoCompleteTextViewCustomer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewUser"
-                android:layout_alignBottom="@id/textViewUser"
-                android:layout_alignStart="@id/spinnerRawNum"
-                android:layout_alignEnd="@id/linearLayoutIgniteBR"
-                android:background="@color/colorHalfTransparent"
-                android:hint="@string/guest"
-                android:textColor="@color/colorWhite"
-                android:textSize="15sp"
-                android:inputType="number"
-                android:padding="10dp"
-                android:lines="1"
-                android:maxWidth="280dp"
-                android:labelFor="@id/AutoCompleteTextViewCustomer"/>
+                <Spinner
+                    android:id="@+id/spinnerRawType"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textViewRawType"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@id/textViewRawNum"
+                    android:background="@color/colorHalfTransparent"
+                    android:padding="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/AutoCompleteTextViewCustomer"
-                android:layout_alignStart="@id/AutoCompleteTextViewCustomer"
-                android:layout_marginTop="10dp"
-                android:text="@string/id_or_phonenumber"
-                android:textSize="15sp"
-                android:textColor="@color/colorWhite"/>
+                <TextView
+                    android:id="@+id/textViewRawNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewRawType"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/raw_num"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
 
+                <Spinner
+                    android:id="@+id/spinnerRawNum"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/textViewRawNum"
+                    android:layout_alignBaseline="@id/textViewRawNum"
+                    android:layout_alignStart="@id/spinnerRawType"
+                    android:background="@color/colorHalfTransparent"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewServiceCharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewRawNum"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/raw_num"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerServiceCharge"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/textViewServiceCharge"
+                    android:layout_alignBaseline="@id/textViewServiceCharge"
+                    android:layout_alignStart="@id/spinnerRawType"
+                    android:background="@color/colorHalfTransparent"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/textViewRawType"
+                    android:layout_below="@id/textViewServiceCharge"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/user"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/AutoCompleteTextViewCustomer"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textViewUser"
+                    android:layout_alignStart="@id/spinnerRawType"
+                    android:layout_toEndOf="@id/textViewUser"
+                    android:background="@color/colorHalfTransparent"
+                    android:hint="@string/guest"
+                    android:inputType="number"
+                    android:labelFor="@id/AutoCompleteTextViewCustomer"
+                    android:lines="1"
+                    android:maxWidth="280dp"
+                    android:padding="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/AutoCompleteTextViewCustomer"
+                    android:layout_below="@id/AutoCompleteTextViewCustomer"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/id_or_phonenumber"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp" />
+            </RelativeLayout>
 
         </RelativeLayout>
-
-
-
-
-
-
-
-
 
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="218dp"
         android:layout_below="@id/linearLayoutPanel">
 
         <Button
@@ -417,18 +462,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/open"
-            android:textSize="25sp"
-            android:paddingStart="100dp"
+            android:background="@color/colorGreen"
             android:paddingEnd="100dp"
-            android:background="@color/colorGreen" />
+            android:paddingStart="100dp"
+            android:text="@string/open"
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:text="@string/copyright"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </RelativeLayout>

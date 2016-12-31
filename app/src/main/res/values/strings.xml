@@ -14,9 +14,10 @@
     <string name="account">帐号</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
+    <string name="raw_type">艾草类型：</string>
     <string name="raw_num">艾草数：</string>
     <string name="heat_board_switch">加热板开关：</string>
-    <string name="open_all">全开</string>
+    <string name="select_all">全选</string>
     <string name="front_left">前左</string>
     <string name="front_right">前右</string>
     <string name="back_left">后左</string>
