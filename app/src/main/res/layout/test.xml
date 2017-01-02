@@ -931,7 +931,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/textViewIgniteBoardWorkState"
-                    android:text="@string/raw_box_work_state"
+                    android:text="@string/ignite_board_work_state"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
