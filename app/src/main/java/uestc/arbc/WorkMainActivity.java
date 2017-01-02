@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.TimeFormatException;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,10 +57,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     ImageView imageViewHeatBoardWorkStateFR;
     ImageView imageViewHeatBoardWorkStateBL;
     ImageView imageViewHeatBoardWorkStateBR;
-    ImageView imageViewRawBoxWorkStateFL;
-    ImageView imageViewRawBoxWorkStateFR;
-    ImageView imageViewRawBoxWorkStateBL;
-    ImageView imageViewRawBoxWorkStateBR;
+    ImageView imageViewIgniteBoardWorkStateFL;
+    ImageView imageViewIgniteBoardWorkStateFR;
+    ImageView imageViewIgniteBoardWorkStateBL;
+    ImageView imageViewIgniteBoardWorkStateBR;
     TextView textViewMainBoxPosition;
     TextView textViewHeadBoxState;
     TextView textViewTailBoxState;
@@ -97,10 +98,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     getDeviceState = false;
                     break;
                 case ManageApplication.MESSAGE_DEVICE_CONNECTED:
-                    if (null != dialogLocal) {
-                        dialogLocal.dismiss();
-                        dialogLocal = null;
-                    }
+                    //implements in ManageApplication.MESSAGE_DEVICE_STATE:
                     break;
                 case ManageApplication.MESSAGE_DEVICE_DISCONNECTED:
                     if (null == dialogLocal) {
@@ -113,6 +111,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     }
                     break;
                 case ManageApplication.MESSAGE_DEVICE_STATE:
+                    if (null != dialogLocal) {
+                        dialogLocal.dismiss();
+                        dialogLocal = null;
+                    }
                     if (null != msg.obj) {
                         updateDeviceState((JSONObject) msg.obj);
                     }
@@ -163,21 +165,27 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         //接下来一堆控制按钮
         imageButtonMainBoxCtrlUP = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlUp);
         imageButtonMainBoxCtrlUP.setOnClickListener(this);
+        imageButtonMainBoxCtrlUP.setOnTouchListener(mainBoxOnTouchListener);
 
         imageButtonMainBoxCtrlDown = (ImageButton)findViewById(R.id.imageButtonMainBoxCtrlDown);
         imageButtonMainBoxCtrlDown.setOnClickListener(this);
+        imageButtonMainBoxCtrlDown.setOnTouchListener(mainBoxOnTouchListener);
 
         imageButtonBackBoxFU = (ImageButton)findViewById(R.id.imageButtonBackBoxFU);
         imageButtonBackBoxFU.setOnClickListener(this);
+        imageButtonBackBoxFU.setOnTouchListener(backBoxOnTouchListener);
 
         imageButtonBackBoxFD = (ImageButton)findViewById(R.id.imageButtonBackBoxFD);
         imageButtonBackBoxFD.setOnClickListener(this);
+        imageButtonBackBoxFD.setOnTouchListener(backBoxOnTouchListener);
 
         imageButtonBackBoxBU = (ImageButton)findViewById(R.id.imageButtonBackBoxBU);
         imageButtonBackBoxBU.setOnClickListener(this);
+        imageButtonBackBoxBU.setOnTouchListener(backBoxOnTouchListener);
 
         imageButtonBackBoxBD = (ImageButton)findViewById(R.id.imageButtonBackBoxBD);
         imageButtonBackBoxBD.setOnClickListener(this);
+        imageButtonBackBoxBD.setOnTouchListener(backBoxOnTouchListener);
 
         imageButtonHeatFL = (ImageButton)findViewById(R.id.imageButtonHeatFL);
         imageButtonHeatFL.setOnClickListener(this);
@@ -209,10 +217,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageViewHeatBoardWorkStateFR = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateFR);
         imageViewHeatBoardWorkStateBL = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateBL);
         imageViewHeatBoardWorkStateBR = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateBR);
-        imageViewRawBoxWorkStateFL = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateFL);
-        imageViewRawBoxWorkStateFR = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateFR);
-        imageViewRawBoxWorkStateBL = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateBL);
-        imageViewRawBoxWorkStateBR = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateBR);
+        imageViewIgniteBoardWorkStateFL = (ImageView)findViewById(R.id.imageViewIgniteBoardWorkStateFL);
+        imageViewIgniteBoardWorkStateFR = (ImageView)findViewById(R.id.imageViewIgniteBoardWorkStateFR);
+        imageViewIgniteBoardWorkStateBL = (ImageView)findViewById(R.id.imageViewIgniteBoardWorkStateBL);
+        imageViewIgniteBoardWorkStateBR = (ImageView)findViewById(R.id.imageViewIgniteBoardWorkStateBR);
         textViewMainBoxPosition = (TextView)findViewById(R.id.textViewMainBoxPosition);
         textViewHeadBoxState = (TextView)findViewById(R.id.textViewHeadBoxState);
         textViewTailBoxState = (TextView)findViewById(R.id.textViewTailBoxState);
@@ -233,10 +241,17 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
                     if (null != jsonObjectDeviceState) {
                         if (jsonObjectDeviceState.getInt("errorCode") == 0) {
-                            Message message = new Message();
-                            message.what = ManageApplication.MESSAGE_DEVICE_STATE;
-                            message.obj = jsonObjectDeviceState;
-                            handler.sendMessage(message);
+                            JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
+                            if (jsonData.getInt("stateNetBoard") == 1) {
+                                Message message = new Message();
+                                message.what = ManageApplication.MESSAGE_DEVICE_STATE;
+                                message.obj = jsonObjectDeviceState;
+                                handler.sendMessage(message);
+                            } else if (jsonData.getInt("stateNetBoard") == 0) {
+                                Message message = new Message();
+                                message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
+                                handler.sendMessage(message);
+                            }
                         } else {
                             Toast.makeText(WorkMainActivity.this,jsonObjectDeviceState.getString("message"),Toast.LENGTH_SHORT).show();
                         }
@@ -252,6 +267,118 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     private void updateDeviceState(JSONObject jsonObject) {
         //TODO 根据服务器返回的json更新UI界面
 
+        try {
+            JSONObject jsonData = jsonObject.getJSONObject("data");
+
+            int tmp;
+            tmp = jsonData.getInt("degreeBackLeft");
+            textViewTemperatureBL.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("degreeBackRight");
+            textViewTemperatureBR.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("degreeForeLeft");
+            textViewTemperatureFL.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("degreeForeRight");
+            textViewTemperatureFR.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("humidityBack");
+            textViewHumidityBack.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("humidityFore");
+            textViewHumidityFront.setText(String.valueOf(tmp));
+
+            tmp = jsonData.getInt("stateDianBackLeft");
+            if ( 0 == tmp) {
+               imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateDianBackRight");
+            if ( 0 == tmp) {
+                imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateDianForeLeft");
+            if ( 0 == tmp) {
+                imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateDianForeRight");
+            if ( 0 == tmp) {
+                imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateHotBackLeft");
+            if ( 0 == tmp) {
+                imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateHotBackRight");
+            if ( 0 == tmp) {
+                imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateHotForeLeft");
+            if ( 0 == tmp) {
+                imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("stateHotForeRight");
+            if ( 0 == tmp) {
+                imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
+            } else if (1 == tmp) {
+                imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
+            }
+
+            tmp = jsonData.getInt("currentTime") - jsonData.getInt("startTime");
+            textViewWorkTimeMin.setText(String.valueOf(tmp/60));
+            textViewWorkTimeSec.setText(String.valueOf(tmp%60));
+
+            tmp = jsonData.getInt("posMainMotor");
+            if (1 == tmp) {
+                textViewMainBoxPosition.setText("中间");
+            } else if (2 == tmp) {
+                textViewMainBoxPosition.setText("顶部");
+            } else if (3 == tmp) {
+                textViewMainBoxPosition.setText("下部");
+            }
+
+            tmp = jsonData.getInt("posForeMotor");
+            if (1 == tmp) {
+                textViewHeadBoxState.setText("中间");
+            } else if (2 == tmp) {
+                textViewHeadBoxState.setText("上翘");
+            } else if (3 == tmp) {
+                textViewHeadBoxState.setText("下翘");
+            }
+
+            tmp = jsonData.getInt("posBackMotor");
+            if (1 == tmp) {
+                textViewTailBoxState.setText("中间");
+            } else if (2 == tmp) {
+                textViewTailBoxState.setText("上翘");
+            } else if (3 == tmp) {
+                textViewTailBoxState.setText("下翘");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }

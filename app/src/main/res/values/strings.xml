@@ -39,7 +39,7 @@
     <string name="humidity_back">床后：</string>
     <string name="percent">%</string>
     <string name="heat_board_work_state">加热板工作状态</string>
-    <string name="raw_box_work_state">艾草箱工作状态</string>
+    <string name="ignite_board_work_state">点燃管状态</string>
     <string name="main_box_position">主箱位置：</string>
     <string name="cm">CM</string>
     <string name="continue_and_pause">开启/暂停</string>

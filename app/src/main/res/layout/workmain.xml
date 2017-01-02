@@ -909,20 +909,20 @@
                 android:layout_weight="2">
 
                 <TextView
-                    android:id="@+id/textViewRawBoxWorkState"
+                    android:id="@+id/textViewIgniteBoardWorkState"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:text="@string/raw_box_work_state"
+                    android:text="@string/ignite_board_work_state"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
                 <FrameLayout
-                    android:id="@+id/frameLayoutRawBoxWorkState"
+                    android:id="@+id/frameLayoutIgniteBoardWorkState"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewRawBoxWorkState"
+                    android:layout_below="@id/textViewIgniteBoardWorkState"
                     android:layout_marginTop="20dp">
 
                     <View
@@ -938,7 +938,7 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/imageViewRawBoxWorkStateFL"
+                            android:id="@+id/imageViewIgniteBoardWorkStateFL"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -946,7 +946,7 @@
                             android:src="@drawable/pic_view_lightoff" />
 
                         <ImageView
-                            android:id="@+id/imageViewRawBoxWorkStateFR"
+                            android:id="@+id/imageViewIgniteBoardWorkStateFR"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -954,7 +954,7 @@
                             android:src="@drawable/pic_view_lightoff" />
 
                         <ImageView
-                            android:id="@+id/imageViewRawBoxWorkStateBL"
+                            android:id="@+id/imageViewIgniteBoardWorkStateBL"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -962,7 +962,7 @@
                             android:src="@drawable/pic_view_lightoff" />
 
                         <ImageView
-                            android:id="@+id/imageViewRawBoxWorkStateBR"
+                            android:id="@+id/imageViewIgniteBoardWorkStateBR"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -975,7 +975,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/frameLayoutRawBoxWorkState"
+                    android:layout_below="@id/frameLayoutIgniteBoardWorkState"
                     android:layout_marginTop="10dp"
                     android:gravity="center">
 
