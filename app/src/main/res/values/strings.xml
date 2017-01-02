@@ -48,7 +48,7 @@
     <string name="pump_ctrl">水泵控制</string>
     <string name="fan_ctrl">风扇调节</string>
     <string name="hand_in_test_report">填写测试报告</string>
-    <string name="please_input_account">请输入帐号名</string>
+    <string name="please_input_account">请输入帐号</string>
     <string name="please_input_service_id">请输入设备编号</string>
     <string name="please_input_password">请输入密码</string>
     <string name="remember_password">记住密码</string>

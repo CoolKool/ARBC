@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -46,14 +47,25 @@ public class BeforeWorkActivity extends Activity {
     private ImageButton imageButtonIgniteFR;
     private ImageButton imageButtonIgniteBL;
     private ImageButton imageButtonIgniteBR;
-    private AutoCompleteTextView autoCompleteTextViewCustomer;
+    private EditText editTextCustomer;
+
 
     private int rawNum;
+    private int consumeTypeID;
+    private int herbTypeID;
+    private int customerID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beforework);
+
+        init();//初始化
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int i) {
@@ -69,8 +81,6 @@ public class BeforeWorkActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-        init();//初始化
     }
 
     private void init() {
@@ -78,23 +88,117 @@ public class BeforeWorkActivity extends Activity {
         //为艾草数选择框填充数据
         Spinner spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
         if (null != spinnerRawNum) {
-            String arr[] = new String[]{"1盒", "2盒", "3盒", "4盒", "5盒"};
+            String arr[] = new String[27];
+            for (int i = 0; i < 27; i++) {
+                arr[i] = (i + 4) + "盒";
+            }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerRawNum.setAdapter(adapter);
             spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Log.i(TAG, "the raw num is:" + i);
-                    rawNum = i;
+                    rawNum = i + 4;
+                    Log.i(TAG, "the raw num is:" + rawNum);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    Log.i(TAG, "the raw num is:" + 1);
-                    rawNum = 1;
+                    rawNum = 4;
+                    Log.i(TAG, "the raw num is:" + 4);
                 }
             });
+        }
+
+        //为艾草类型和服务费类型选择框填充数据
+        Spinner spinnerRawType = (Spinner) findViewById(R.id.spinnerRawType);
+        Spinner spinnerConsumeType = (Spinner) findViewById(R.id.spinnerServiceCharge);
+        if (null != spinnerRawType) {
+            try {
+                JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getRawType();
+                if (null == jsonObject) {
+                    Toast.makeText(this, "与云端通信异常！", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                if (jsonObject.getInt("errorCode") != 0) {
+                    Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+
+                JSONObject jsonData = jsonObject.getJSONObject("data");
+                final int defaultConsumeID = jsonData.getInt("defaultConsumeID");
+                final int defaultHerbID = jsonData.getInt("defaultHerbID");
+                JSONArray jsonArrayConsumeType = jsonData.getJSONArray("consumeType");
+                JSONArray jsonArrayHerbType = jsonData.getJSONArray("herbType");
+                final JSONObject[] jsonObjectsConsumeType = new JSONObject[jsonArrayConsumeType.length()];
+                final JSONObject[] jsonObjectsHerbType = new JSONObject[jsonArrayHerbType.length()];
+
+                for (int i = 0; i < jsonArrayConsumeType.length(); i++) {
+                    jsonObjectsConsumeType[i] = jsonArrayConsumeType.getJSONObject(i);
+                }
+                for (int i = 0; i < jsonArrayHerbType.length(); i++) {
+                    jsonObjectsHerbType[i] = jsonArrayHerbType.getJSONObject(i);
+                }
+
+                String stringsConsumeType[] = new String[jsonArrayConsumeType.length()];
+                for (int i = 0; i < jsonArrayConsumeType.length(); i++) {
+                    stringsConsumeType[i] = jsonObjectsConsumeType[i].getString("name");
+                }
+                String stringsHerbType[] = new String[jsonArrayHerbType.length()];
+                for (int i = 0; i < jsonArrayHerbType.length(); i++) {
+                    stringsHerbType[i] = jsonObjectsHerbType[i].getString("name");
+                }
+
+                ArrayAdapter<String> consumeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsConsumeType);
+                ArrayAdapter<String> herbAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsHerbType);
+
+                //consumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                //herbAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                spinnerConsumeType.setAdapter(consumeAdapter);
+                spinnerRawType.setAdapter(herbAdapter);
+
+
+                spinnerConsumeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        try {
+                            consumeTypeID = jsonObjectsConsumeType[i].getInt("dataID");
+                            Log.i(TAG, "the consumeTypeID is:" + consumeTypeID);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        consumeTypeID = defaultConsumeID;
+                        Log.i(TAG, "the consumeTypeID is:" + consumeTypeID);
+                    }
+                });
+                spinnerRawType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        try {
+                            herbTypeID = jsonObjectsHerbType[i].getInt("dataID");
+                            Log.i(TAG, "the herbTypeID is:" + herbTypeID);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        herbTypeID = defaultHerbID;
+                        Log.i(TAG, "the herbTypeID is:" + herbTypeID);
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         //为“开启”按钮设置按下行为
@@ -182,9 +286,64 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteBL.setOnClickListener(igniteListener);
         imageButtonIgniteBR.setOnClickListener(igniteListener);
 
-        autoCompleteTextViewCustomer = (AutoCompleteTextView) findViewById(R.id.AutoCompleteTextViewCustomer);
-        autoCompleteTextViewCustomer.addTextChangedListener(customerListener);
+        //为用户输入框添加监听
+        editTextCustomer = (EditText) findViewById(R.id.editTextCustomer);
+        editTextCustomer.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() == 11) {
+                    try {
+                        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCustomerInfo(Integer.parseInt(s.toString()));
+                        if (null == jsonObject) {
+                            Toast.makeText(BeforeWorkActivity.this, "与云端通信异常！", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                        if (jsonObject.getInt("errorCode") == 0) {
+                            JSONObject jsonData = jsonObject.getJSONObject("data");
+                            Toast.makeText(BeforeWorkActivity.this, "欢迎 " + jsonData.getString("userName"), Toast.LENGTH_SHORT).show();
+                            customerID = jsonData.getInt("userID");
+                        } else if (jsonObject.getInt("errorCode") == -1){
+                            Toast.makeText(BeforeWorkActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            customerID = 0;
+                            Intent intent = new Intent();
+                            intent.setClass(BeforeWorkActivity.this,CustomerSetActivity.class);
+                            intent.putExtra("phone",Integer.parseInt(s.toString()));
+                            BeforeWorkActivity.this.startActivityForResult(intent,ManageApplication.REQUEST_CODE_CUSTOMER_SET);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (ManageApplication.REQUEST_CODE_CUSTOMER_SET == requestCode) {
+            if (ManageApplication.RESULT_CODE_FAILED == resultCode) {
+                customerID = 0;
+                editTextCustomer.setText("");
+            } else {
+                String s = editTextCustomer.getText().toString();
+                //触发监听
+                editTextCustomer.setText("");
+                editTextCustomer.setText(s);
+            }
+        }
     }
 
     private void setState(ImageButton imageButton, Boolean state) {
@@ -200,12 +359,12 @@ public class BeforeWorkActivity extends Activity {
     View.OnClickListener heatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == (int)view.getTag()) {
+            if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxHeatBoardSwitch.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if (1 == (int)imageButtonHeatFL.getTag() && 1 == (int)imageButtonHeatFR.getTag() && 1 == (int)imageButtonHeatBL.getTag() && 1 ==  (int)imageButtonHeatBR.getTag()) {
+                if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
                     checkBoxHeatBoardSwitch.setChecked(true);
                 }
             }
@@ -215,73 +374,15 @@ public class BeforeWorkActivity extends Activity {
     View.OnClickListener igniteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == (int)view.getTag()) {
+            if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
                 checkBoxRawBoxIgnite.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
-                if (1 == (int)imageButtonIgniteFL.getTag() && 1 == (int)imageButtonIgniteFR.getTag() && 1 == (int)imageButtonIgniteBL.getTag() && 1 == (int)imageButtonIgniteBR.getTag()) {
+                if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
                     checkBoxRawBoxIgnite.setChecked(true);
                 }
             }
-        }
-    };
-
-    TextWatcher customerListener = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(final Editable editable) {
-            if (editable.toString().isEmpty()) {
-                return;
-            }
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCustomers(Integer.parseInt(editable.toString()));
-                    if (null == jsonObject) {
-                        Log.i(TAG,"autoCompleteCustomer:cloud no response");
-                        return;
-                    }
-                    try {
-                        if ( 0 != jsonObject.getInt("errorCode")) {
-                            Log.i(TAG,"autoCompleteCustomer:cloud no says error occurred");
-                            return;
-                        }
-
-                        JSONObject jsonData = jsonObject.optJSONObject("data");
-                        if (null == jsonData) {
-                            Log.i(TAG,"autoCompleteCustomer:data is null");
-                            return;
-                        }
-                        //TODO
-
-                        if (editable.toString().equals(jsonData.getInt("userPhone") + "")) {
-                            Log.i(TAG,"autoCompleteCustomer:no need to change");
-                            return;
-                        }
-
-
-                        String[] strings = new String[1];
-                        strings[0] = jsonData.getInt("userPhone") + "";
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(BeforeWorkActivity.this, android.R.layout.simple_dropdown_item_1line,strings);
-                        autoCompleteTextViewCustomer.setAdapter(adapter);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.i(TAG,"autoCompleteCustomer:JSONException");
-                    }
-                }
-            };
-            new Thread(runnable).start();
         }
     };
 
@@ -299,10 +400,10 @@ public class BeforeWorkActivity extends Activity {
         }
         try {
             //TODO
-            jsonObject.put("bedID",bedID);
+            jsonObject.put("bedID", bedID);
             jsonObject.put("num", rawNum);
-            if (!autoCompleteTextViewCustomer.getText().toString().isEmpty()) {
-                jsonObject.put("userID", Integer.parseInt(autoCompleteTextViewCustomer.getText().toString()));
+            if (!editTextCustomer.getText().toString().isEmpty()) {
+                jsonObject.put("userID", Integer.parseInt(editTextCustomer.getText().toString()));
             } else {
                 jsonObject.put("userID", 0);
             }
@@ -350,14 +451,14 @@ public class BeforeWorkActivity extends Activity {
             jsonTemp.put("state", (int) imageButtonIgniteBR.getTag());
             fireSet.put(jsonTemp);
 
-            jsonObject.put("hotSet",hotSet);
-            jsonObject.put("fireSet",fireSet);
+            jsonObject.put("hotSet", hotSet);
+            jsonObject.put("fireSet", fireSet);
 
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
-        Log.i("TAG","device setting json data is:" + jsonObject.toString());
+        Log.i("TAG", "device setting json data is:" + jsonObject.toString());
         return jsonObject;
     }
 
@@ -432,7 +533,7 @@ public class BeforeWorkActivity extends Activity {
                     }
                     break;
                 case 0:
-                    Toast.makeText(BeforeWorkActivity.this, "启动成功", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BeforeWorkActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.setClass(BeforeWorkActivity.this, WorkMainActivity.class);
                     startActivity(intent);

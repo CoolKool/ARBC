@@ -207,12 +207,15 @@ public class CloudManage {
             return null;
         }
 
+
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
 
                 Socket socket = new Socket();
                 try {
+                    Log.i(TAG, "upload(): Json to upload is:" + jsonObject.toString());
                     //连接服务器 并设置连接超时//
                     Log.i(TAG, "upload(): Connecting to Server");
                     socket.connect(new InetSocketAddress(SERVER_IP_ADDRESS, SERVER_PORT), TIME_OUT);
@@ -427,14 +430,13 @@ public class CloudManage {
     public JSONObject getMainInfo() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
         try {
             jsonObject.put("token", 0);
             jsonObject.put("require", "PAD_Main_Info");
             data.put("storeID", deviceInfo.getInt("storeID"));
-            data.put("storeID", deviceInfo.getInt("bedID"));
-            data.put("code", deviceInfo.getString("password"));
+            data.put("bedID", deviceInfo.getInt("bedID"));
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -447,12 +449,29 @@ public class CloudManage {
     public JSONObject mainStart() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson("deviceInfo");
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
         try {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Main_Start");
-            data.put("storeID", deviceInfo.getInt("storeID"));
+            data.put("storeID", deviceInfo.getInt("bedID"));
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
+    //获取艾草类型
+    public JSONObject getRawType() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
+
+        try {
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Start_GetType");
             data.put("storeID", deviceInfo.getInt("bedID"));
             jsonObject.put("data", data);
         } catch (JSONException e) {
@@ -595,14 +614,14 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public JSONObject getCustomers(int id) {
+    public JSONObject getCustomerInfo(int phone) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
             //TODO 获取客户的的指令
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_User_Info");
-            data.put("phone", id);
+            data.put("phone", phone);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();

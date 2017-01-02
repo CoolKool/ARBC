@@ -15,15 +15,33 @@
         android:contentDescription="@string/nothing"
         android:background="@color/colorTransparent"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageButtonCancel"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="80dp"
+        android:src="@drawable/pic_view_logo"
+        android:contentDescription="@string/nothing"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="@string/copyright"
+        android:textSize="15sp"/>
+
     <RelativeLayout
         android:id="@+id/relativeLayoutLoginBox"
         android:layout_width="493dp"
         android:layout_height="357dp"
-        android:layout_centerInParent="true"
         android:background="@drawable/pic_view_subbackground_login"
         android:paddingTop="50dp"
         android:paddingStart="75dp"
-        android:paddingEnd="75dp">
+        android:paddingEnd="75dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
             android:id="@+id/relativeLayoutAccountBox"
@@ -150,22 +168,5 @@
             android:layout_marginStart="25dp"
             android:background="@color/colorWhite"/>
     </RelativeLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageButtonCancel"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="80dp"
-        android:src="@drawable/pic_view_logo"
-        android:contentDescription="@string/nothing"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:text="@string/copyright"
-        android:textSize="15sp"/>
 
 </RelativeLayout>

@@ -38,20 +38,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                }, 1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         init();
     }
 
@@ -66,16 +53,16 @@ public class LoginActivity extends Activity {
             finish();
         }
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
-            textViewTitle.setText("设备注册登录");
-            editTextAccount.setInputType(InputType.TYPE_CLASS_NUMBER);
-            editTextAccount.setHint("请输入艾灸床号");
-        } else {
-            textViewTitle.setText("工作人员登录");
-            editTextAccount.setInputType(InputType.TYPE_CLASS_NUMBER);
-            editTextAccount.setHint("请输入帐号");
+            textViewTitle.setText("设备首次使用注册");
+            editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
+            //editTextAccount.setHint("请输入艾灸床号");
+        } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode){
+            textViewTitle.setText("智能艾灸床登录");
+            editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
+            //editTextAccount.setHint("请输入帐号");
 
 
-            JSONObject jsonObject = dataSQL.getJson("userAccount");
+            JSONObject jsonObject = dataSQL.getJson(ManageApplication.TABLE_NAME_USER_ACCOUNT);
             if (null != jsonObject) {
                 try {
                     String account = jsonObject.getString("account");
@@ -84,6 +71,9 @@ public class LoginActivity extends Activity {
                     e.printStackTrace();
                 }
             }
+        } else {
+            Log.i(TAG, "loginMode wrong,未知的登录请求");
+            finish();
         }
 
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
@@ -118,13 +108,12 @@ public class LoginActivity extends Activity {
 
         JSONObject data = new JSONObject();
         JSONObject jsonObject = new JSONObject();
-        int account = Integer.parseInt(stringAccount);
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
             Log.v(TAG, "device sign");
 
 
             try {
-                data.put("account", account);
+                data.put("account", stringAccount);
                 data.put("code", stringPassword);
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_DeviceSign");
@@ -133,12 +122,14 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
                 Log.v(TAG, "device sign,create JSONObject failed");
             }
-        } else {
+        } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
             Log.v(TAG, "user login");
 
             try {
-                data.put("account",account);
-                data.put("code", ManageApplication.string2MD5(stringPassword));
+                data.put("storeID",dataSQL.getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("storeID"));
+                data.put("bedID",dataSQL.getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID"));
+                data.put("account",stringAccount);
+                data.put("code", stringPassword);
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_Start_Login");
                 jsonObject.put("data", data);
@@ -213,6 +204,11 @@ public class LoginActivity extends Activity {
 
                         JSONObject jsonData = jsonObjectResponse.optJSONObject("data");
                         try {
+                            if (stringAccount.contains("store")) {
+                                jsonData.put("bedID", 0);
+                            } else {
+                                jsonData.put("bedID", Integer.parseInt(stringAccount));
+                            }
                             jsonData.put("password",ManageApplication.string2MD5(stringPassword));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -221,14 +217,14 @@ public class LoginActivity extends Activity {
 
                         setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         finish();
-                    } else {
+                    } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
                         //工作人员登录成功
-                        dataSQL.deleteTable("userAccount");
-                        dataSQL.createJsonTable("userAccount");
+                        dataSQL.deleteTable(ManageApplication.TABLE_NAME_USER_ACCOUNT);
+                        dataSQL.createJsonTable(ManageApplication.TABLE_NAME_USER_ACCOUNT);
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("account",stringAccount);
-                            dataSQL.pushJson("userAccount",jsonObject);
+                            dataSQL.pushJson(ManageApplication.TABLE_NAME_USER_ACCOUNT,jsonObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

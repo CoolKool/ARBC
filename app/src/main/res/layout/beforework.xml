@@ -419,8 +419,8 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/AutoCompleteTextViewCustomer"
+                <EditText
+                    android:id="@+id/editTextCustomer"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/textViewUser"
@@ -429,7 +429,7 @@
                     android:background="@color/colorHalfTransparent"
                     android:hint="@string/guest"
                     android:inputType="number"
-                    android:labelFor="@id/AutoCompleteTextViewCustomer"
+                    android:labelFor="@id/editTextCustomer"
                     android:lines="1"
                     android:maxWidth="280dp"
                     android:padding="10dp"
@@ -439,8 +439,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/AutoCompleteTextViewCustomer"
-                    android:layout_below="@id/AutoCompleteTextViewCustomer"
+                    android:layout_alignStart="@id/editTextCustomer"
+                    android:layout_below="@id/editTextCustomer"
                     android:layout_marginTop="10dp"
                     android:text="@string/id_or_phonenumber"
                     android:textColor="@color/colorWhite"
