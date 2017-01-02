@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
-import android.util.TimeFormatException;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -320,29 +319,37 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             tmp = jsonData.getInt("stateHotBackLeft");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
+                imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_released);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
+                imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_pressed);
             }
 
             tmp = jsonData.getInt("stateHotBackRight");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
+                imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_released);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
+                imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_pressed);
             }
 
             tmp = jsonData.getInt("stateHotForeLeft");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
+                imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_released);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
+                imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_pressed);
             }
 
             tmp = jsonData.getInt("stateHotForeRight");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
+                imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_released);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
+                imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_pressed);
             }
 
             tmp = jsonData.getInt("currentTime") - jsonData.getInt("startTime");
@@ -387,7 +394,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonPause:
-                ((ManageApplication) getApplication()).getCloudManage().devicePause();
+                ((ManageApplication) getApplication()).getCloudManage().setDeviceWorkState(1);
                 break;
             case R.id.imageButtonCancel:
                 finish();

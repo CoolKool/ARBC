@@ -607,12 +607,22 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void devicePause() {
+    public void setDeviceWorkState(int cmd) {
+        JSONObject jsonObjectDeviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
         JSONObject jsonObject = new JSONObject();
+        JSONObject jsonData = new JSONObject();
 
         try {
             //TODO 切换运行/暂停的指令
-            jsonObject.put("deviceInfo", "hh");
+
+            jsonObject.put("token", "0");
+            jsonObject.put("require","PAD_Work");
+
+            jsonData.put("storeID",jsonObjectDeviceInfo.getInt("storeID"));
+            jsonData.put("bedID",jsonObjectDeviceInfo.getInt("bedID"));
+            jsonData.put("state",cmd);
+
+            jsonObject.put("data",jsonData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
