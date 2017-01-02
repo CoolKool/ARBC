@@ -203,6 +203,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         //信息显示面板
         textViewStoreID = (TextView)findViewById(R.id.textViewStoreID);
         textViewStoreName = (TextView)findViewById(R.id.textViewStoreName);
+        try {
+            textViewStoreName.setText(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("storeName"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         textViewBedID = (TextView)findViewById(R.id.textViewBedID);
         textViewWorkTimeMin = (TextView)findViewById(R.id.textViewWorkTimeMin);
         textViewWorkTimeSec = (TextView)findViewById(R.id.textViewWorkTimeSec);
@@ -393,6 +398,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            //// TODO: 2017/1/2  
             case R.id.buttonPause:
                 ((ManageApplication) getApplication()).getCloudManage().setDeviceWorkState(1);
                 break;
