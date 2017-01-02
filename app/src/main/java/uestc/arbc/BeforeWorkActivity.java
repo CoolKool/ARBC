@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -348,11 +347,11 @@ public class BeforeWorkActivity extends Activity {
 
     private void setState(ImageButton imageButton, Boolean state) {
         if (state) {
-            imageButton.setBackgroundResource(R.color.colorYellow);
             imageButton.setTag(1);
+            imageButton.setImageResource(R.drawable.pic_button_leftup_pressed);
         } else {
-            imageButton.setBackgroundResource(R.color.colorTransparent);
             imageButton.setTag(0);
+            imageButton.setImageResource(R.drawable.pic_button_leftup_released);
         }
     }
 

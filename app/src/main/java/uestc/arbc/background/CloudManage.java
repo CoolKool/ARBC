@@ -560,11 +560,11 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void backBoxCtrlUp() {
+    public void backBoxCtrlFU() {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            //TODO 背部箱向上的指令
+            //TODO 背部箱前上的指令
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();
@@ -577,11 +577,11 @@ public class CloudManage {
         upload(jsonObject);
     }
 
-    public void backBoxCtrlDown() {
+    public void backBoxCtrlFD() {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            //TODO 背部箱向下的指令
+            //TODO 背部箱前下的指令
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_MachineControl");
             JSONObject data = new JSONObject();

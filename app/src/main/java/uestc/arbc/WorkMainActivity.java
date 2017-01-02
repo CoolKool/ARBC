@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +27,43 @@ import uestc.arbc.background.MyHandler;
 public class WorkMainActivity extends Activity implements View.OnClickListener {
     private final static String TAG = "WorkMainActivity";
 
-    TextView textViewTime;
-
-
     private boolean getDeviceState = true;
     private final static long DEVICE_STATE_DELAY = 1000;//每1秒获取一次艾灸机信息
 
-    private int storeID;
-    private int bedID;
+    ImageButton imageButtonMainBoxCtrlUP;
+    ImageButton imageButtonMainBoxCtrlDown;
+    ImageButton imageButtonBackBoxFU;
+    ImageButton imageButtonBackBoxFD;
+    ImageButton imageButtonBackBoxBU;
+    ImageButton imageButtonBackBoxBD;
+    ImageButton imageButtonHeatFL;
+    ImageButton imageButtonHeatFR;
+    ImageButton imageButtonHeatBL;
+    ImageButton imageButtonHeatBR;
+
+    TextView textViewStoreID;
+    TextView textViewStoreName;
+    TextView textViewBedID;
+    TextView textViewWorkTimeMin;
+    TextView textViewWorkTimeSec;
+    TextView textViewTemperatureFL;
+    TextView textViewTemperatureFR;
+    TextView textViewTemperatureBL;
+    TextView textViewTemperatureBR;
+    TextView textViewHumidityFront;
+    TextView textViewHumidityBack;
+    ImageView imageViewHeatBoardWorkStateFL;
+    ImageView imageViewHeatBoardWorkStateFR;
+    ImageView imageViewHeatBoardWorkStateBL;
+    ImageView imageViewHeatBoardWorkStateBR;
+    ImageView imageViewRawBoxWorkStateFL;
+    ImageView imageViewRawBoxWorkStateFR;
+    ImageView imageViewRawBoxWorkStateBL;
+    ImageView imageViewRawBoxWorkStateBR;
+    TextView textViewMainBoxPosition;
+    TextView textViewHeadBoxState;
+    TextView textViewTailBoxState;
+    TextView textViewTime;
 
     MyHandler handler = new MyHandler(TAG) {
 
@@ -129,23 +161,61 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.buttonPause).setOnClickListener(this);
 
         //接下来一堆控制按钮
-        findViewById(R.id.imageButtonMainBoxCtrlUp).setOnClickListener(this);
+        imageButtonMainBoxCtrlUP = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlUp);
+        imageButtonMainBoxCtrlUP.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonMainBoxCtrlDown).setOnClickListener(this);
+        imageButtonMainBoxCtrlDown = (ImageButton)findViewById(R.id.imageButtonMainBoxCtrlDown);
+        imageButtonMainBoxCtrlDown.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonBackBoxCtrlUp).setOnClickListener(this);
+        imageButtonBackBoxFU = (ImageButton)findViewById(R.id.imageButtonBackBoxFU);
+        imageButtonBackBoxFU.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonBackBoxCtrlDown).setOnClickListener(this);
+        imageButtonBackBoxFD = (ImageButton)findViewById(R.id.imageButtonBackBoxFD);
+        imageButtonBackBoxFD.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonHeatFL).setOnClickListener(this);
+        imageButtonBackBoxBU = (ImageButton)findViewById(R.id.imageButtonBackBoxBU);
+        imageButtonBackBoxBU.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonHeatFR).setOnClickListener(this);
+        imageButtonBackBoxBD = (ImageButton)findViewById(R.id.imageButtonBackBoxBD);
+        imageButtonBackBoxBD.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonHeatBL).setOnClickListener(this);
+        imageButtonHeatFL = (ImageButton)findViewById(R.id.imageButtonHeatFL);
+        imageButtonHeatFL.setOnClickListener(this);
 
-        findViewById(R.id.imageButtonHeatBR).setOnClickListener(this);
+        imageButtonHeatFR = (ImageButton)findViewById(R.id.imageButtonHeatFR);
+        imageButtonHeatFR.setOnClickListener(this);
+
+        imageButtonHeatBL = (ImageButton)findViewById(R.id.imageButtonHeatBL);
+        imageButtonHeatBL.setOnClickListener(this);
+
+        imageButtonHeatBR = (ImageButton)findViewById(R.id.imageButtonHeatBR);
+        imageButtonHeatBR.setOnClickListener(this);
 
         Log.i(TAG,"button init done");
+
+        //信息显示面板
+        textViewStoreID = (TextView)findViewById(R.id.textViewStoreID);
+        textViewStoreName = (TextView)findViewById(R.id.textViewStoreName);
+        textViewBedID = (TextView)findViewById(R.id.textViewBedID);
+        textViewWorkTimeMin = (TextView)findViewById(R.id.textViewWorkTimeMin);
+        textViewWorkTimeSec = (TextView)findViewById(R.id.textViewWorkTimeSec);
+        textViewTemperatureFL = (TextView)findViewById(R.id.textViewTemperatureFL);
+        textViewTemperatureFR = (TextView)findViewById(R.id.textViewTemperatureFR);
+        textViewTemperatureBL = (TextView)findViewById(R.id.textViewTemperatureBL);
+        textViewTemperatureBR = (TextView)findViewById(R.id.textViewTemperatureBR);
+        textViewHumidityFront = (TextView)findViewById(R.id.textViewHumidityFront);
+        textViewHumidityBack = (TextView)findViewById(R.id.textViewHumidityBack);
+        imageViewHeatBoardWorkStateFL = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateFL);
+        imageViewHeatBoardWorkStateFR = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateFR);
+        imageViewHeatBoardWorkStateBL = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateBL);
+        imageViewHeatBoardWorkStateBR = (ImageView)findViewById(R.id.imageViewHeatBoardWorkStateBR);
+        imageViewRawBoxWorkStateFL = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateFL);
+        imageViewRawBoxWorkStateFR = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateFR);
+        imageViewRawBoxWorkStateBL = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateBL);
+        imageViewRawBoxWorkStateBR = (ImageView)findViewById(R.id.imageViewRawBoxWorkStateBR);
+        textViewMainBoxPosition = (TextView)findViewById(R.id.textViewMainBoxPosition);
+        textViewHeadBoxState = (TextView)findViewById(R.id.textViewHeadBoxState);
+        textViewTailBoxState = (TextView)findViewById(R.id.textViewTailBoxState);
 
         //传递handler给ManageApplication
         ManageApplication.getInstance().setCurrentActivityHandler(handler);
@@ -201,11 +271,17 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             case R.id.imageButtonMainBoxCtrlDown:
                 ((ManageApplication) getApplication()).getCloudManage().mainBoxCtrlDown();
                 break;
-            case R.id.imageButtonBackBoxCtrlUp:
-                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlUp();
+            case R.id.imageButtonBackBoxFU:
+                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlFU();
                 break;
-            case R.id.imageButtonBackBoxCtrlDown:
-                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlDown();
+            case R.id.imageButtonBackBoxFD:
+                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlFD();
+                break;
+            case R.id.imageButtonBackBoxBU:
+
+                break;
+            case R.id.imageButtonBackBoxBD:
+
                 break;
             case R.id.imageButtonHeatFL:
                 ((ManageApplication) getApplication()).getCloudManage().heatBoardCtrl("FL");
@@ -223,6 +299,32 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
+    View.OnTouchListener mainBoxOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                ((ImageButton)v).setImageResource(R.drawable.pic_button_mainbox_up_pressed);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                ((ImageButton)v).setImageResource(R.drawable.pic_button_mainbox_up_released);
+            }
+
+            return false;
+        }
+    };
+
+    View.OnTouchListener backBoxOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                ((ImageButton)v).setImageResource(R.drawable.pic_button_backbox_up_pressed);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                ((ImageButton)v).setImageResource(R.drawable.pic_button_backbox_up_released);
+            }
+
+            return false;
+        }
+    };
 
     @Override
     public void finish() {
