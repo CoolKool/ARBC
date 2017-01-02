@@ -53,7 +53,7 @@ public class BeforeWorkActivity extends Activity {
     private int rawNum;
     private int consumeTypeID;
     private int herbTypeID;
-    private int customerID;
+    private int customerID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,24 +392,13 @@ public class BeforeWorkActivity extends Activity {
         JSONArray fireSet = new JSONArray();
         JSONObject jsonTemp;
 
-        int bedID = 0;
-        try {
-            bedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         try {
             //TODO
-            jsonObject.put("bedID", bedID);
+            jsonObject.put("bedID", ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID"));
             jsonObject.put("num", rawNum);
-            if (!editTextCustomer.getText().toString().isEmpty()) {
-                jsonObject.put("userID", Integer.parseInt(editTextCustomer.getText().toString()));
-            } else {
-                jsonObject.put("userID", 0);
-            }
-
-            jsonObject.put("herbID", 0);
-            jsonObject.put("consumeID", 0);
+            jsonObject.put("userID", customerID);
+            jsonObject.put("herbID", herbTypeID);
+            jsonObject.put("consumeID", consumeTypeID);
 
             jsonTemp = new JSONObject();
             jsonTemp.put("switchID", 1);
