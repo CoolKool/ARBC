@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +28,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
 
     private boolean getDeviceState = true;
-    private final static long DEVICE_STATE_DELAY = 5000;//每5秒获取一次艾灸机信息
+    private final static long DEVICE_STATE_DELAY = 1000;//每1秒获取一次艾灸机信息
+
+    private int storeID;
+    private int bedID;
 
     MyHandler handler = new MyHandler(TAG) {
 
@@ -46,14 +50,19 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                         dialogCloud.dismiss();
                         dialogCloud = null;
                     }
+                    getDeviceState = true;
+                    new GetDeviceStateThread().start();
                     break;
                 case ManageApplication.MESSAGE_SERVER_DISCONNECTED:
-                    dialogCloud = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
+                    if (null == dialogCloud) {
+                        dialogCloud = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
 
-                            .setMessage("云端连接异常")//设置显示的内容
+                                .setMessage("云端连接异常")//设置显示的内容
 
-                            .setCancelable(false).create();
-                    dialogCloud.show();
+                                .setCancelable(false).create();
+                        dialogCloud.show();
+                    }
+                    getDeviceState = false;
                     break;
                 case ManageApplication.MESSAGE_DEVICE_CONNECTED:
                     if (null != dialogLocal) {
@@ -62,23 +71,18 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     }
                     break;
                 case ManageApplication.MESSAGE_DEVICE_DISCONNECTED:
-                    dialogLocal = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
+                    if (null == dialogLocal) {
+                        dialogLocal = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
 
-                            .setMessage("云端连接异常")//设置显示的内容
+                                .setMessage("艾灸机连接异常")//设置显示的内容
 
-                            .setCancelable(false).create();
-                    dialogLocal.show();
+                                .setCancelable(false).create();
+                        dialogLocal.show();
+                    }
                     break;
                 case ManageApplication.MESSAGE_DEVICE_STATE:
-                    JSONObject json = null;
-                    try {
-                        json =  new JSONObject(msg.obj.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.i(TAG,"MESSAGE_DEVICE_STATE json error");
-                    }
-                    if (null != json) {
-                        updateDeviceState(json);
+                    if (null != msg.obj) {
+                        updateDeviceState((JSONObject) msg.obj);
                     }
                     break;
                 default:
@@ -153,22 +157,32 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     class GetDeviceStateThread extends Thread {
         @Override
         public void run() {
-            JSONObject jsonObjectDeviceState;
-            while (getDeviceState) {
-                jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
-                if (null != jsonObjectDeviceState) {
-                    Message message = new Message();
-                    message.what = ManageApplication.MESSAGE_DEVICE_STATE;
-                    message.obj = jsonObjectDeviceState.toString();
-                    handler.sendMessage(message);
+            try {
+                JSONObject jsonObjectDeviceState;
+                while (getDeviceState) {
+                    jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
+                    if (null != jsonObjectDeviceState) {
+                        if (jsonObjectDeviceState.getInt("errorCode") == 0) {
+                            Message message = new Message();
+                            message.what = ManageApplication.MESSAGE_DEVICE_STATE;
+                            message.obj = jsonObjectDeviceState;
+                            handler.sendMessage(message);
+                        } else {
+                            Toast.makeText(WorkMainActivity.this,jsonObjectDeviceState.getString("message"),Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-                SystemClock.sleep(DEVICE_STATE_DELAY);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            SystemClock.sleep(DEVICE_STATE_DELAY);
         }
     }
 
     private void updateDeviceState(JSONObject jsonObject) {
         //TODO 根据服务器返回的json更新UI界面
+
+
 
     }
 

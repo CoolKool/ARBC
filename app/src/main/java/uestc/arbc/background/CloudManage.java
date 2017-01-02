@@ -508,11 +508,17 @@ public class CloudManage {
     //获取艾灸机设备的传感器数据
     public JSONObject getDeviceState() {
         JSONObject jsonObject = new JSONObject();
-
+        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
         try {
-            //TODO 获取设备传感器数据的指令
+            // 获取设备传感器数据的指令
             jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_GetMachineState");
+            jsonObject.put("require", "PAD_Monitor");
+
+            JSONObject jsonData = new JSONObject();
+            jsonData.put("storeID",deviceInfo.getInt("storeID"));
+            jsonData.put("bedID",deviceInfo.getInt("bedID"));
+
+            jsonObject.put("data",jsonData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
