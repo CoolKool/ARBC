@@ -225,32 +225,35 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     class GetDeviceStateThread extends Thread {
         @Override
         public void run() {
-            try {
-                JSONObject jsonObjectDeviceState;
                 while (getDeviceState) {
-                    jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
-                    if (null != jsonObjectDeviceState) {
-                        if (jsonObjectDeviceState.getInt("errorCode") == 0) {
-                            JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
-                            if (jsonData.getInt("stateNetBoard") == 1) {
-                                Message message = new Message();
-                                message.what = ManageApplication.MESSAGE_DEVICE_STATE;
-                                message.obj = jsonObjectDeviceState;
-                                handler.sendMessage(message);
-                            } else if (jsonData.getInt("stateNetBoard") == 0) {
-                                Message message = new Message();
-                                message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
-                                handler.sendMessage(message);
-                            }
-                        } else {
-                            Toast.makeText(WorkMainActivity.this,jsonObjectDeviceState.getString("message"),Toast.LENGTH_SHORT).show();
+                    getOnes();
+                    SystemClock.sleep(DEVICE_STATE_DELAY);
+                }
+        }
+
+        public void getOnes() {
+            try {
+                JSONObject jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
+                if (null != jsonObjectDeviceState) {
+                    if (jsonObjectDeviceState.getInt("errorCode") == 0) {
+                        JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
+                        if (jsonData.getInt("stateNetBoard") == 1) {
+                            Message message = new Message();
+                            message.what = ManageApplication.MESSAGE_DEVICE_STATE;
+                            message.obj = jsonObjectDeviceState;
+                            handler.sendMessage(message);
+                        } else if (jsonData.getInt("stateNetBoard") == 0) {
+                            Message message = new Message();
+                            message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
+                            handler.sendMessage(message);
                         }
+                    } else {
+                        Toast.makeText(WorkMainActivity.this,jsonObjectDeviceState.getString("message"),Toast.LENGTH_SHORT).show();
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            SystemClock.sleep(DEVICE_STATE_DELAY);
         }
     }
 
@@ -311,36 +314,44 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
                 imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatBL.setTag(1);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
                 imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatBL.setTag(0);
             }
 
             tmp = jsonData.getInt("stateHotBackRight");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
                 imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatBR.setTag(1);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
                 imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatBR.setTag(0);
             }
 
             tmp = jsonData.getInt("stateHotForeLeft");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
                 imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatFL.setTag(1);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
                 imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatFL.setTag(0);
             }
 
             tmp = jsonData.getInt("stateHotForeRight");
             if ( 0 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
                 imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatFR.setTag(1);
             } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
                 imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatFR.setTag(0);
             }
 
             tmp = jsonData.getInt("currentTime") - jsonData.getInt("startTime");
@@ -410,20 +421,21 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.imageButtonHeatFL:
-
+                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_FL",(int)view.getTag());
                 break;
             case R.id.imageButtonHeatFR:
-
+                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_FR",(int)view.getTag());
                 break;
             case R.id.imageButtonHeatBL:
-
+                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_BL",(int)view.getTag());
                 break;
             case R.id.imageButtonHeatBR:
-
+                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_BR",(int)view.getTag());
                 break;
             default:
                 break;
         }
+        new GetDeviceStateThread().getOnes();
     }
 
     View.OnTouchListener mainBoxOnTouchListener = new View.OnTouchListener() {

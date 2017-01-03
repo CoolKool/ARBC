@@ -147,6 +147,16 @@ public class MainActivity extends Activity {
 
     private void selectBed() {
         //// TODO: 2017/1/3
+        int localBedID;
+        try {
+            localBedID= ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (0 != localBedID) {
+            ManageApplication.getInstance().bedID = localBedID;
+        }
     }
 
     @Override
