@@ -35,13 +35,13 @@ public class BeforeWorkActivity extends Activity {
 
     private final static String TAG = "BeforeWorkActivity";
 
-    private CheckBox checkBoxHeatBoardSwitch;
+    private ImageButton imageButtonHeatBoardSwitchSelectAll;
     private ImageButton imageButtonHeatFL;
     private ImageButton imageButtonHeatFR;
     private ImageButton imageButtonHeatBL;
     private ImageButton imageButtonHeatBR;
 
-    private CheckBox checkBoxRawBoxIgnite;
+    private ImageButton imageButtonRawBoxIgniteSelectAll;
     private ImageButton imageButtonIgniteFL;
     private ImageButton imageButtonIgniteFR;
     private ImageButton imageButtonIgniteBL;
@@ -222,13 +222,13 @@ public class BeforeWorkActivity extends Activity {
             });
         }
 
-        checkBoxHeatBoardSwitch = (CheckBox) findViewById(R.id.checkBoxHeatBoardSwitch);
+        imageButtonHeatBoardSwitchSelectAll = (ImageButton) findViewById(R.id.checkBoxHeatBoardSwitch);
         imageButtonHeatFL = (ImageButton) findViewById(R.id.imageButtonHeatFL);
         imageButtonHeatFR = (ImageButton) findViewById(R.id.imageButtonHeatFR);
         imageButtonHeatBL = (ImageButton) findViewById(R.id.imageButtonHeatBL);
         imageButtonHeatBR = (ImageButton) findViewById(R.id.imageButtonHeatBR);
 
-        checkBoxRawBoxIgnite = (CheckBox) findViewById(R.id.checkBoxRawBoxIgnite);
+        imageButtonRawBoxIgniteSelectAll = (ImageButton) findViewById(R.id.checkBoxRawBoxIgnite);
         imageButtonIgniteFL = (ImageButton) findViewById(R.id.imageButtonIgniteFL);
         imageButtonIgniteFR = (ImageButton) findViewById(R.id.imageButtonIgniteFR);
         imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
@@ -243,7 +243,7 @@ public class BeforeWorkActivity extends Activity {
         setState(imageButtonIgniteBL, true);
         setState(imageButtonIgniteBR, true);
 
-        checkBoxHeatBoardSwitch.setOnClickListener(new View.OnClickListener() {
+        imageButtonHeatBoardSwitchSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (((CheckBox) view).isChecked()) {
@@ -264,7 +264,7 @@ public class BeforeWorkActivity extends Activity {
         imageButtonHeatBL.setOnClickListener(heatListener);
         imageButtonHeatBR.setOnClickListener(heatListener);
 
-        checkBoxRawBoxIgnite.setOnClickListener(new View.OnClickListener() {
+        imageButtonRawBoxIgniteSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (((CheckBox) view).isChecked()) {
@@ -360,11 +360,11 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                checkBoxHeatBoardSwitch.setChecked(false);
+                imageButtonHeatBoardSwitchSelectAll.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
-                    checkBoxHeatBoardSwitch.setChecked(true);
+                    imageButtonHeatBoardSwitchSelectAll.setChecked(true);
                 }
             }
         }
@@ -375,11 +375,11 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                checkBoxRawBoxIgnite.setChecked(false);
+                imageButtonRawBoxIgniteSelectAll.setChecked(false);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
-                    checkBoxRawBoxIgnite.setChecked(true);
+                    imageButtonRawBoxIgniteSelectAll.setChecked(true);
                 }
             }
         }
