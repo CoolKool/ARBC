@@ -73,10 +73,15 @@
             android:textColor="@color/colorWhite"
             android:drawablePadding="20dp"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@id/textViewQR"
+            android:layout_toEndOf="@id/textViewQR">
+        <LinearLayout
+            android:id="@+id/linearLayoutStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -100,7 +105,22 @@
                 android:paddingEnd="80dp"
                 android:background="@color/colorGreen"
                 android:enabled="false"/>
+
         </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewSelectBed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/linearLayoutStart"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                tools:text="一号床"
+                android:textSize="45sp"
+                android:textColor="@color/colorYellow"
+                android:gravity="end" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout

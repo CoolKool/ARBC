@@ -98,7 +98,6 @@ public class MainActivity extends Activity {
     };
 
     private void getMainInfo() {
-        //TODO
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
         JSONObject jsonData;
         Log.i(TAG, "getMainInfo() running");
