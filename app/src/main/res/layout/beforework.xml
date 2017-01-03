@@ -238,7 +238,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/front_left"
+                        android:text="@string/select_all"
                         android:textColor="@color/colorWhite"
                         android:textSize="15sp" />
                 </LinearLayout>

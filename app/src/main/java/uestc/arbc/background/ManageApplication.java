@@ -16,6 +16,9 @@ import java.security.NoSuchAlgorithmException;
 public class ManageApplication extends Application {
     private final static String TAG = "ManageApplication";
 
+    public volatile int storeID = 0;
+    public volatile int bedID = 0;
+
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_USER_ACCOUNT = "deviceInfo";//保存工作人员账号的表名
 

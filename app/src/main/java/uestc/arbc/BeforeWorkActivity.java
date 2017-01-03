@@ -222,13 +222,13 @@ public class BeforeWorkActivity extends Activity {
             });
         }
 
-        imageButtonHeatBoardSwitchSelectAll = (ImageButton) findViewById(R.id.checkBoxHeatBoardSwitch);
+        imageButtonHeatBoardSwitchSelectAll = (ImageButton) findViewById(R.id.imageButtonHeatSelectAll);
         imageButtonHeatFL = (ImageButton) findViewById(R.id.imageButtonHeatFL);
         imageButtonHeatFR = (ImageButton) findViewById(R.id.imageButtonHeatFR);
         imageButtonHeatBL = (ImageButton) findViewById(R.id.imageButtonHeatBL);
         imageButtonHeatBR = (ImageButton) findViewById(R.id.imageButtonHeatBR);
 
-        imageButtonRawBoxIgniteSelectAll = (ImageButton) findViewById(R.id.checkBoxRawBoxIgnite);
+        imageButtonRawBoxIgniteSelectAll = (ImageButton) findViewById(R.id.imageButtonIgniteSelectAll);
         imageButtonIgniteFL = (ImageButton) findViewById(R.id.imageButtonIgniteFL);
         imageButtonIgniteFR = (ImageButton) findViewById(R.id.imageButtonIgniteFR);
         imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
@@ -360,11 +360,13 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                imageButtonHeatBoardSwitchSelectAll.setChecked(false);
+                imageButtonHeatBoardSwitchSelectAll.setTag(false);
+                imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
-                    imageButtonHeatBoardSwitchSelectAll.setChecked(true);
+                    imageButtonHeatBoardSwitchSelectAll.setTag(true);
+                    imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                 }
             }
         }
@@ -375,15 +377,18 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                imageButtonRawBoxIgniteSelectAll.setChecked(false);
+                imageButtonRawBoxIgniteSelectAll.setTag(false);
+                imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
-                    imageButtonRawBoxIgniteSelectAll.setChecked(true);
+                    imageButtonRawBoxIgniteSelectAll.setTag(true);
+                    imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                 }
             }
         }
     };
+
 
     private JSONObject getStartSetting() {
         JSONObject jsonObject = new JSONObject();
@@ -393,7 +398,7 @@ public class BeforeWorkActivity extends Activity {
 
         try {
             //TODO
-            jsonObject.put("bedID", ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID"));
+            jsonObject.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("num", rawNum);
             jsonObject.put("userID", customerID);
             jsonObject.put("herbID", herbTypeID);

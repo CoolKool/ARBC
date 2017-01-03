@@ -17,8 +17,12 @@ import android.widget.Toast;
 import android.util.DisplayMetrics;
 import android.view.Display;
 */
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import uestc.arbc.background.DataSQL;
 import uestc.arbc.background.ManageApplication;
@@ -34,6 +38,7 @@ public class MainActivity extends Activity {
     private TextView textViewCloudConnect;
     private TextView textViewLocalConnect;
 
+    private List<JSONObject> bedList = new ArrayList<>();
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
     private DataSQL dataSQL;
@@ -95,40 +100,53 @@ public class MainActivity extends Activity {
     private void getMainInfo() {
         //TODO
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
-        JSONObject data;
-        Log.i(TAG,"getMainInfo() running");
+        JSONObject jsonData;
+        Log.i(TAG, "getMainInfo() running");
         if (null == jsonObjectMainInfo) {
-            Log.i(TAG,"getMainInfo failed:return null");
+            Log.i(TAG, "getMainInfo failed:return null");
             return;
         }
         try {
-            if (jsonObjectMainInfo.getInt("errorCode") == -1)  {
-                Toast.makeText(MainActivity.this,jsonObjectMainInfo.getString("message"),Toast.LENGTH_LONG).show();
+            if (jsonObjectMainInfo.getInt("errorCode") == -1) {
+                Toast.makeText(MainActivity.this, jsonObjectMainInfo.getString("message"), Toast.LENGTH_LONG).show();
             } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
-                data = jsonObjectMainInfo.optJSONObject("data");
-                if (null != data) {
-                    if (data.getInt("boardConnect") == 0) {
-                        textViewLocalConnect.setText(getString(R.string.local_connect_successful));
-                        isDeviceConnected = true;
-                        if (isServerConnected) {
-                            buttonStart.setEnabled(true);
-                        }
-                    } else {
-                        textViewLocalConnect.setText(getString(R.string.local_connect_failed));
-                        isDeviceConnected = false;
-                        buttonStart.setEnabled(false);
+                jsonData = jsonObjectMainInfo.getJSONObject("data");
+                ManageApplication.getInstance().storeID = jsonData.getInt("storeID");
+
+                if (jsonData.getInt("boardConnect") == 0) {
+                    textViewLocalConnect.setText(getString(R.string.local_connect_successful));
+                    isDeviceConnected = true;
+                    if (isServerConnected) {
+                        buttonStart.setEnabled(true);
                     }
-
-                    //TODO
-
                 } else {
-                    Log.i(TAG,"getMainInfo failed:data null");
+                    textViewLocalConnect.setText(getString(R.string.local_connect_failed));
+                    isDeviceConnected = false;
+                    buttonStart.setEnabled(false);
+                }
+
+                if (ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID") == 0) {
+
+                    JSONArray jsonArrayBedList = jsonData.optJSONArray("bedList");
+                    for (int i = 0; i < jsonArrayBedList.length(); i++) {
+                        JSONObject jsonObjectTmp = jsonArrayBedList.getJSONObject(i);
+                        if (!bedList.contains(jsonObjectTmp)) {
+                            bedList.add(jsonObjectTmp);
+                        }
+                    }
+                    if (ManageApplication.getInstance().bedID == 0) {
+                        selectBed();
+                    }
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG,"getMainInfo() finished");
+        Log.i(TAG, "getMainInfo() finished");
+    }
+
+    private void selectBed() {
+        //// TODO: 2017/1/3
     }
 
     @Override
@@ -193,15 +211,15 @@ public class MainActivity extends Activity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                     }
-                },1000);
+                }, 1000);
             }
         });
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     @Override
@@ -238,32 +256,32 @@ public class MainActivity extends Activity {
         Intent intent = new Intent();
         JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().mainStart();
         if (null == jsonObject) {
-            Toast.makeText(this,"通信失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "通信失败", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
             if (jsonObject.getInt("errorCode") == -1) {
-                Toast.makeText(this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 return;
             } else if (jsonObject.getInt("errorCode") == 0) {
                 JSONObject data = jsonObject.optJSONObject("data");
                 if (null == data) {
-                    Toast.makeText(this,"数据错误",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (data.getInt("state") == 0) {
-                    intent.setClass(this,LoginActivity.class);
-                    intent.putExtra("RequestCode",ManageApplication.REQUEST_CODE_USER_LOGIN);
+                    intent.setClass(this, LoginActivity.class);
+                    intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_USER_LOGIN);
                 } else if (data.getInt("state") == 1) {
-                    intent.setClass(this,WorkMainActivity.class);
+                    intent.setClass(this, WorkMainActivity.class);
                 } else {
-                    Toast.makeText(this,"数据错误",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i(TAG,"start failed:json error");
+            Log.i(TAG, "start failed:json error");
         }
 
         startActivity(intent);

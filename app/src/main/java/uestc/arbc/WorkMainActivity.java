@@ -128,21 +128,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workmain);
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                },1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         init();
 
     }
@@ -400,22 +386,22 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             //// TODO: 2017/1/2  
             case R.id.buttonPause:
-                ((ManageApplication) getApplication()).getCloudManage().setDeviceWorkState(1);
+
                 break;
             case R.id.imageButtonCancel:
                 finish();
                 break;
             case R.id.imageButtonMainBoxCtrlUp:
-                ((ManageApplication) getApplication()).getCloudManage().mainBoxCtrlUp();
+
                 break;
             case R.id.imageButtonMainBoxCtrlDown:
-                ((ManageApplication) getApplication()).getCloudManage().mainBoxCtrlDown();
+
                 break;
             case R.id.imageButtonBackBoxFU:
-                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlFU();
+
                 break;
             case R.id.imageButtonBackBoxFD:
-                ((ManageApplication) getApplication()).getCloudManage().backBoxCtrlFD();
+
                 break;
             case R.id.imageButtonBackBoxBU:
 
@@ -424,16 +410,16 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.imageButtonHeatFL:
-                ((ManageApplication) getApplication()).getCloudManage().heatBoardCtrl("FL");
+
                 break;
             case R.id.imageButtonHeatFR:
-                ((ManageApplication) getApplication()).getCloudManage().heatBoardCtrl("FR");
+
                 break;
             case R.id.imageButtonHeatBL:
-                ((ManageApplication) getApplication()).getCloudManage().heatBoardCtrl("BL");
+
                 break;
             case R.id.imageButtonHeatBR:
-                ((ManageApplication) getApplication()).getCloudManage().heatBoardCtrl("BR");
+
                 break;
             default:
                 break;

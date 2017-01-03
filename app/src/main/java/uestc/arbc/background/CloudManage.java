@@ -449,12 +449,11 @@ public class CloudManage {
     public JSONObject mainStart() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
         try {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Main_Start");
-            data.put("storeID", deviceInfo.getInt("bedID"));
+            data.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -467,12 +466,11 @@ public class CloudManage {
     public JSONObject getRawType() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
         try {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Start_GetType");
-            data.put("storeID", deviceInfo.getInt("bedID"));
+            data.put("storeID", ManageApplication.getInstance().storeID);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -481,42 +479,18 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
-    //TODO 艾灸机是否在线
-    public boolean isDeviceConnected() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_IsMachineConnected");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JSONObject jsonResponse = upload(jsonObject);
-        if (null == jsonResponse) {
-            return false;
-        }
-        int result;
-        try {
-            result = jsonResponse.getInt("errorCode");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return 0 == result;
-    }
 
     //获取艾灸机设备的传感器数据
     public JSONObject getDeviceState() {
         JSONObject jsonObject = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
         try {
             // 获取设备传感器数据的指令
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Monitor");
 
             JSONObject jsonData = new JSONObject();
-            jsonData.put("storeID",deviceInfo.getInt("storeID"));
-            jsonData.put("bedID",deviceInfo.getInt("bedID"));
+            jsonData.put("storeID",ManageApplication.getInstance().storeID);
+            jsonData.put("bedID",ManageApplication.getInstance().bedID);
 
             jsonObject.put("data",jsonData);
         } catch (JSONException e) {
@@ -526,115 +500,12 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
-    public void mainBoxCtrlUp() {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            //TODO 主箱向上的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_MachineControl");
-            JSONObject data = new JSONObject();
-            data.put("cmd", "MainBoxUp");
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
-
-    public void mainBoxCtrlDown() {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            //TODO 主箱向下的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_MachineControl");
-            JSONObject data = new JSONObject();
-            data.put("cmd", "MainBoxDown");
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
-
-    public void backBoxCtrlFU() {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            //TODO 背部箱前上的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_MachineControl");
-            JSONObject data = new JSONObject();
-            data.put("cmd", "BackBoxUp");
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
-
-    public void backBoxCtrlFD() {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            //TODO 背部箱前下的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_MachineControl");
-            JSONObject data = new JSONObject();
-            data.put("cmd", "BackBoxDown");
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
-
-    public void heatBoardCtrl(String whichOne) {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            //TODO 切换某个加热板开启状态的指令
-            jsonObject.put("deviceInfo", "hh");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
-
-    public void setDeviceWorkState(int cmd) {
-        JSONObject jsonObjectDeviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
-        JSONObject jsonObject = new JSONObject();
-        JSONObject jsonData = new JSONObject();
-
-        try {
-            //TODO 切换运行/暂停的指令
-
-            jsonObject.put("token", "0");
-            jsonObject.put("require","PAD_Work");
-
-            jsonData.put("storeID",jsonObjectDeviceInfo.getInt("storeID"));
-            jsonData.put("bedID",jsonObjectDeviceInfo.getInt("bedID"));
-            jsonData.put("state",cmd);
-
-            jsonObject.put("data",jsonData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        upload(jsonObject);
-    }
 
     public JSONObject getCustomerInfo(int phone) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
-            //TODO 获取客户的的指令
+            //获取客户的的指令
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_User_Info");
             data.put("phone", phone);

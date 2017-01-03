@@ -111,10 +111,13 @@ public class LoginActivity extends Activity {
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
             Log.v(TAG, "device sign");
 
-
             try {
                 data.put("account", stringAccount);
-                data.put("code", stringPassword);
+                if (stringAccount.contains("store")) {
+                    data.put("code", ManageApplication.string2MD5(stringPassword));
+                } else {
+                    data.put("code", stringPassword);
+                }
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_DeviceSign");
                 jsonObject.put("data", data);
@@ -126,8 +129,8 @@ public class LoginActivity extends Activity {
             Log.v(TAG, "user login");
 
             try {
-                data.put("storeID",dataSQL.getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("storeID"));
-                data.put("bedID",dataSQL.getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID"));
+                data.put("storeID",ManageApplication.getInstance().storeID);
+                data.put("bedID",ManageApplication.getInstance().bedID);
                 data.put("account",stringAccount);
                 data.put("code", stringPassword);
                 jsonObject.put("token", "0");

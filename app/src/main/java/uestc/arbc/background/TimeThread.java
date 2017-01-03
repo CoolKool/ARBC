@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 
 
-class TimeThread extends Thread {
+public class TimeThread extends Thread {
 
     private volatile boolean keepRunning = true;
 
