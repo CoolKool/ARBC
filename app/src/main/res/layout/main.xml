@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/pic_view_background"
+    android:orientation="vertical"
     tools:context="uestc.arbc.MainActivity">
 
     <RelativeLayout
@@ -20,7 +20,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/nothing"
-            android:src="@drawable/pic_view_logo"/>
+            android:src="@drawable/pic_view_logo" />
 
         <ImageButton
             android:id="@+id/imageButtonManage"
@@ -28,9 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:background="@color/colorTransparent"
             android:contentDescription="@string/nothing"
-            android:src="@drawable/pic_button_manage"
-            android:background="@color/colorTransparent" />
+            android:src="@drawable/pic_button_manage" />
 
         <TextView
             android:id="@+id/textViewTime"
@@ -40,17 +40,17 @@
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@id/imageButtonManage"
             android:text="@string/time_initiating"
-            android:textSize="20sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/textViewTime"
             android:layout_alignBottom="@id/textViewTime"
             android:layout_marginEnd="15dp"
-            android:src="@drawable/pic_view_calendar"
-            android:contentDescription="@string/nothing"/>
+            android:layout_toStartOf="@id/textViewTime"
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_view_calendar" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,60 +66,61 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="100dp"
+            android:drawablePadding="20dp"
             android:drawableTop="@drawable/pic_view_qrcode"
             android:gravity="center"
             android:text="@string/qr_code"
-            android:textSize="20sp"
             android:textColor="@color/colorWhite"
-            android:drawablePadding="20dp"/>
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toEndOf="@id/textViewQR">
-        <LinearLayout
-            android:id="@+id/linearLayoutStart"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:gravity="center">
 
-            <ImageView
+            <LinearLayout
+                android:id="@+id/linearLayoutStart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pic_view_product"
-                android:contentDescription="@string/nothing"/>
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/buttonStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:text="@string/start"
-                android:textSize="40sp"
-                android:textColor="@color/colorWhite"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:paddingStart="80dp"
-                android:paddingEnd="80dp"
-                android:background="@color/colorGreen"
-                android:enabled="false"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/nothing"
+                    android:src="@drawable/pic_view_product" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/buttonStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:background="@color/colorGreen"
+                    android:enabled="false"
+                    android:paddingBottom="20dp"
+                    android:paddingEnd="80dp"
+                    android:paddingStart="80dp"
+                    android:paddingTop="20dp"
+                    android:text="@string/start"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="40sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewSelectBed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/linearLayoutStart"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
                 android:layout_marginEnd="30dp"
-                tools:text="一号床"
-                android:textSize="45sp"
+                android:layout_toEndOf="@id/linearLayoutStart"
+                android:gravity="end"
                 android:textColor="@color/colorYellow"
-                android:gravity="end" />
+                android:textSize="45sp"
+                tools:text="一号床" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -129,33 +130,33 @@
         android:layout_weight="3">
 
         <ImageView
+            android:id="@+id/imageViewCloudConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="160dp"
-            android:src="@drawable/pic_view_connected"
             android:contentDescription="@string/nothing"
-            android:id="@+id/imageViewCloudConnect"/>
+            android:src="@drawable/pic_view_connected" />
 
         <TextView
             android:id="@+id/textViewCloudConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageViewCloudConnect"
             android:layout_centerVertical="true"
             android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/imageViewCloudConnect"
             android:text="@string/connecting"
-            android:textSize="20sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
 
         <ImageView
+            android:id="@+id/imageViewLocalConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/pic_view_connected"
             android:contentDescription="@string/nothing"
-            android:id="@+id/imageViewLocalConnect"/>
+            android:src="@drawable/pic_view_connected" />
 
         <ImageButton
             android:id="@+id/imageButtonInfo"
@@ -164,22 +165,22 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="70dp"
-            android:src="@drawable/pic_button_info"
             android:background="@color/colorTransparent"
-            android:contentDescription="@string/nothing" />
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_button_info" />
 
         <TextView
             android:id="@+id/textViewLocalConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageViewLocalConnect"
             android:layout_centerVertical="true"
             android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/imageViewLocalConnect"
             android:layout_toStartOf="@id/imageButtonInfo"
             android:gravity="start"
             android:text="@string/connecting"
-            android:textSize="20sp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewCopyright"
@@ -189,7 +190,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:text="@string/copyright"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </LinearLayout>
