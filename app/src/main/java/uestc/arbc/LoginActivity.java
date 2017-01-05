@@ -209,8 +209,6 @@ public class LoginActivity extends Activity {
                         try {
                             if (stringAccount.contains("store")) {
                                 jsonData.put("bedID", 0);
-                            } else {
-                                jsonData.put("bedID", Integer.parseInt(stringAccount));
                             }
                             jsonData.put("password",ManageApplication.string2MD5(stringPassword));
                         } catch (JSONException e) {

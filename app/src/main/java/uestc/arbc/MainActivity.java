@@ -9,7 +9,10 @@ import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +40,9 @@ public class MainActivity extends Activity {
     private Button buttonStart;
     private TextView textViewCloudConnect;
     private TextView textViewLocalConnect;
+    private TextView textViewSelectBed;
 
+    AlertDialog alertDialogSelectBed = null;
     private List<JSONObject> bedList = new ArrayList<>();
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
@@ -123,8 +128,8 @@ public class MainActivity extends Activity {
                     isDeviceConnected = false;
                     buttonStart.setEnabled(false);
                 }
-
-                if (ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID") == 0) {
+                int localBedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
+                if (0 == localBedID) {
 
                     JSONArray jsonArrayBedList = jsonData.optJSONArray("bedList");
                     for (int i = 0; i < jsonArrayBedList.length(); i++) {
@@ -136,6 +141,9 @@ public class MainActivity extends Activity {
                     if (ManageApplication.getInstance().bedID == 0) {
                         selectBed();
                     }
+                } else {
+                    ManageApplication.getInstance().bedID = localBedID;
+                    textViewSelectBed.setText(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("bedName"));
                 }
             }
         } catch (JSONException e) {
@@ -145,18 +153,73 @@ public class MainActivity extends Activity {
     }
 
     private void selectBed() {
-        //// TODO: 2017/1/3
-        int localBedID;
-        try {
-            localBedID= ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-        if (0 != localBedID) {
-            ManageApplication.getInstance().bedID = localBedID;
+        if (null == alertDialogSelectBed) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View layout = getLayoutInflater().inflate(R.layout.bedlist_frame, null);
+            ListView listViewBedList = (ListView) layout.findViewById(R.id.listViewBedList);
+            listViewBedList.setAdapter(bedAdapter);
+            builder.setView(layout);
+            alertDialogSelectBed = builder.create();
+            alertDialogSelectBed.show();
         }
     }
+
+    private BaseAdapter bedAdapter = new BaseAdapter() {
+        @Override
+        public int getCount() {
+            return bedList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return bedList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (null == convertView) {
+                convertView = getLayoutInflater().inflate(R.layout.bedlist_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.bedID = (TextView) convertView.findViewById(R.id.textViewBedID);
+                viewHolder.bedName = (TextView) convertView.findViewById(R.id.textViewBedName);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            try {
+                final int bedID = bedList.get(position).getInt("bedID");
+                final String bedName = bedList.get(position).getString("bedName");
+                viewHolder.bedID.setText(String.valueOf(bedID));
+                viewHolder.bedName.setText(bedName);
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ManageApplication.getInstance().bedID = bedID;
+                        textViewSelectBed.setText(bedName);
+                        if (null != alertDialogSelectBed) {
+                            alertDialogSelectBed.dismiss();
+                        }
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView bedID;
+            TextView bedName;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +245,8 @@ public class MainActivity extends Activity {
         textViewCloudConnect = ((TextView) findViewById(R.id.textViewCloudConnect));
 
         textViewLocalConnect = ((TextView) findViewById(R.id.textViewLocalConnect));
+
+        textViewSelectBed = (TextView) findViewById(R.id.textViewSelectBed);
 
         //发送handler
         ((ManageApplication) getApplication()).setCurrentActivityHandler(handler);
