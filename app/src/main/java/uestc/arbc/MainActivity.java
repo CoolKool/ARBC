@@ -116,6 +116,7 @@ public class MainActivity extends Activity {
             } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
                 jsonData = jsonObjectMainInfo.getJSONObject("data");
                 ManageApplication.getInstance().storeID = jsonData.getInt("storeID");
+                ManageApplication.getInstance().storeName = jsonData.getString("storeName");
 
                 if (jsonData.getInt("boardConnect") == 0) {
                     textViewLocalConnect.setText(getString(R.string.local_connect_successful));
@@ -142,8 +143,10 @@ public class MainActivity extends Activity {
                         selectBed();
                     }
                 } else {
+                    String localBedName = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("bedName");
                     ManageApplication.getInstance().bedID = localBedID;
-                    textViewSelectBed.setText(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("bedName"));
+                    ManageApplication.getInstance().bedName = localBedName;
+                    textViewSelectBed.setText(localBedName);
                 }
             }
         } catch (JSONException e) {
@@ -202,6 +205,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         ManageApplication.getInstance().bedID = bedID;
+                        ManageApplication.getInstance().bedName = bedName;
                         textViewSelectBed.setText(bedName);
                         if (null != alertDialogSelectBed) {
                             alertDialogSelectBed.dismiss();

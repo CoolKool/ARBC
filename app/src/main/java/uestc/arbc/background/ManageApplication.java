@@ -18,6 +18,8 @@ public class ManageApplication extends Application {
 
     public volatile int storeID = 0;
     public volatile int bedID = 0;
+    public volatile String storeName = "";
+    public volatile String bedName = "";
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_USER_ACCOUNT = "deviceInfo";//保存工作人员账号的表名

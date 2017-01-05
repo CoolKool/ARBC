@@ -189,11 +189,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         //信息显示面板
         textViewStoreID = (TextView)findViewById(R.id.textViewStoreID);
         textViewStoreName = (TextView)findViewById(R.id.textViewStoreName);
-        try {
-            textViewStoreName.setText(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("storeName"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        textViewStoreName.setText(ManageApplication.getInstance().storeName);
+
         textViewBedID = (TextView)findViewById(R.id.textViewBedID);
         textViewWorkTimeMin = (TextView)findViewById(R.id.textViewWorkTimeMin);
         textViewWorkTimeSec = (TextView)findViewById(R.id.textViewWorkTimeSec);
