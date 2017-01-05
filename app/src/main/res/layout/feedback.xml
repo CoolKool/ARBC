@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pic_view_background"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="130">
+        android:layout_weight="130"
+        android:background="@color/colorLightBlue">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -18,9 +20,17 @@
             android:contentDescription="@string/nothing"
             android:src="@drawable/pic_view_logo" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/device_info"
+            android:textSize="40sp"
+            android:textColor="@color/colorWhite"
+            tools:ignore="RelativeOverlap" />
 
         <ImageButton
-            android:id="@+id/cancel"
+            android:id="@+id/imageButtonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -38,12 +48,13 @@
 
         <View
             android:id="@+id/center"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerInParent="true" />
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="@color/colorTransparent" />
 
-        <LinearLayout
-            android:id="@+id/linearLayoutInfoLeft"
+        <ScrollView
+
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -52,7 +63,14 @@
             android:gravity="start"
             android:orientation="vertical">
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/textViewInfoLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/colorBlack" />
+
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,15 +78,21 @@
             android:layout_toEndOf="@id/center"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayoutInfoRight"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="370"
                 android:gravity="start"
                 android:orientation="vertical">
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textViewInfoRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorBlack" />
+
+            </ScrollView>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -81,19 +105,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:background="@color/colorHalfTransparent"
                     android:gravity="top|start"
                     android:hint="@string/welcome_to_feedback"
                     android:inputType="textMultiLine"
                     android:labelFor="@id/editTextFeedback"
                     android:lines="4"
                     android:padding="5dp"
-                    android:textColor="@color/colorWhite"
-                    android:textColorHint="@color/colorWhite"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
                     android:textSize="20sp" />
 
                 <Button
-                    android:id="@+id/buttonHandIn"
+                    android:id="@+id/buttonSubmit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -104,7 +127,7 @@
                     android:paddingEnd="80dp"
                     android:paddingStart="80dp"
                     android:paddingTop="10dp"
-                    android:text="@string/hand_in"
+                    android:text="@string/submit"
                     android:textColor="@android:color/white"
                     android:textSize="25sp" />
 

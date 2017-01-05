@@ -535,4 +535,41 @@ public class CloudManage {
 
         return upload(jsonObject);
     }
+
+    public JSONObject getBedInfo() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            //获取设备信息的指令
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Bed_Info");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
+    public JSONObject feedbackSubmit(String content) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            //提交反馈的指令
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Proposal");
+            data.put("content", content);
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
 }

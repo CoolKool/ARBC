@@ -44,7 +44,6 @@
     <string name="cm">CM</string>
     <string name="continue_and_pause">开启/暂停</string>
     <string name="welcome_to_feedback">欢迎您提出宝贵建议：</string>
-    <string name="hand_in">提交</string>
     <string name="pump_ctrl">水泵控制</string>
     <string name="fan_ctrl">风扇调节</string>
     <string name="hand_in_test_report">填写测试报告</string>
@@ -107,4 +106,5 @@
     <string name="sex">性别：</string>
     <string name="age">年龄：</string>
     <string name="submit">提交</string>
+    <string name="device_info">智能艾灸床信息</string>
 </resources>
