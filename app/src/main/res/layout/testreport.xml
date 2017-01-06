@@ -69,7 +69,7 @@
             android:background="@color/colorGreen"
             android:paddingEnd="80dp"
             android:paddingStart="80dp"
-            android:text="@string/hand_in"
+            android:text="@string/submit"
             android:textColor="@color/colorWhite"
             android:textSize="25sp" />
 

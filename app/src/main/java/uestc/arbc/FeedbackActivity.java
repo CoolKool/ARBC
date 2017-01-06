@@ -2,9 +2,16 @@ package uestc.arbc;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,13 +121,82 @@ public class FeedbackActivity extends Activity {
             Toast.makeText(this, "获取信息失败 T_T", Toast.LENGTH_SHORT).show();
             return;
         }
-        //// TODO: 2017/1/5
         try {
             JSONObject jsonData = jsonObject.getJSONObject("data");
+            int bedID, boardID, boardVer, companyQQ, companyTel, padID, padVer, produceTime, storeID, workNum, workTotalTime;
+            String bedType, companyAddr, companyIntro, companyWeixin, serverTel, specification, storeAddr, storeName;
+
+            bedID = jsonData.getInt("bedID");
+            boardID = jsonData.getInt("boardID");
+            boardVer = jsonData.getInt("boardVer");
+            companyQQ = jsonData.getInt("companyQQ");
+            companyTel = jsonData.getInt("companyTel");
+            padID = jsonData.getInt("padID");
+            padVer = jsonData.getInt("padVer");
+            produceTime = jsonData.getInt("produceTime");
+            storeID = jsonData.getInt("storeID");
+            workNum = jsonData.getInt("workNum");
+            workTotalTime = jsonData.getInt("workTotalTime");
+            bedType = jsonData.getString("bedType");
+            companyAddr = jsonData.getString("companyAddr");
+            companyIntro = jsonData.getString("companyIntro");
+            companyWeixin = jsonData.getString("companyWeixin");
+            serverTel = jsonData.getString("serverTel");
+            specification = jsonData.getString("specification");
+            storeAddr = jsonData.getString("storeAddr");
+            storeName = jsonData.getString("storeName");
+
+            textViewInfoLeft.append("艾灸床编号：" + bedID);
+            textViewInfoLeft.append("\n艾灸床型号：" + bedType);
+            textViewInfoLeft.append("\n艾灸床规格：" + specification);
+            textViewInfoLeft.append("\n艾灸床生产日期：" + produceTime);
+            textViewInfoLeft.append("\n电路板编号：" + boardID);
+            textViewInfoLeft.append("\n电路板版本：" + boardVer);
+            textViewInfoLeft.append("\n智能平板编号：" + padID);
+            textViewInfoLeft.append("\n智能平板版本：" + padVer);
+            textViewInfoLeft.append("\n商家编号：" + storeID);
+            textViewInfoLeft.append("\n商家名称：" + storeName);
+            textViewInfoLeft.append("\n商家地址：" + storeAddr);
+            textViewInfoLeft.append("\n商家服务电话：" + serverTel);
+            SpannableString spannableStringWorkTime = new SpannableString("" + workNum);
+            spannableStringWorkTime.setSpan(new ForegroundColorSpan(0xe8ba0e), 0, spannableStringWorkTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textViewInfoLeft.append("\n共运行" + spannableStringWorkTime + "次，");
+
+            //// TODO: 2017/1/6  
+            SpannableString spannableStringWorkTotalTime = new SpannableString("" + workTotalTime);
+            spannableStringWorkTotalTime.setSpan(new ForegroundColorSpan(0xe8ba0e), 0, spannableStringWorkTotalTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textViewInfoLeft.append("已工作" + spannableStringWorkTotalTime);
+
+            SpannableString spannableStringCompany = new SpannableString("四川艾瑞本草科技有限公司");
+            spannableStringCompany.setSpan(new AbsoluteSizeSpan(40, true), 0, spannableStringCompany.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textViewInfoRight.append(spannableStringCompany + companyIntro);
+
+            textViewInfoRight.append("\n" + getImageSpannedString(" 公司地址：" + companyAddr, 0, R.drawable.pic_view_address));
+
+            textViewInfoRight.append("\n" + getImageSpannedString(" 服务/加盟热线电话：" + companyTel, 0, R.drawable.pic_view_phone));
+
+            textViewInfoRight.append("\n" + getImageSpannedString(" 服务QQ：" + companyQQ, 0, R.drawable.pic_view_qq));
+            textViewInfoRight.append("\n" + getImageSpannedString(" 微信公众号：" + companyWeixin, 0, R.drawable.pic_view_wechat));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private SpannableString getImageSpannedString(String string, int insertPosition, int resourceID) {
+        SpannableString spannableString = new SpannableString(string);
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT >= 23) {
+            drawable = getDrawable(resourceID);
+        } else {
+            drawable = getResources().getDrawable(resourceID);
+        }
+        if (null != drawable) {
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            spannableString.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), insertPosition, insertPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return spannableString;
     }
 
     private void submit() {
