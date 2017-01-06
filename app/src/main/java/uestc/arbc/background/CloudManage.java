@@ -121,7 +121,7 @@ public class CloudManage {
                 }
 
                 try {
-                    Log.i(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(),0,udpPacket.getLength() - 1));
+                    Log.d(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, udpPacket.getLength() - 1));
                     String string = new String(udpPacket.getData(), 0, udpPacket.getLength()-1, "UTF-8");
                     String[] strings = string.split(" ");
                     //TODO 广播处理

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
 
     private TextView textViewTime;
     private Button buttonStart;
+    ImageButton imageButtonDeviceInfo;
     private TextView textViewCloudConnect;
     private TextView textViewLocalConnect;
     private TextView textViewSelectBed;
@@ -235,14 +237,10 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
-        //为“启动/start”按钮设置按下行为
+
         buttonStart = (Button) findViewById(R.id.buttonStart);
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start();
-            }
-        });
+
+        imageButtonDeviceInfo = (ImageButton) findViewById(R.id.imageButtonDeviceInfo);
 
         textViewTime = ((TextView) findViewById(R.id.textViewTime));
 
@@ -271,6 +269,29 @@ public class MainActivity extends Activity {
             finish();
         }
 
+        //为“启动/start”按钮设置按下行为
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start();
+            }
+        });
+
+        //为“信息”按钮设置按下行为
+        imageButtonDeviceInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoFeedback();
+            }
+        });
+    }
+
+    private void gotoFeedback() {
+        if (isServerConnected) {
+            Intent intent = new Intent();
+            intent.setClass(this, FeedbackActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

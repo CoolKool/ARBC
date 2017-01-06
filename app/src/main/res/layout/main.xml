@@ -46,7 +46,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/textViewTime"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="15dp"
             android:layout_toStartOf="@id/textViewTime"
             android:contentDescription="@string/nothing"
@@ -146,7 +146,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="30dp"
             android:layout_toEndOf="@id/imageViewCloudConnect"
-            android:text="@string/connecting"
+            android:text="@string/cloud_connecting"
             android:textColor="@color/colorWhite"
             android:textSize="20sp" />
 
@@ -159,7 +159,7 @@
             android:src="@drawable/pic_view_connected" />
 
         <ImageButton
-            android:id="@+id/imageButtonInfo"
+            android:id="@+id/imageButtonDeviceInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -176,9 +176,9 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="30dp"
             android:layout_toEndOf="@id/imageViewLocalConnect"
-            android:layout_toStartOf="@id/imageButtonInfo"
+            android:layout_toStartOf="@id/imageButtonDeviceInfo"
             android:gravity="start"
-            android:text="@string/connecting"
+            android:text="@string/device_connecting"
             android:textColor="@color/colorWhite"
             android:textSize="20sp" />
 

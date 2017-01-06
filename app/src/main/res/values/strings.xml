@@ -5,7 +5,8 @@
     <string name="qr_code">欢迎关注艾瑞本草</string>
     <string name="start">启动 / start</string>
     <string name="open">开启</string>
-    <string name="connecting">连接中…</string>
+    <string name="cloud_connecting">服务器连接中…</string>
+    <string name="device_connecting">艾灸床连接中…</string>
     <string name="cloud_connect_successful">服务端连接正常</string>
     <string name="cloud_connect_failed">服务端连接断线</string>
     <string name="local_connect_successful">艾灸机连接正常</string>
