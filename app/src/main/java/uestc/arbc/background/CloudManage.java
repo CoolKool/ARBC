@@ -248,7 +248,7 @@ public class CloudManage {
 
                     //将接收的数据转化为String//
                     String strReceived = byteArrayOutputStream.toString("UTF-8");
-                    Log.i(TAG, "upload() 收到服务器消息:" + strReceived);
+                    Log.d(TAG, "upload() 收到服务器消息:" + strReceived);
                     try {
                         jsonReturn = new JSONObject(strReceived);
                     } catch (JSONException e) {

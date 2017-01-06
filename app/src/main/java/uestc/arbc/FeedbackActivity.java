@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -123,20 +124,22 @@ public class FeedbackActivity extends Activity {
         }
         try {
             JSONObject jsonData = jsonObject.getJSONObject("data");
-            int bedID, boardID, boardVer, companyQQ, companyTel, padID, padVer, produceTime, storeID, workNum, workTotalTime;
+            int bedID, boardID, padID, storeID, workNum;
             String bedType, companyAddr, companyIntro, companyWeixin, serverTel, specification, storeAddr, storeName;
+            long companyQQ, companyTel, produceTime, workTotalTime;
+            double boardVer, padVer;
 
             bedID = jsonData.getInt("bedID");
             boardID = jsonData.getInt("boardID");
-            boardVer = jsonData.getInt("boardVer");
-            companyQQ = jsonData.getInt("companyQQ");
-            companyTel = jsonData.getInt("companyTel");
+            boardVer = jsonData.getDouble("boardVer");
+            companyQQ = jsonData.getLong("companyQQ");
+            companyTel = jsonData.getLong("companyTel");
             padID = jsonData.getInt("padID");
-            padVer = jsonData.getInt("padVer");
-            produceTime = jsonData.getInt("produceTime");
+            padVer = jsonData.getDouble("padVer");
+            produceTime = jsonData.getLong("produceTime");
             storeID = jsonData.getInt("storeID");
             workNum = jsonData.getInt("workNum");
-            workTotalTime = jsonData.getInt("workTotalTime");
+            workTotalTime = jsonData.getLong("workTotalTime");
             bedType = jsonData.getString("bedType");
             companyAddr = jsonData.getString("companyAddr");
             companyIntro = jsonData.getString("companyIntro");
@@ -158,25 +161,34 @@ public class FeedbackActivity extends Activity {
             textViewInfoLeft.append("\n商家名称：" + storeName);
             textViewInfoLeft.append("\n商家地址：" + storeAddr);
             textViewInfoLeft.append("\n商家服务电话：" + serverTel);
+
             SpannableString spannableStringWorkTime = new SpannableString("" + workNum);
-            spannableStringWorkTime.setSpan(new ForegroundColorSpan(0xe8ba0e), 0, spannableStringWorkTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textViewInfoLeft.append("\n共运行" + spannableStringWorkTime + "次，");
+            spannableStringWorkTime.setSpan(new ForegroundColorSpan(0xffe8ba0e), 0, spannableStringWorkTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textViewInfoLeft.append("\n共运行");
+            textViewInfoLeft.append(spannableStringWorkTime);
 
             //// TODO: 2017/1/6  
             SpannableString spannableStringWorkTotalTime = new SpannableString("" + workTotalTime);
-            spannableStringWorkTotalTime.setSpan(new ForegroundColorSpan(0xe8ba0e), 0, spannableStringWorkTotalTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textViewInfoLeft.append("已工作" + spannableStringWorkTotalTime);
+            spannableStringWorkTotalTime.setSpan(new ForegroundColorSpan(0xffe8ba0e), 0, spannableStringWorkTotalTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textViewInfoLeft.append("次，已工作");
+            textViewInfoLeft.append(spannableStringWorkTotalTime);
 
             SpannableString spannableStringCompany = new SpannableString("四川艾瑞本草科技有限公司");
             spannableStringCompany.setSpan(new AbsoluteSizeSpan(40, true), 0, spannableStringCompany.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textViewInfoRight.append(spannableStringCompany + companyIntro);
+            textViewInfoRight.append(spannableStringCompany);
+            textViewInfoRight.append(companyIntro);
 
-            textViewInfoRight.append("\n" + getImageSpannedString(" 公司地址：" + companyAddr, 0, R.drawable.pic_view_address));
+            textViewInfoRight.append("\n");
+            textViewInfoRight.append(getImageSpannedString(" 公司地址：" + companyAddr, 0, R.drawable.pic_view_address));
 
-            textViewInfoRight.append("\n" + getImageSpannedString(" 服务/加盟热线电话：" + companyTel, 0, R.drawable.pic_view_phone));
+            textViewInfoRight.append("\n");
+            textViewInfoRight.append(getImageSpannedString(" 服务/加盟热线电话：" + companyTel, 0, R.drawable.pic_view_phone));
 
-            textViewInfoRight.append("\n" + getImageSpannedString(" 服务QQ：" + companyQQ, 0, R.drawable.pic_view_qq));
-            textViewInfoRight.append("\n" + getImageSpannedString(" 微信公众号：" + companyWeixin, 0, R.drawable.pic_view_wechat));
+            textViewInfoRight.append("\n");
+            textViewInfoRight.append(getImageSpannedString(" 服务QQ：" + companyQQ, 0, R.drawable.pic_view_qq));
+
+            textViewInfoRight.append("\n");
+            textViewInfoRight.append(getImageSpannedString(" 微信公众号：" + companyWeixin, 0, R.drawable.pic_view_wechat));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -193,7 +205,8 @@ public class FeedbackActivity extends Activity {
         }
         if (null != drawable) {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            spannableString.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), insertPosition, insertPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM), insertPosition, insertPosition + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            Log.i(TAG, "drawable not null");
         }
 
         return spannableString;

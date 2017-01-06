@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
 
     AlertDialog alertDialogSelectBed = null;
     private List<JSONObject> bedList = new ArrayList<>();
+    private boolean gotMainInfo = false;
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
     private DataSQL dataSQL;
@@ -105,11 +106,14 @@ public class MainActivity extends Activity {
     };
 
     private void getMainInfo() {
+        if (gotMainInfo) {
+            return;
+        }
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
         JSONObject jsonData;
-        Log.i(TAG, "getMainInfo() running");
+        Log.i(TAG, "gotMainInfo() running");
         if (null == jsonObjectMainInfo) {
-            Log.i(TAG, "getMainInfo failed:return null");
+            Log.i(TAG, "gotMainInfo failed:return null");
             return;
         }
         try {
@@ -150,11 +154,12 @@ public class MainActivity extends Activity {
                     ManageApplication.getInstance().bedName = localBedName;
                     textViewSelectBed.setText(localBedName);
                 }
+                gotMainInfo = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "getMainInfo() finished");
+        Log.i(TAG, "gotMainInfo() finished");
     }
 
     private void selectBed() {
