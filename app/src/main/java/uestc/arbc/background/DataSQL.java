@@ -40,6 +40,7 @@ public class DataSQL {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.i(TAG, "initialed");
     }
 
     //检测数据库打开是否成功，return true/false

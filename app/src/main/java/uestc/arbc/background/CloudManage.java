@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 /*
 import java.net.UnknownHostException;
 import android.content.Context;
@@ -52,15 +53,19 @@ public class CloudManage {
     //是否上传完成接收到的数据
     private volatile JSONObject jsonReturn = null;
 
+    private LocalServer localServer = null;
     //服务端是否继续运行的标志
     private volatile boolean localServerKeepRunning = true;
     //服务端是否正在运行的标志
     private volatile boolean isLocalServerRunning = false;
 
+    private CloudBroadcastReceiver cloudBroadcastReceiver = null;
+
     private class CloudBroadcastReceiver extends Thread {
         private String TAG = "CloudBroadcastReceiver";
         private volatile boolean isRunning = true;
         private volatile boolean isServerConnected = false;
+        DatagramSocket udpSocket;
 
         private void connectionStateWatcher() {
 
@@ -70,8 +75,8 @@ public class CloudManage {
                     int time = 0;
 
 
-
-                    while (isRunning) {
+                    Log.i(TAG, "connectionStateWatcher is running");
+                    while (cloudManageKeepRunning && isRunning) {
 
                         if (isServerConnected) {
                             time = 0;
@@ -90,6 +95,7 @@ public class CloudManage {
                         }
                         SystemClock.sleep(1000);
                     }
+                    Log.i(TAG, "connection state watcher closed");
                 }
             };
             new Thread(runnable).start();
@@ -97,12 +103,12 @@ public class CloudManage {
 
         @Override
         public void run() {
-            DatagramSocket udpSocket;
             DatagramPacket udpPacket;
             byte[] data = new byte[100];
 
             try {
                 udpSocket = new DatagramSocket(BROADCAST_PORT);
+                //udpSocket.setSoTimeout(TIME_OUT);
                 udpPacket = new DatagramPacket(data, data.length);
             } catch (SocketException e) {
                 e.printStackTrace();
@@ -114,33 +120,33 @@ public class CloudManage {
             while (cloudManageKeepRunning) {
                 try {
                     udpSocket.receive(udpPacket);
+                    try {
+                        Log.d(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, udpPacket.getLength() - 1));
+                        String string = new String(udpPacket.getData(), 0, udpPacket.getLength() - 1, "UTF-8");
+                        String[] strings = string.split(" ");
+                        //TODO 广播处理
+                        if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
+                            //获取服务器ip地址
+                            SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
+                            //int storeID = Integer.parseInt(strings[1]);
+                            //Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
+                            //Log.i(TAG, "cloud broadcast data is:" + string);
+                            //表示云端连接正常
+                            isServerConnected = true;
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 } catch (IOException e) {
                     Log.i(TAG, "IOException while receiving udpPacket");
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     break;
-                }
-
-                try {
-                    Log.d(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, udpPacket.getLength() - 1));
-                    String string = new String(udpPacket.getData(), 0, udpPacket.getLength()-1, "UTF-8");
-                    String[] strings = string.split(" ");
-                    //TODO 广播处理
-                    if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
-                        //获取服务器ip地址
-                        SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
-                        //int storeID = Integer.parseInt(strings[1]);
-                        //Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
-                        //Log.i(TAG, "cloud broadcast data is:" + string);
-                        //表示云端连接正常
-                        isServerConnected = true;
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
                 }
             }
 
             udpSocket.close();
             isRunning = false;
+            Log.i(TAG, "udp listener closed");
         }
     }
 
@@ -208,7 +214,6 @@ public class CloudManage {
         }
 
 
-
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -241,8 +246,8 @@ public class CloudManage {
                     byte[] bytes = new byte[2048];
                     int len;
                     Log.i(TAG, "upload(): receiving message");
-                    while ((len = dataInputStream.read(bytes)) > 0 ) {
-                        byteArrayOutputStream.write(bytes, 0, len-1);
+                    while ((len = dataInputStream.read(bytes)) > 0) {
+                        byteArrayOutputStream.write(bytes, 0, len - 1);
                     }
                     ////
 
@@ -298,11 +303,24 @@ public class CloudManage {
     //关闭cloudManage
     void close() {
         cloudManageKeepRunning = false;
+        if (isLocalServerRunning && null != localServer) {
+            try {
+                localServer.localServerSocket.close();
+                localServer = null;
+            } catch (IOException e) {
+                Log.i(TAG, "IOException while close server socket");
+            }
+        }
+        if (null != cloudBroadcastReceiver) {
+            cloudBroadcastReceiver.udpSocket.close();
+            cloudBroadcastReceiver = null;
+        }
     }
 
 
     //服务端线程，保持运行，随cloudManage结束而结束
     private class LocalServer extends Thread {
+        ServerSocket localServerSocket = null;
         @Override
         public void run() {
 
@@ -313,7 +331,7 @@ public class CloudManage {
                     isLocalServerRunning = true;
 
                     //服务端的监听端口
-                    ServerSocket localServerSocket = new ServerSocket(LOCAL_SERVER_PORT);
+                    localServerSocket = new ServerSocket(LOCAL_SERVER_PORT);
 
                     //broadcast();//广播自己
 
@@ -397,7 +415,7 @@ public class CloudManage {
                         ////
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Log.i(TAG, "LocalServer: LocalServer will close itself because of IOException");
                 } finally {
                     //关闭服务端
@@ -413,17 +431,27 @@ public class CloudManage {
 
     //启动服务端，如果服务端已经在运行则不采取操作
     private void startLocalServer() {
-        if (isLocalServerRunning) {
+        if (isLocalServerRunning || !cloudManageKeepRunning || null != localServer) {
             return;
         }
         localServerKeepRunning = true;
-        new LocalServer().start();
+        localServer = new LocalServer();
+        localServer.start();
     }
 
 
     void init() {
-        startLocalServer();
-        new CloudBroadcastReceiver().start();
+        cloudManageKeepRunning = true;
+        //startLocalServer();
+        startCloudBroadcastReceiver();
+        Log.i(TAG, "initialed");
+    }
+
+    private void startCloudBroadcastReceiver() {
+        if (cloudManageKeepRunning && null == cloudBroadcastReceiver) {
+            cloudBroadcastReceiver = new CloudBroadcastReceiver();
+            cloudBroadcastReceiver.start();
+        }
     }
 
     //获取主界面信息
@@ -489,10 +517,10 @@ public class CloudManage {
             jsonObject.put("require", "PAD_Monitor");
 
             JSONObject jsonData = new JSONObject();
-            jsonData.put("storeID",ManageApplication.getInstance().storeID);
-            jsonData.put("bedID",ManageApplication.getInstance().bedID);
+            jsonData.put("storeID", ManageApplication.getInstance().storeID);
+            jsonData.put("bedID", ManageApplication.getInstance().bedID);
 
-            jsonObject.put("data",jsonData);
+            jsonObject.put("data", jsonData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -517,7 +545,7 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
-    public JSONObject setSwitch(String targetSwitch,int targetState) {
+    public JSONObject setSwitch(String targetSwitch, int targetState) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
@@ -525,8 +553,8 @@ public class CloudManage {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Switch");
             data.put("operateType", targetSwitch);
-            data.put("storeID",ManageApplication.getInstance().storeID);
-            data.put("bedID",ManageApplication.getInstance().bedID);
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
             data.put("state", targetState);
             jsonObject.put("data", data);
         } catch (JSONException e) {

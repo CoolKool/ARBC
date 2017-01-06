@@ -61,10 +61,13 @@ public class ManageApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG, "creating");
         //app开始运行时将会首先实例化该类，此时将其保存下来，以后可以在任何地方通过静态方法获得该实例
         //从而得到其中的数据
         instance = this;
+    }
 
+    public void init() {
         dataSQL = new DataSQL();
         if (!dataSQL.isStartSucceed()) {
             dataSQL = null;
@@ -74,9 +77,7 @@ public class ManageApplication extends Application {
         cloudManage.init();
 
         startTimeThread();
-
     }
-
 
     public DataSQL getDataSQL() {
         return dataSQL;
@@ -87,6 +88,7 @@ public class ManageApplication extends Application {
     }
 
     public void close () {
+        Log.i(TAG, "closing");
         closeTimeThread();
         cloudManage.close();
         dataSQL.close();
@@ -127,9 +129,9 @@ public class ManageApplication extends Application {
     }
 
     //向当前activity发送消息
-    public synchronized void sendMessage(Message msgTime) {
+    public synchronized void sendMessage(Message msg) {
        if (null != currentActivityHandler) {
-           currentActivityHandler.sendMessage(msgTime);
+           currentActivityHandler.sendMessage(msg);
        }
     }
 
@@ -153,5 +155,11 @@ public class ManageApplication extends Application {
             Log.i(TAG,"make MD5 error");
         }
         return reStr;
+    }
+
+    @Override
+    public void onTerminate() {
+        Log.i(TAG, "terminating");
+        super.onTerminate();
     }
 }

@@ -2,6 +2,7 @@ package uestc.arbc.background;
 
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 
 import java.util.Calendar;
 
@@ -12,8 +13,13 @@ import java.util.Calendar;
 
 
 public class TimeThread extends Thread {
+    private final static String TAG = "TimeThread";
 
     private volatile boolean keepRunning = true;
+
+    TimeThread() {
+        Log.i(TAG, "initialed");
+    }
 
     public static String getTime() {
         Calendar calendar = Calendar.getInstance();

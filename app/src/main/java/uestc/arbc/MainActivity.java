@@ -235,6 +235,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreating");
         setContentView(R.layout.main);
 
         init();//初始化
@@ -242,6 +243,8 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
+        //非常重要，启动网络管理，数据库等模块
+        ManageApplication.getInstance().init();
 
         buttonStart = (Button) findViewById(R.id.buttonStart);
 
@@ -254,9 +257,6 @@ public class MainActivity extends Activity {
         textViewLocalConnect = ((TextView) findViewById(R.id.textViewLocalConnect));
 
         textViewSelectBed = (TextView) findViewById(R.id.textViewSelectBed);
-
-        //发送handler
-        ((ManageApplication) getApplication()).setCurrentActivityHandler(handler);
 
         dataSQL = ((ManageApplication) getApplication()).getDataSQL();
         if (null == dataSQL) {
@@ -341,17 +341,11 @@ public class MainActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    //主动退出时需要做的事
-    @Override
-    public void finish() {
-        ((ManageApplication) getApplication()).removeCurrentHandler();
-        ((ManageApplication) getApplication()).close();
-        super.finish();
-    }
-
     @Override
     protected void onDestroy() {
+        Log.i(TAG, "onDestroy");
         ((ManageApplication) getApplication()).removeCurrentHandler();
+        ((ManageApplication) getApplication()).close();
         super.onDestroy();
     }
 
