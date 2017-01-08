@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity {
     private TextView textViewTime;
     private Button buttonStart;
     ImageButton imageButtonDeviceInfo;
+    ImageButton imageButtonManage;
     private TextView textViewCloudConnect;
     private TextView textViewLocalConnect;
     private TextView textViewSelectBed;
@@ -109,6 +111,7 @@ public class MainActivity extends Activity {
         if (gotMainInfo) {
             return;
         }
+
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
         JSONObject jsonData;
         Log.i(TAG, "gotMainInfo() running");
@@ -250,6 +253,8 @@ public class MainActivity extends Activity {
 
         imageButtonDeviceInfo = (ImageButton) findViewById(R.id.imageButtonDeviceInfo);
 
+        imageButtonManage = (ImageButton) findViewById(R.id.imageButtonManage);
+
         textViewTime = ((TextView) findViewById(R.id.textViewTime));
 
         textViewCloudConnect = ((TextView) findViewById(R.id.textViewCloudConnect));
@@ -289,6 +294,31 @@ public class MainActivity extends Activity {
                 gotoFeedback();
             }
         });
+
+        imageButtonManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test();
+            }
+        });
+    }
+
+    private void test() {
+        Resources resources = getResources();
+        int resIdShow = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        boolean hasNavigationBar = false;
+        if (resIdShow > 0) {
+            hasNavigationBar = resources.getBoolean(resIdShow);//是否显示底部navigationBar
+        }
+        if (hasNavigationBar) {
+            int resIdNavigationBar = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resIdNavigationBar > 0) {
+                int navigationBarHeight = resources.getDimensionPixelSize(resIdNavigationBar);//navigationBar高度
+                Log.e("TEST", "height of navigationBar:" + navigationBarHeight);
+            }
+
+        }
+
     }
 
     private void gotoFeedback() {

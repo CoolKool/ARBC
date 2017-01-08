@@ -26,16 +26,16 @@ public class DataSQL {
 
             db = SQLiteDatabase.openOrCreateDatabase(ManageApplication.getInstance().getFilesDir().getPath()+"/arbc.db", null);
             Log.i(TAG,"Database path:" + ManageApplication.getInstance().getFilesDir().getPath()+"/arbc.db");
-            if (null != db) {
-                /*
+            /*if (null != db) {
+
                 if (!isTableExists("Local")) {
                     createJsonTable("Local");
                 }
                 if (!isTableExists("Cloud")) {
                     createJsonTable("Cloud");
                 }
-                */
-            }
+
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class DataSQL {
             return false;
         }
 
-        //创建表SQL语句
+        //SQL语句
         String s = "drop table " + table;
         try {
             //执行SQL语句
@@ -163,18 +163,22 @@ public class DataSQL {
         if (!isTableExists(table)) {
             return null;
         }
-        String jsonString = null;
+        Cursor cursor;
+        String jsonString;
         try {
-            Cursor cursor = db.query(table, null, null, null, null, null, null);
-            if (cursor.getCount() == 0||!cursor.moveToFirst()) {
-                return null;
+            cursor = db.query(table, null, null, null, null, null, null);
+            Log.d(TAG, "table " + table + " is:");
+            while (cursor.moveToNext()) {
+                Log.d(TAG, cursor.getString(0));
             }
+            cursor.moveToFirst();
             jsonString = cursor.getString(0);
-            cursor.close();
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+        cursor.close();
         return jsonString;
     }
 
@@ -203,10 +207,10 @@ public class DataSQL {
             e.printStackTrace();
         }
     }
-
+/*
     @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();
-    }
+    }*/
 }

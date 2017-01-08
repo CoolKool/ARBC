@@ -22,7 +22,7 @@ public class ManageApplication extends Application {
     public volatile String bedName = "";
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
-    public final static String TABLE_NAME_USER_ACCOUNT = "deviceInfo";//保存工作人员账号的表名
+    public final static String TABLE_NAME_USER_ACCOUNT = "userAccount";//保存工作人员账号的表名
 
     //定义各种消息的值
     public final static int MESSAGE_TIME = 1;//更新时间UI

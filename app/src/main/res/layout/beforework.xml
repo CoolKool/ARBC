@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_select_yes" />
+                        android:src="@drawable/pic_button_select_no" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -232,7 +232,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_select_yes" />
+                        android:src="@drawable/pic_button_select_no" />
 
                     <TextView
                         android:layout_width="wrap_content"

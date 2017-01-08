@@ -113,11 +113,12 @@ public class LoginActivity extends Activity {
 
             try {
                 data.put("account", stringAccount);
-                if (stringAccount.contains("store")) {
+                /*if (stringAccount.contains("store")) {
                     data.put("code", ManageApplication.string2MD5(stringPassword));
                 } else {
                     data.put("code", stringPassword);
-                }
+                }*/
+                data.put("code", stringPassword);
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_DeviceSign");
                 jsonObject.put("data", data);
@@ -214,6 +215,7 @@ public class LoginActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Log.i(TAG, "deviceInfo is:" + jsonData.toString());
                         dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
 
                         setResult(ManageApplication.RESULT_CODE_SUCCEED, null);

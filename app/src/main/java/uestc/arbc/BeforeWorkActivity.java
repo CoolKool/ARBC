@@ -234,24 +234,32 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
         imageButtonIgniteBR = (ImageButton) findViewById(R.id.imageButtonIgniteBR);
 
-        setState(imageButtonHeatFL, true);
-        setState(imageButtonHeatFR, true);
-        setState(imageButtonHeatBL, true);
-        setState(imageButtonHeatBR, true);
-        setState(imageButtonIgniteFL, true);
-        setState(imageButtonIgniteFR, true);
-        setState(imageButtonIgniteBL, true);
-        setState(imageButtonIgniteBR, true);
+        setState(imageButtonHeatFL, false);
+        setState(imageButtonHeatFR, false);
+        setState(imageButtonHeatBL, false);
+        setState(imageButtonHeatBR, false);
+        imageButtonHeatBoardSwitchSelectAll.setTag(0);
+        imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
+        setState(imageButtonIgniteFL, false);
+        setState(imageButtonIgniteFR, false);
+        setState(imageButtonIgniteBL, false);
+        setState(imageButtonIgniteBR, false);
+        imageButtonRawBoxIgniteSelectAll.setTag(0);
+        imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
 
         imageButtonHeatBoardSwitchSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((CheckBox) view).isChecked()) {
+                if ((int) view.getTag() == 0) {
+                    view.setTag(1);
+                    imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                     setState(imageButtonHeatFL, true);
                     setState(imageButtonHeatFR, true);
                     setState(imageButtonHeatBL, true);
                     setState(imageButtonHeatBR, true);
                 } else {
+                    view.setTag(0);
+                    imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
                     setState(imageButtonHeatFL, false);
                     setState(imageButtonHeatFR, false);
                     setState(imageButtonHeatBL, false);
@@ -267,12 +275,16 @@ public class BeforeWorkActivity extends Activity {
         imageButtonRawBoxIgniteSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((CheckBox) view).isChecked()) {
+                if ((int) view.getTag() == 0) {
+                    view.setTag(1);
+                    imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                     setState(imageButtonIgniteFL, true);
                     setState(imageButtonIgniteFR, true);
                     setState(imageButtonIgniteBL, true);
                     setState(imageButtonIgniteBR, true);
                 } else {
+                    view.setTag(0);
+                    imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
                     setState(imageButtonIgniteFL, false);
                     setState(imageButtonIgniteFR, false);
                     setState(imageButtonIgniteBL, false);
@@ -360,12 +372,12 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                imageButtonHeatBoardSwitchSelectAll.setTag(false);
+                imageButtonHeatBoardSwitchSelectAll.setTag(0);
                 imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
-                    imageButtonHeatBoardSwitchSelectAll.setTag(true);
+                    imageButtonHeatBoardSwitchSelectAll.setTag(1);
                     imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                 }
             }
@@ -377,13 +389,13 @@ public class BeforeWorkActivity extends Activity {
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
                 setState((ImageButton) view, false);
-                imageButtonRawBoxIgniteSelectAll.setTag(false);
-                imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
+                imageButtonRawBoxIgniteSelectAll.setTag(0);
+                imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
                 setState((ImageButton) view, true);
                 if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
-                    imageButtonRawBoxIgniteSelectAll.setTag(true);
-                    imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
+                    imageButtonRawBoxIgniteSelectAll.setTag(1);
+                    imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_yes);
                 }
             }
         }

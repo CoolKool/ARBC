@@ -55,13 +55,13 @@ public class TimeThread extends Thread {
 
     @Override
     public void run() {
-        Calendar calendar;
+        /*Calendar calendar;
         int tmpInt;
-        String hour, min, sec;
+        String hour, min, sec;*/
 
 
         while (keepRunning) {
-            calendar = Calendar.getInstance();
+            /*calendar = Calendar.getInstance();
 
             if ((tmpInt = calendar.get(Calendar.HOUR_OF_DAY)) < 10) {
                 hour = "0" + String.valueOf(tmpInt);
@@ -81,9 +81,10 @@ public class TimeThread extends Thread {
             String time = calendar.get(Calendar.YEAR) + "年" +
                     (calendar.get(Calendar.MONTH) + 1) + "月" +
                     calendar.get(Calendar.DAY_OF_MONTH) + "日 " +
-                    hour + ":" + min + ":" + sec;
+                    hour + ":" + min + ":" + sec;*/
+
             Message message = new Message();
-            message.obj = time;
+            message.obj = getTime();
             message.what = ManageApplication.MESSAGE_TIME;
 
             ManageApplication.getInstance().sendMessage(message);

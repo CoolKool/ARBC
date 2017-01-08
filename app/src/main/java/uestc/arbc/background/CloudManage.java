@@ -124,7 +124,7 @@ public class CloudManage {
                         Log.d(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, udpPacket.getLength() - 1));
                         String string = new String(udpPacket.getData(), 0, udpPacket.getLength() - 1, "UTF-8");
                         String[] strings = string.split(" ");
-                        //TODO 广播处理
+                        // 广播处理
                         if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
                             //获取服务器ip地址
                             SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
@@ -220,11 +220,11 @@ public class CloudManage {
 
                 Socket socket = new Socket();
                 try {
-                    Log.i(TAG, "upload(): Json to upload is:" + jsonObject.toString());
+                    Log.d(TAG, "upload(): Json to upload is:" + jsonObject.toString());
                     //连接服务器 并设置连接超时//
-                    Log.i(TAG, "upload(): Connecting to Server");
+                    Log.d(TAG, "upload(): Connecting to Server");
                     socket.connect(new InetSocketAddress(SERVER_IP_ADDRESS, SERVER_PORT), TIME_OUT);
-                    Log.i(TAG, "upload(): Server Connected");
+                    Log.d(TAG, "upload(): Server Connected");
                     ////
 
                     //获取输入输出流//
@@ -233,11 +233,11 @@ public class CloudManage {
                     ////
 
                     //发出信息//
-                    Log.i(TAG, "upload(): message sending");
+                    Log.d(TAG, "upload(): message sending");
                     byte[] jsonBytes = jsonObject.toString().getBytes("UTF-8");//使用UTF-8编码
                     dataOutputStream.write(jsonBytes);
                     dataOutputStream.flush();
-                    Log.i(TAG, "upload(): message sent");
+                    Log.d(TAG, "upload(): message sent");
                     socket.shutdownOutput();
                     ////
 
@@ -245,7 +245,7 @@ public class CloudManage {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     byte[] bytes = new byte[2048];
                     int len;
-                    Log.i(TAG, "upload(): receiving message");
+                    Log.d(TAG, "upload(): receiving message");
                     while ((len = dataInputStream.read(bytes)) > 0) {
                         byteArrayOutputStream.write(bytes, 0, len - 1);
                     }
@@ -260,7 +260,7 @@ public class CloudManage {
                         e.printStackTrace();
                     }
 
-                    Log.i(TAG, "upload(): finished succeed");
+                    Log.d(TAG, "upload(): finished succeed");
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     Log.i(TAG, "upload(): timeout，ConnectException");
