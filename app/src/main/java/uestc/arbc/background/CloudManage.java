@@ -564,6 +564,25 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
+    public JSONObject setMotor(String targetMotor, int targetState) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            //控制开关的指令
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Motor");
+            data.put("operateType", targetMotor);
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+            data.put("state", targetState);
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
     public JSONObject getBedInfo() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
@@ -590,6 +609,24 @@ public class CloudManage {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Proposal");
             data.put("content", content);
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
+    public JSONObject devicePause() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            //暂停的指令
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Pause");
             data.put("storeID", ManageApplication.getInstance().storeID);
             data.put("bedID", ManageApplication.getInstance().bedID);
 

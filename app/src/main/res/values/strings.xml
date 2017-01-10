@@ -17,7 +17,7 @@
     <string name="login">登录</string>
     <string name="raw_type">艾草类型：</string>
     <string name="raw_num">艾草数：</string>
-    <string name="heat_board_switch">加热板开关：</string>
+    <string name="heat_board">加热板：</string>
     <string name="select_all">全选</string>
     <string name="front_left">前左</string>
     <string name="front_right">前右</string>
@@ -26,11 +26,11 @@
     <string name="user">用户：</string>
     <string name="guest">散客</string>
     <string name="id_or_phonenumber">（用户ID或手机号后4位）</string>
-    <string name="raw_box_ignite">艾草箱点燃：</string>
+    <string name="ignite">点燃管：</string>
     <string name="main_box_ctrl">主箱调节</string>
     <string name="work_time">已工作：</string>
     <string name="back_box_ctrl">背部箱调节</string>
-    <string name="heat_board_ctrl">加热板控制</string>
+    <string name="heat_board_switch">加热板开关</string>
     <string name="work_time_min">分</string>
     <string name="work_time_sec">秒</string>
     <string name="temperature_fl">温度：  前左：</string>
@@ -46,7 +46,7 @@
     <string name="continue_and_pause">开启/暂停</string>
     <string name="welcome_to_feedback">欢迎您提出宝贵建议：</string>
     <string name="pump_ctrl">水泵控制</string>
-    <string name="fan_ctrl">风扇调节</string>
+    <string name="fan_ctrl">风机阀门开关</string>
     <string name="hand_in_test_report">填写测试报告</string>
     <string name="please_input_account">请输入帐号</string>
     <string name="please_input_service_id">请输入设备编号</string>
@@ -108,4 +108,10 @@
     <string name="age">年龄：</string>
     <string name="submit">提交</string>
     <string name="device_info">智能艾灸床信息</string>
+    <string name="ignite_switch">点燃管开关</string>
+    <string name="pause">暂停</string>
+    <string name="pay">结帐</string>
+    <string name="on">开</string>
+    <string name="off">关</string>
+    <string name="short_stop">停</string>
 </resources>

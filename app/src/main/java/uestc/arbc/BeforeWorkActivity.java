@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -49,10 +49,12 @@ public class BeforeWorkActivity extends Activity {
     private EditText editTextCustomer;
 
 
+
     private int rawNum;
     private int consumeTypeID;
     private int herbTypeID;
     private int customerID = 0;
+    private TextView textViewCustomerInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +89,9 @@ public class BeforeWorkActivity extends Activity {
         //为艾草数选择框填充数据
         Spinner spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
         if (null != spinnerRawNum) {
-            String arr[] = new String[27];
-            for (int i = 0; i < 27; i++) {
-                arr[i] = (i + 4) + "盒";
+            String arr[] = new String[21];
+            for (int i = 0; i < 21; i++) {
+                arr[i] = i + "盒";
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -97,14 +99,14 @@ public class BeforeWorkActivity extends Activity {
             spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    rawNum = i + 4;
+                    rawNum = i;
                     Log.i(TAG, "the raw num is:" + rawNum);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    rawNum = 4;
-                    Log.i(TAG, "the raw num is:" + 4);
+                    rawNum = 0;
+                    Log.i(TAG, "the raw num is:" + rawNum);
                 }
             });
         }
@@ -298,6 +300,7 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteBR.setOnClickListener(igniteListener);
 
         //为用户输入框添加监听
+        textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
         editTextCustomer = (EditText) findViewById(R.id.editTextCustomer);
         editTextCustomer.addTextChangedListener(new TextWatcher() {
             @Override
@@ -323,10 +326,12 @@ public class BeforeWorkActivity extends Activity {
                         if (jsonObject.getInt("errorCode") == 0) {
                             JSONObject jsonData = jsonObject.getJSONObject("data");
                             Toast.makeText(BeforeWorkActivity.this, "欢迎 " + jsonData.getString("userName"), Toast.LENGTH_SHORT).show();
+                            textViewCustomerInfo.setText(jsonData.getString("userName") + "," + jsonData.getString("userSex") + "," + jsonData.getInt("userAge") + "岁");
                             customerID = jsonData.getInt("userID");
                         } else if (jsonObject.getInt("errorCode") == -1){
                             Toast.makeText(BeforeWorkActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                             customerID = 0;
+                            textViewCustomerInfo.setText("");
                             Intent intent = new Intent();
                             intent.setClass(BeforeWorkActivity.this,CustomerSetActivity.class);
                             intent.putExtra("phone",Integer.parseInt(s.toString()));
@@ -336,6 +341,9 @@ public class BeforeWorkActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    customerID = 0;
+                    textViewCustomerInfo.setText("");
                 }
             }
         });
