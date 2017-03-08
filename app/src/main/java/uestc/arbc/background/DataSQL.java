@@ -167,9 +167,9 @@ public class DataSQL {
         String jsonString;
         try {
             cursor = db.query(table, null, null, null, null, null, null);
-            Log.d(TAG, "table " + table + " is:");
+            //Log.d(TAG, "table " + table + " is:");
             while (cursor.moveToNext()) {
-                Log.d(TAG, cursor.getString(0));
+                //Log.d(TAG, cursor.getString(0));
             }
             cursor.moveToFirst();
             jsonString = cursor.getString(0);

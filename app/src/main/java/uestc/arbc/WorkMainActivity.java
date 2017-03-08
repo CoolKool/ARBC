@@ -64,8 +64,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     ImageView imageViewIgniteBoardWorkStateFR;
     ImageView imageViewIgniteBoardWorkStateBL;
     ImageView imageViewIgniteBoardWorkStateBR;
-    TextView textViewHeadBoxState;
-    TextView textViewTailBoxState;
     TextView textViewTime;
 
     MyHandler handler = new MyHandler(TAG) {
@@ -224,8 +222,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageViewIgniteBoardWorkStateFR = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateFR);
         imageViewIgniteBoardWorkStateBL = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateBL);
         imageViewIgniteBoardWorkStateBR = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateBR);
-        textViewHeadBoxState = (TextView) findViewById(R.id.textViewHeadBoxState);
-        textViewTailBoxState = (TextView) findViewById(R.id.textViewTailBoxState);
 
         //开始周期性获取艾灸机数据
         new GetDeviceStateThread().start();

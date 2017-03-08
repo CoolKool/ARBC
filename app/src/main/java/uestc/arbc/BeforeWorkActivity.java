@@ -35,13 +35,13 @@ public class BeforeWorkActivity extends Activity {
 
     private final static String TAG = "BeforeWorkActivity";
 
-    private ImageButton imageButtonHeatBoardSwitchSelectAll;
+    //    private ImageButton imageButtonHeatBoardSwitchSelectAll;
     private ImageButton imageButtonHeatFL;
     private ImageButton imageButtonHeatFR;
     private ImageButton imageButtonHeatBL;
     private ImageButton imageButtonHeatBR;
 
-    private ImageButton imageButtonRawBoxIgniteSelectAll;
+    //    private ImageButton imageButtonRawBoxIgniteSelectAll;
     private ImageButton imageButtonIgniteFL;
     private ImageButton imageButtonIgniteFR;
     private ImageButton imageButtonIgniteBL;
@@ -53,7 +53,7 @@ public class BeforeWorkActivity extends Activity {
     private int rawNum;
     private int consumeTypeID;
     private int herbTypeID;
-    private int customerID = 0;
+    private long customerID = 0;
     private TextView textViewCustomerInfo;
 
     @Override
@@ -155,8 +155,8 @@ public class BeforeWorkActivity extends Activity {
                 ArrayAdapter<String> consumeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsConsumeType);
                 ArrayAdapter<String> herbAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsHerbType);
 
-                //consumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                //herbAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                consumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                herbAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 spinnerConsumeType.setAdapter(consumeAdapter);
                 spinnerRawType.setAdapter(herbAdapter);
@@ -224,13 +224,13 @@ public class BeforeWorkActivity extends Activity {
             });
         }
 
-        imageButtonHeatBoardSwitchSelectAll = (ImageButton) findViewById(R.id.imageButtonHeatSelectAll);
+//        imageButtonHeatBoardSwitchSelectAll = (ImageButton) findViewById(R.id.imageButtonHeatSelectAll);
         imageButtonHeatFL = (ImageButton) findViewById(R.id.imageButtonHeatFL);
         imageButtonHeatFR = (ImageButton) findViewById(R.id.imageButtonHeatFR);
         imageButtonHeatBL = (ImageButton) findViewById(R.id.imageButtonHeatBL);
         imageButtonHeatBR = (ImageButton) findViewById(R.id.imageButtonHeatBR);
 
-        imageButtonRawBoxIgniteSelectAll = (ImageButton) findViewById(R.id.imageButtonIgniteSelectAll);
+//        imageButtonRawBoxIgniteSelectAll = (ImageButton) findViewById(R.id.imageButtonIgniteSelectAll);
         imageButtonIgniteFL = (ImageButton) findViewById(R.id.imageButtonIgniteFL);
         imageButtonIgniteFR = (ImageButton) findViewById(R.id.imageButtonIgniteFR);
         imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
@@ -240,15 +240,15 @@ public class BeforeWorkActivity extends Activity {
         setState(imageButtonHeatFR, false);
         setState(imageButtonHeatBL, false);
         setState(imageButtonHeatBR, false);
-        imageButtonHeatBoardSwitchSelectAll.setTag(0);
-        imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
+        //       imageButtonHeatBoardSwitchSelectAll.setTag(0);
+        //       imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
         setState(imageButtonIgniteFL, false);
         setState(imageButtonIgniteFR, false);
         setState(imageButtonIgniteBL, false);
         setState(imageButtonIgniteBR, false);
-        imageButtonRawBoxIgniteSelectAll.setTag(0);
-        imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
-
+        //       imageButtonRawBoxIgniteSelectAll.setTag(0);
+        //      imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
+/*
         imageButtonHeatBoardSwitchSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,11 +269,12 @@ public class BeforeWorkActivity extends Activity {
                 }
             }
         });
+        */
         imageButtonHeatFL.setOnClickListener(heatListener);
         imageButtonHeatFR.setOnClickListener(heatListener);
         imageButtonHeatBL.setOnClickListener(heatListener);
         imageButtonHeatBR.setOnClickListener(heatListener);
-
+/*
         imageButtonRawBoxIgniteSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -294,6 +295,7 @@ public class BeforeWorkActivity extends Activity {
                 }
             }
         });
+        */
         imageButtonIgniteFL.setOnClickListener(igniteListener);
         imageButtonIgniteFR.setOnClickListener(igniteListener);
         imageButtonIgniteBL.setOnClickListener(igniteListener);
@@ -317,7 +319,7 @@ public class BeforeWorkActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() == 11) {
                     try {
-                        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCustomerInfo(Integer.parseInt(s.toString()));
+                        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCustomerInfo(Long.parseLong(s.toString()));
                         if (null == jsonObject) {
                             Toast.makeText(BeforeWorkActivity.this, "与云端通信异常！", Toast.LENGTH_SHORT).show();
                             finish();
@@ -327,15 +329,15 @@ public class BeforeWorkActivity extends Activity {
                             JSONObject jsonData = jsonObject.getJSONObject("data");
                             Toast.makeText(BeforeWorkActivity.this, "欢迎 " + jsonData.getString("userName"), Toast.LENGTH_SHORT).show();
                             textViewCustomerInfo.setText(jsonData.getString("userName") + "," + jsonData.getString("userSex") + "," + jsonData.getInt("userAge") + "岁");
-                            customerID = jsonData.getInt("userID");
+                            customerID = jsonData.getLong("userID");
                         } else if (jsonObject.getInt("errorCode") == -1){
                             Toast.makeText(BeforeWorkActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                             customerID = 0;
                             textViewCustomerInfo.setText("");
                             Intent intent = new Intent();
                             intent.setClass(BeforeWorkActivity.this,CustomerSetActivity.class);
-                            intent.putExtra("phone",Integer.parseInt(s.toString()));
-                            BeforeWorkActivity.this.startActivityForResult(intent,ManageApplication.REQUEST_CODE_CUSTOMER_SET);
+                            intent.putExtra("phone", Long.parseLong(s.toString()));
+                            startActivityForResult(intent, ManageApplication.REQUEST_CODE_CUSTOMER_SET);
                         }
 
                     } catch (JSONException e) {
@@ -379,15 +381,27 @@ public class BeforeWorkActivity extends Activity {
         @Override
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
-                setState((ImageButton) view, false);
-                imageButtonHeatBoardSwitchSelectAll.setTag(0);
-                imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
+                if (view.getId() == R.id.imageButtonHeatFL || view.getId() == R.id.imageButtonHeatFR) {
+                    setState(imageButtonHeatFL, false);
+                    setState(imageButtonHeatFR, false);
+                } else {
+                    setState(imageButtonHeatBL, false);
+                    setState(imageButtonHeatBR, false);
+                }
+                //imageButtonHeatBoardSwitchSelectAll.setTag(0);
+                //imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
-                setState((ImageButton) view, true);
-                if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
+                if (view.getId() == R.id.imageButtonHeatFL || view.getId() == R.id.imageButtonHeatFR) {
+                    setState(imageButtonHeatFL, true);
+                    setState(imageButtonHeatFR, true);
+                } else {
+                    setState(imageButtonHeatBL, true);
+                    setState(imageButtonHeatBR, true);
+                }
+                /*if (1 == (int) imageButtonHeatFL.getTag() && 1 == (int) imageButtonHeatFR.getTag() && 1 == (int) imageButtonHeatBL.getTag() && 1 == (int) imageButtonHeatBR.getTag()) {
                     imageButtonHeatBoardSwitchSelectAll.setTag(1);
                     imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_yes);
-                }
+                }*/
             }
         }
     };
@@ -396,15 +410,35 @@ public class BeforeWorkActivity extends Activity {
         @Override
         public void onClick(View view) {
             if (1 == (int) view.getTag()) {
-                setState((ImageButton) view, false);
-                imageButtonRawBoxIgniteSelectAll.setTag(0);
-                imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
+                if (view.getId() == R.id.imageButtonIgniteFL || view.getId() == R.id.imageButtonIgniteBL) {
+                    setState(imageButtonIgniteFL, false);
+                    setState(imageButtonIgniteBL, false);
+                    setState(imageButtonIgniteFR, true);
+                    setState(imageButtonIgniteBR, true);
+                } else {
+                    setState(imageButtonIgniteFL, true);
+                    setState(imageButtonIgniteBL, true);
+                    setState(imageButtonIgniteFR, false);
+                    setState(imageButtonIgniteBR, false);
+                }
+                //imageButtonRawBoxIgniteSelectAll.setTag(0);
+                //imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
             } else {
-                setState((ImageButton) view, true);
-                if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
+                if (view.getId() == R.id.imageButtonIgniteFL || view.getId() == R.id.imageButtonIgniteBL) {
+                    setState(imageButtonIgniteFL, true);
+                    setState(imageButtonIgniteBL, true);
+                    setState(imageButtonIgniteFR, false);
+                    setState(imageButtonIgniteBR, false);
+                } else {
+                    setState(imageButtonIgniteFL, false);
+                    setState(imageButtonIgniteBL, false);
+                    setState(imageButtonIgniteFR, true);
+                    setState(imageButtonIgniteBR, true);
+                }
+                /*if (1 == (int) imageButtonIgniteFL.getTag() && 1 == (int) imageButtonIgniteFR.getTag() && 1 == (int) imageButtonIgniteBL.getTag() && 1 == (int) imageButtonIgniteBR.getTag()) {
                     imageButtonRawBoxIgniteSelectAll.setTag(1);
                     imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_yes);
-                }
+                }*/
             }
         }
     };
@@ -418,6 +452,8 @@ public class BeforeWorkActivity extends Activity {
 
         try {
             //TODO
+            jsonObject.put("storeID", ManageApplication.getInstance().storeID);
+            jsonObject.put("workerID", ManageApplication.getInstance().workerID);
             jsonObject.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("num", rawNum);
             jsonObject.put("userID", customerID);
@@ -425,43 +461,23 @@ public class BeforeWorkActivity extends Activity {
             jsonObject.put("consumeID", consumeTypeID);
 
             jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 1);
+            jsonTemp.put("switchID", 12);
             jsonTemp.put("state", (int) imageButtonHeatFL.getTag());
             hotSet.put(jsonTemp);
 
             jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 2);
-            jsonTemp.put("state", (int) imageButtonHeatFR.getTag());
-            hotSet.put(jsonTemp);
-
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 3);
+            jsonTemp.put("switchID", 34);
             jsonTemp.put("state", (int) imageButtonHeatBL.getTag());
             hotSet.put(jsonTemp);
 
             jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 4);
-            jsonTemp.put("state", (int) imageButtonHeatBR.getTag());
-            hotSet.put(jsonTemp);
-
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 1);
+            jsonTemp.put("switchID", 13);
             jsonTemp.put("state", (int) imageButtonIgniteFL.getTag());
             fireSet.put(jsonTemp);
 
             jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 2);
+            jsonTemp.put("switchID", 24);
             jsonTemp.put("state", (int) imageButtonIgniteFR.getTag());
-            fireSet.put(jsonTemp);
-
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 3);
-            jsonTemp.put("state", (int) imageButtonIgniteBL.getTag());
-            fireSet.put(jsonTemp);
-
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 4);
-            jsonTemp.put("state", (int) imageButtonIgniteBR.getTag());
             fireSet.put(jsonTemp);
 
             jsonObject.put("hotSet", hotSet);
@@ -471,7 +487,7 @@ public class BeforeWorkActivity extends Activity {
             e.printStackTrace();
             return null;
         }
-        Log.i("TAG", "device setting json data is:" + jsonObject.toString());
+        Log.i("TAG", "mainStart setting json data is:" + jsonObject.toString());
         return jsonObject;
     }
 
@@ -496,7 +512,7 @@ public class BeforeWorkActivity extends Activity {
         new StartAsyncTask().execute(jsonObject);
     }
 
-    class StartAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
+    private class StartAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
         JSONObject jsonObjectResponse;
         ProgressDialog dialog = new ProgressDialog(BeforeWorkActivity.this);
 

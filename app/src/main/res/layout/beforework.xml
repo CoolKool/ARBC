@@ -68,22 +68,23 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
+                    <!--
+                                        <ImageButton
+                                            android:id="@+id/imageButtonHeatSelectAll"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@color/colorTransparent"
+                                            android:contentDescription="@string/nothing"
+                                            android:src="@drawable/pic_button_select_no" />
 
-                    <ImageButton
-                        android:id="@+id/imageButtonHeatSelectAll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_select_no" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/select_all"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="15dp"
+                                            android:text="@string/select_all"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="15sp" />
+                    -->
                 </LinearLayout>
 
                 <LinearLayout
@@ -225,22 +226,23 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
+                    <!--
+                                        <ImageButton
+                                            android:id="@+id/imageButtonIgniteSelectAll"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@color/colorTransparent"
+                                            android:contentDescription="@string/nothing"
+                                            android:src="@drawable/pic_button_select_no" />
 
-                    <ImageButton
-                        android:id="@+id/imageButtonIgniteSelectAll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_select_no" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/select_all"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="15dp"
+                                            android:text="@string/select_all"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="15sp" />
+                    -->
                 </LinearLayout>
 
                 <LinearLayout

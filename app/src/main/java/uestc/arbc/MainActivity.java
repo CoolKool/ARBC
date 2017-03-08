@@ -48,7 +48,6 @@ public class MainActivity extends Activity {
 
     AlertDialog alertDialogSelectBed = null;
     private List<JSONObject> bedList = new ArrayList<>();
-    private boolean gotMainInfo = false;
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
     private DataSQL dataSQL;
@@ -108,20 +107,21 @@ public class MainActivity extends Activity {
     };
 
     private void getMainInfo() {
-        if (gotMainInfo) {
-            return;
-        }
+        //Log.i(TAG, "getMainInfo() started");
 
         JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
         JSONObject jsonData;
-        Log.i(TAG, "gotMainInfo() running");
+
         if (null == jsonObjectMainInfo) {
-            Log.i(TAG, "gotMainInfo failed:return null");
+            Log.i(TAG, "getMainInfo failed: server returned null");
+            //Log.i(TAG, "gotMainInfo() finished");
             return;
         }
         try {
             if (jsonObjectMainInfo.getInt("errorCode") == -1) {
                 Toast.makeText(MainActivity.this, jsonObjectMainInfo.getString("message"), Toast.LENGTH_LONG).show();
+                //Log.i(TAG, "gotMainInfo() finished");
+                return;
             } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
                 jsonData = jsonObjectMainInfo.getJSONObject("data");
                 ManageApplication.getInstance().storeID = jsonData.getInt("storeID");
@@ -141,13 +141,15 @@ public class MainActivity extends Activity {
                 int localBedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
                 if (0 == localBedID) {
 
-                    JSONArray jsonArrayBedList = jsonData.optJSONArray("bedList");
+                    JSONArray jsonArrayBedList = jsonData.getJSONArray("bedList");
+                    bedList.clear();
                     for (int i = 0; i < jsonArrayBedList.length(); i++) {
                         JSONObject jsonObjectTmp = jsonArrayBedList.getJSONObject(i);
                         if (!bedList.contains(jsonObjectTmp)) {
                             bedList.add(jsonObjectTmp);
                         }
                     }
+                    bedAdapter.notifyDataSetChanged();
                     if (ManageApplication.getInstance().bedID == 0) {
                         selectBed();
                     }
@@ -157,15 +159,24 @@ public class MainActivity extends Activity {
                     ManageApplication.getInstance().bedName = localBedName;
                     textViewSelectBed.setText(localBedName);
                 }
-                gotMainInfo = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "gotMainInfo() finished");
+        //Log.i(TAG, "gotMainInfo() finished");
     }
 
     private void selectBed() {
+        try {
+            int localBedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
+            if (0 != localBedID) {
+                return;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
         if (null == alertDialogSelectBed) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             View layout = getLayoutInflater().inflate(R.layout.bedlist_frame, null);
@@ -219,6 +230,7 @@ public class MainActivity extends Activity {
                         textViewSelectBed.setText(bedName);
                         if (null != alertDialogSelectBed) {
                             alertDialogSelectBed.dismiss();
+                            alertDialogSelectBed = null;
                         }
                     }
                 });
@@ -262,6 +274,12 @@ public class MainActivity extends Activity {
         textViewLocalConnect = ((TextView) findViewById(R.id.textViewLocalConnect));
 
         textViewSelectBed = (TextView) findViewById(R.id.textViewSelectBed);
+        textViewSelectBed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectBed();
+            }
+        });
 
         dataSQL = ((ManageApplication) getApplication()).getDataSQL();
         if (null == dataSQL) {

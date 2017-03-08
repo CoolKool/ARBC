@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,10 +14,10 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:src="@drawable/pic_view_title_customerset"
-            android:contentDescription="@string/nothing"/>
+            android:contentDescription="@string/nothing" />
 
         <ImageButton
             android:id="@+id/imageButtonCancel"
@@ -44,15 +44,15 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp"
-            tools:text="手机号：18200122222的客户信息设置"
+            android:textColor="@color/colorYellow"
             android:textSize="20sp"
-            android:textColor="@color/colorYellow"/>
+            tools:text="手机号：18200122222的客户信息设置" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewCustomerPhone"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/textViewCustomerPhone"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp">
 
@@ -61,17 +61,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textSize="25sp"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewName"
                 android:layout_alignBaseline="@id/textViewName"
+                android:layout_toEndOf="@id/textViewName"
                 android:inputType="text"
-                android:labelFor="@id/editTextName"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="25sp"
+                android:labelFor="@id/editTextName" />
 
             <TextView
                 android:id="@+id/textViewSex"
@@ -80,15 +82,15 @@
                 android:layout_below="@id/textViewName"
                 android:layout_marginTop="70dp"
                 android:text="@string/sex"
-                android:textSize="25sp"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="25sp" />
 
             <Spinner
                 android:id="@+id/spinnerSex"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewSex"
-                android:layout_alignBaseline="@id/textViewSex"/>
+                android:layout_alignTop="@id/textViewSex"
+                android:layout_toEndOf="@id/textViewSex" />
 
             <TextView
                 android:id="@+id/textViewAge"
@@ -97,17 +99,19 @@
                 android:layout_below="@id/textViewSex"
                 android:layout_marginTop="70dp"
                 android:text="@string/age"
-                android:textSize="25sp"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/editTextAge"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/textViewAge"
                 android:layout_alignBaseline="@id/textViewAge"
+                android:layout_toEndOf="@id/textViewAge"
                 android:inputType="number"
-                android:labelFor="@id/editTextAge"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="25sp"
+                android:labelFor="@id/editTextAge" />
         </RelativeLayout>
 
     </RelativeLayout>

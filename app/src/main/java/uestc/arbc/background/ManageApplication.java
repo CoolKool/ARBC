@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.Message;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -20,6 +22,8 @@ public class ManageApplication extends Application {
     public volatile int bedID = 0;
     public volatile String storeName = "";
     public volatile String bedName = "";
+    public volatile int workerID = 0;
+    public volatile String workerName = "";
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_USER_ACCOUNT = "userAccount";//保存工作人员账号的表名

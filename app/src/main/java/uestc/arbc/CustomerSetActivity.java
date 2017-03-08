@@ -3,9 +3,11 @@ package uestc.arbc;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +33,7 @@ import uestc.arbc.background.MyHandler;
 public class CustomerSetActivity extends Activity {
 
     private final static String TAG = "CustomerSetActivity";
-    MyHandler handler = new MyHandler(TAG);
+    //MyHandler handler = new MyHandler(TAG);
 
     TextView textViewCustomerPhone;
     EditText editTextName;
@@ -40,37 +42,37 @@ public class CustomerSetActivity extends Activity {
     Button buttonSubmit;
     ImageButton imageButtonCancel;
 
-    private int phone = 0;
+    private long phone = 0;
     private String userSex = "";
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.customerset);
         init();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ManageApplication.getInstance().setCurrentActivityHandler(handler);
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                },1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
+    /*
+        @Override
+        protected void onResume() {
+            super.onResume();
+            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+                @Override
+                public void onSystemUiVisibilityChange(int i) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        }
+                    },1000);
+                }
+            });
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+    */
     private void init() {
         textViewCustomerPhone = (TextView)findViewById(R.id.textViewCustomerPhone);
         editTextName = (EditText) findViewById(R.id.editTextName);
@@ -79,30 +81,35 @@ public class CustomerSetActivity extends Activity {
         buttonSubmit = (Button) findViewById(R.id.buttonSubmit);
         imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
 
-        Intent intent = getIntent();
-        phone = intent.getIntExtra("phone",-1);
+     /*   Intent intent = getIntent();
+        phone = intent.getLongExtra("phone",-1);
         if (-1 == phone) {
             Toast.makeText(this,"获取手机号失败！",Toast.LENGTH_SHORT).show();
             setResult(ManageApplication.RESULT_CODE_FAILED, null);
             finish();
             return;
-        }
+        }*/
         textViewCustomerPhone.setText("手机号：" + phone + "的客户信息设置");
 
-        final String[] strings = new String[]{"男","女","其他"};
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,strings);
-        spinnerSex.setAdapter(arrayAdapter);
+        final String arr[] = new String[2];
+        arr[0] = "男";
+        arr[1] = "女";
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSex.setAdapter(adapter);
         spinnerSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userSex = strings[position];
-                Log.i(TAG,"User Sex is:" + userSex);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) view).setTextColor(Color.BLACK);
+                ((TextView) view).setTextSize(25);
+                userSex = arr[i];
+                Log.i(TAG, "user sex is:" + userSex);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                userSex = strings[0];
-                Log.i(TAG,"User Sex is:" + userSex);
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                userSex = "男";
+                Log.i(TAG, "user sex is:" + userSex);
             }
         });
 
@@ -149,7 +156,7 @@ public class CustomerSetActivity extends Activity {
         }
     }
 
-    class CustomerSetAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
+    private class CustomerSetAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
         JSONObject jsonObjectResponse;
         ProgressDialog dialog = new ProgressDialog(CustomerSetActivity.this);
 

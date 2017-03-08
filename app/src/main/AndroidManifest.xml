@@ -38,6 +38,12 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
 
         </activity>
+        <activity
+            android:name=".CustomerSetActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+
+        </activity>
         <activity android:name=".FeedbackActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">

@@ -72,27 +72,32 @@ public class CloudManage {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    int time = 0;
-
+                    int connectDelay = 0;
+                    int disconnectDelay = 0;
 
                     Log.i(TAG, "connectionStateWatcher is running");
                     while (cloudManageKeepRunning && isRunning) {
 
                         if (isServerConnected) {
-                            time = 0;
+                            connectDelay++;
+                            disconnectDelay = 0;
                             isServerConnected = false;
-                            Message connected = new Message();
-                            connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
-                            ManageApplication.getInstance().sendMessage(connected);
+                            if (connectDelay > 3) {
+                                connectDelay = 0;
+                                Message connected = new Message();
+                                connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
+                                ManageApplication.getInstance().sendMessage(connected);
+                            }
                         } else {
-                            time += 1000;
+                            connectDelay = 0;
+                            disconnectDelay++;
+                            if (disconnectDelay > 3) {
+                                Message disconnected = new Message();
+                                disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
+                                ManageApplication.getInstance().sendMessage(disconnected);
+                            }
                         }
-                        if (time > 3000) {
-                            Message disconnected = new Message();
-                            disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
-                            ManageApplication.getInstance().sendMessage(disconnected);
-                            time = 0;
-                        }
+
                         SystemClock.sleep(1000);
                     }
                     Log.i(TAG, "connection state watcher closed");
@@ -121,8 +126,12 @@ public class CloudManage {
                 try {
                     udpSocket.receive(udpPacket);
                     try {
-                        Log.d(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, udpPacket.getLength() - 1));
-                        String string = new String(udpPacket.getData(), 0, udpPacket.getLength() - 1, "UTF-8");
+                        int packetLength = udpPacket.getLength();
+                        if (0 == udpPacket.getData()[packetLength - 1]) {
+                            packetLength--;
+                        }
+                        Log.v(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, packetLength));
+                        String string = new String(udpPacket.getData(), 0, packetLength, "UTF-8");
                         String[] strings = string.split(" ");
                         // 广播处理
                         if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
@@ -222,9 +231,9 @@ public class CloudManage {
                 try {
                     Log.d(TAG, "upload(): Json to upload is:" + jsonObject.toString());
                     //连接服务器 并设置连接超时//
-                    Log.d(TAG, "upload(): Connecting to Server");
+                    Log.v(TAG, "upload(): Connecting to Server");
                     socket.connect(new InetSocketAddress(SERVER_IP_ADDRESS, SERVER_PORT), TIME_OUT);
-                    Log.d(TAG, "upload(): Server Connected");
+                    Log.v(TAG, "upload(): Server Connected");
                     ////
 
                     //获取输入输出流//
@@ -233,11 +242,11 @@ public class CloudManage {
                     ////
 
                     //发出信息//
-                    Log.d(TAG, "upload(): message sending");
+                    Log.v(TAG, "upload(): message sending");
                     byte[] jsonBytes = jsonObject.toString().getBytes("UTF-8");//使用UTF-8编码
                     dataOutputStream.write(jsonBytes);
                     dataOutputStream.flush();
-                    Log.d(TAG, "upload(): message sent");
+                    Log.v(TAG, "upload(): message sent");
                     socket.shutdownOutput();
                     ////
 
@@ -245,7 +254,7 @@ public class CloudManage {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     byte[] bytes = new byte[2048];
                     int len;
-                    Log.d(TAG, "upload(): receiving message");
+                    Log.v(TAG, "upload(): receiving message");
                     while ((len = dataInputStream.read(bytes)) > 0) {
                         byteArrayOutputStream.write(bytes, 0, len - 1);
                     }
@@ -260,13 +269,13 @@ public class CloudManage {
                         e.printStackTrace();
                     }
 
-                    Log.d(TAG, "upload(): finished succeed");
+                    Log.v(TAG, "upload(): finished succeed");
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    Log.i(TAG, "upload(): timeout，ConnectException");
+                    Log.e(TAG, "upload(): timeout，ConnectException");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.i(TAG, "upload(): failed，IOException");
+                    Log.e(TAG, "upload(): failed，IOException");
                 } finally {
                     isUploadDone = true;
 
@@ -481,6 +490,7 @@ public class CloudManage {
         try {
             jsonObject.put("token", "0");
             jsonObject.put("require", "PAD_Main_Start");
+            data.put("storeID", ManageApplication.getInstance().storeID);
             data.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("data", data);
         } catch (JSONException e) {
@@ -529,7 +539,7 @@ public class CloudManage {
     }
 
 
-    public JSONObject getCustomerInfo(int phone) {
+    public JSONObject getCustomerInfo(long phone) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {

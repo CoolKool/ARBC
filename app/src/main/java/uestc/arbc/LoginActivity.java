@@ -147,7 +147,7 @@ public class LoginActivity extends Activity {
 
     }
 
-    class LoginAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
+    private class LoginAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
         JSONObject jsonObjectResponse;
         ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
 
@@ -206,19 +206,18 @@ public class LoginActivity extends Activity {
                         //此处保存设备信息
                         dataSQL.createJsonTable(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
-                        JSONObject jsonData = jsonObjectResponse.optJSONObject("data");
                         try {
-                            if (stringAccount.contains("store")) {
+                            JSONObject jsonData = jsonObjectResponse.getJSONObject("data");
+                            /*if (stringAccount.contains("store")) {
                                 jsonData.put("bedID", 0);
-                            }
-                            jsonData.put("password",ManageApplication.string2MD5(stringPassword));
+                            }*/
+                            jsonData.put("password", stringPassword);
+                            Log.i(TAG, "deviceInfo is:" + jsonData.toString());
+                            dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
+                            setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.i(TAG, "deviceInfo is:" + jsonData.toString());
-                        dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
-
-                        setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         finish();
                     } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
                         //工作人员登录成功
@@ -228,6 +227,9 @@ public class LoginActivity extends Activity {
                         try {
                             jsonObject.put("account",stringAccount);
                             dataSQL.pushJson(ManageApplication.TABLE_NAME_USER_ACCOUNT,jsonObject);
+                            JSONObject jsonData = jsonObjectResponse.getJSONObject("data");
+                            ManageApplication.getInstance().workerID = jsonData.getInt("workerID");
+                            ManageApplication.getInstance().workerName = jsonData.getString("workerName");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -236,7 +238,6 @@ public class LoginActivity extends Activity {
                         startActivity(intent);
                         finish();
                     }
-
 
                     break;
                 default:
