@@ -228,7 +228,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    class GetDeviceStateThread extends Thread {
+    private class GetDeviceStateThread extends Thread {
         @Override
         public void run() {
             while (getDeviceState) {
@@ -237,7 +237,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             }
         }
 
-        public void getOnes() {
+        private void getOnes() {
             try {
                 JSONObject jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
                 if (null != jsonObjectDeviceState) {

@@ -450,10 +450,11 @@
 
                 <EditText
                     android:id="@+id/editTextCustomer"
-                    android:layout_width="300dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/textViewUser"
                     android:layout_alignStart="@id/spinnerRawType"
+                    android:layout_alignEnd="@id/spinnerRawType"
                     android:layout_toEndOf="@id/textViewUser"
                     android:background="@color/colorHalfTransparent"
                     android:hint="@string/guest"
@@ -469,9 +470,9 @@
                     android:id="@+id/textViewCustomerInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/editTextCustomer"
-                    android:layout_below="@id/editTextCustomer"
-                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/editTextCustomer"
+                    android:layout_alignBaseline="@id/editTextCustomer"
+                    android:gravity="center"
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp" />
             </RelativeLayout>

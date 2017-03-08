@@ -81,14 +81,14 @@ public class CustomerSetActivity extends Activity {
         buttonSubmit = (Button) findViewById(R.id.buttonSubmit);
         imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
 
-     /*   Intent intent = getIntent();
+        Intent intent = getIntent();
         phone = intent.getLongExtra("phone",-1);
         if (-1 == phone) {
             Toast.makeText(this,"获取手机号失败！",Toast.LENGTH_SHORT).show();
             setResult(ManageApplication.RESULT_CODE_FAILED, null);
             finish();
             return;
-        }*/
+        }
         textViewCustomerPhone.setText("手机号：" + phone + "的客户信息设置");
 
         final String arr[] = new String[2];

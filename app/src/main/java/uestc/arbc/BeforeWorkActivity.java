@@ -89,9 +89,9 @@ public class BeforeWorkActivity extends Activity {
         //为艾草数选择框填充数据
         Spinner spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
         if (null != spinnerRawNum) {
-            String arr[] = new String[21];
-            for (int i = 0; i < 21; i++) {
-                arr[i] = i + "盒";
+            String arr[] = new String[20];
+            for (int i = 0; i < 20; i++) {
+                arr[i] = i + 1 + "盒";
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -99,13 +99,13 @@ public class BeforeWorkActivity extends Activity {
             spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    rawNum = i;
+                    rawNum = i + 1;
                     Log.i(TAG, "the raw num is:" + rawNum);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    rawNum = 0;
+                    rawNum = 1;
                     Log.i(TAG, "the raw num is:" + rawNum);
                 }
             });
@@ -303,6 +303,7 @@ public class BeforeWorkActivity extends Activity {
 
         //为用户输入框添加监听
         textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
+        textViewCustomerInfo.setText("");
         editTextCustomer = (EditText) findViewById(R.id.editTextCustomer);
         editTextCustomer.addTextChangedListener(new TextWatcher() {
             @Override
