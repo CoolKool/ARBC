@@ -236,15 +236,15 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
         imageButtonIgniteBR = (ImageButton) findViewById(R.id.imageButtonIgniteBR);
 
-        setState(imageButtonHeatFL, false);
-        setState(imageButtonHeatFR, false);
-        setState(imageButtonHeatBL, false);
-        setState(imageButtonHeatBR, false);
+        setState(imageButtonHeatFL, true);
+        setState(imageButtonHeatFR, true);
+        setState(imageButtonHeatBL, true);
+        setState(imageButtonHeatBR, true);
         //       imageButtonHeatBoardSwitchSelectAll.setTag(0);
         //       imageButtonHeatBoardSwitchSelectAll.setImageResource(R.drawable.pic_button_select_no);
-        setState(imageButtonIgniteFL, false);
+        setState(imageButtonIgniteFL, true);
         setState(imageButtonIgniteFR, false);
-        setState(imageButtonIgniteBL, false);
+        setState(imageButtonIgniteBL, true);
         setState(imageButtonIgniteBR, false);
         //       imageButtonRawBoxIgniteSelectAll.setTag(0);
         //      imageButtonRawBoxIgniteSelectAll.setImageResource(R.drawable.pic_button_select_no);
@@ -471,16 +471,19 @@ public class BeforeWorkActivity extends Activity {
             jsonTemp.put("state", (int) imageButtonHeatBL.getTag());
             hotSet.put(jsonTemp);
 
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 13);
-            jsonTemp.put("state", (int) imageButtonIgniteFL.getTag());
-            fireSet.put(jsonTemp);
+            if (((int) imageButtonIgniteFL.getTag()) == 1) {
+                jsonTemp = new JSONObject();
+                jsonTemp.put("switchID", 13);
+                jsonTemp.put("state", (int) imageButtonIgniteFL.getTag());
+                fireSet.put(jsonTemp);
+            }
 
-            jsonTemp = new JSONObject();
-            jsonTemp.put("switchID", 24);
-            jsonTemp.put("state", (int) imageButtonIgniteFR.getTag());
-            fireSet.put(jsonTemp);
-
+            if (((int) imageButtonIgniteFR.getTag()) == 1) {
+                jsonTemp = new JSONObject();
+                jsonTemp.put("switchID", 24);
+                jsonTemp.put("state", (int) imageButtonIgniteFR.getTag());
+                fireSet.put(jsonTemp);
+            }
             jsonObject.put("hotSet", hotSet);
             jsonObject.put("fireSet", fireSet);
 

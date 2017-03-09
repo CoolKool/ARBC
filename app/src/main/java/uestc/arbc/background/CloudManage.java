@@ -555,33 +555,14 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
-    public JSONObject setSwitch(String targetSwitch, int targetState) {
+    public JSONObject bedControl(String operateType, int targetState) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
-            //控制开关的指令
+            //控制指令
             jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Switch");
-            data.put("operateType", targetSwitch);
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
-            data.put("state", targetState);
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return upload(jsonObject);
-    }
-
-    public JSONObject setMotor(String targetMotor, int targetState) {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //控制开关的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Motor");
-            data.put("operateType", targetMotor);
+            jsonObject.put("require", "PAD_Control");
+            data.put("operateType", operateType);
             data.put("storeID", ManageApplication.getInstance().storeID);
             data.put("bedID", ManageApplication.getInstance().bedID);
             data.put("state", targetState);
@@ -636,7 +617,7 @@ public class CloudManage {
         try {
             //暂停的指令
             jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Pause");
+            jsonObject.put("require", "PAD_Work_Pause");
             data.put("storeID", ManageApplication.getInstance().storeID);
             data.put("bedID", ManageApplication.getInstance().bedID);
 

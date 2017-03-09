@@ -30,32 +30,30 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     private boolean getDeviceState = true;
     private final static long DEVICE_STATE_DELAY = 1000;//每1秒获取一次艾灸机信息
 
+    TextView textViewStoreID;
+    TextView textViewStoreName;
+    TextView textViewBedID;
+
     ImageButton imageButtonMainBoxCtrlUP;
     ImageButton imageButtonMainBoxCtrlDown;
 
-    ImageButton imageButtonHeatFL;
-    ImageButton imageButtonHeatFR;
-    ImageButton imageButtonHeatBL;
-    ImageButton imageButtonHeatBR;
-    ImageButton imageButtonIgniteFL;
-    ImageButton imageButtonIgniteFR;
-    ImageButton imageButtonIgniteBL;
-    ImageButton imageButtonIgniteBR;
+    ImageButton imageButtonHeatFront;
+    ImageButton imageButtonHeatBack;
+
+    ImageButton imageButtonIgniteMain;
+    ImageButton imageButtonIgniteBackup;
+
     ImageButton imageButtonFanOn;
     ImageButton imageButtonFanOff;
     ImageButton imageButtonFanStop;
 
-    TextView textViewStoreID;
-    TextView textViewStoreName;
-    TextView textViewBedID;
+    TextView textViewMainBoxPosition;
     TextView textViewWorkTimeMin;
     TextView textViewWorkTimeSec;
-    TextView textViewTemperatureFL;
-    TextView textViewTemperatureFR;
-    TextView textViewTemperatureBL;
-    TextView textViewTemperatureBR;
-    TextView textViewHumidityFront;
-    TextView textViewHumidityBack;
+    TextView textViewBedTemperatureFront;
+    TextView textViewBedTemperatureBack;
+    TextView textViewDegreeBody;
+    TextView textViewHeartRate;
     ImageView imageViewHeatBoardWorkStateFL;
     ImageView imageViewHeatBoardWorkStateFR;
     ImageView imageViewHeatBoardWorkStateBL;
@@ -64,6 +62,9 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     ImageView imageViewIgniteBoardWorkStateFR;
     ImageView imageViewIgniteBoardWorkStateBL;
     ImageView imageViewIgniteBoardWorkStateBR;
+    ImageView imageViewFanWorkStateOn;
+    ImageView imageViewFanWorkStateOff;
+    ImageView imageViewFanWorkStateStop;
     TextView textViewTime;
 
     MyHandler handler = new MyHandler(TAG) {
@@ -157,37 +158,21 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonMainBoxCtrlDown.setTag(false);
         imageButtonMainBoxCtrlDown.setOnClickListener(this);
 
-        imageButtonIgniteFL = (ImageButton) findViewById(R.id.imageButtonIgniteFL);
-        imageButtonIgniteFL.setTag(1);
-        imageButtonIgniteFL.setOnClickListener(this);
+        imageButtonIgniteMain = (ImageButton) findViewById(R.id.imageButtonIgniteMain);
+        imageButtonIgniteMain.setTag(1);
+        imageButtonIgniteMain.setOnClickListener(this);
 
-        imageButtonIgniteFR = (ImageButton) findViewById(R.id.imageButtonIgniteFR);
-        imageButtonIgniteFR.setTag(1);
-        imageButtonIgniteFR.setOnClickListener(this);
+        imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
+        imageButtonIgniteBackup.setTag(1);
+        imageButtonIgniteBackup.setOnClickListener(this);
 
-        imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
-        imageButtonIgniteBL.setTag(1);
-        imageButtonIgniteBL.setOnClickListener(this);
+        imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
+        imageButtonHeatFront.setTag(1);
+        imageButtonHeatFront.setOnClickListener(this);
 
-        imageButtonIgniteBR = (ImageButton) findViewById(R.id.imageButtonIgniteBR);
-        imageButtonIgniteBR.setTag(1);
-        imageButtonIgniteBR.setOnClickListener(this);
-
-        imageButtonHeatFL = (ImageButton) findViewById(R.id.imageButtonHeatFL);
-        imageButtonHeatFL.setTag(1);
-        imageButtonHeatFL.setOnClickListener(this);
-
-        imageButtonHeatFR = (ImageButton) findViewById(R.id.imageButtonHeatFR);
-        imageButtonHeatFR.setTag(1);
-        imageButtonHeatFR.setOnClickListener(this);
-
-        imageButtonHeatBL = (ImageButton) findViewById(R.id.imageButtonHeatBL);
-        imageButtonHeatBL.setTag(1);
-        imageButtonHeatBL.setOnClickListener(this);
-
-        imageButtonHeatBR = (ImageButton) findViewById(R.id.imageButtonHeatBR);
-        imageButtonHeatBR.setTag(1);
-        imageButtonHeatBR.setOnClickListener(this);
+        imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
+        imageButtonHeatBack.setTag(1);
+        imageButtonHeatBack.setOnClickListener(this);
 
         imageButtonFanOn = (ImageButton) findViewById(R.id.imageButtonFanOn);
         imageButtonFanOn.setOnClickListener(this);
@@ -204,16 +189,15 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
         textViewStoreName = (TextView) findViewById(R.id.textViewStoreName);
         textViewStoreName.setText(ManageApplication.getInstance().storeName);
-
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
+
+        textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
         textViewWorkTimeMin = (TextView) findViewById(R.id.textViewWorkTimeMin);
         textViewWorkTimeSec = (TextView) findViewById(R.id.textViewWorkTimeSec);
-        textViewTemperatureFL = (TextView) findViewById(R.id.textViewTemperatureFL);
-        textViewTemperatureFR = (TextView) findViewById(R.id.textViewTemperatureFR);
-        textViewTemperatureBL = (TextView) findViewById(R.id.textViewTemperatureBL);
-        textViewTemperatureBR = (TextView) findViewById(R.id.textViewTemperatureBR);
-        textViewHumidityFront = (TextView) findViewById(R.id.textViewHumidityFront);
-        textViewHumidityBack = (TextView) findViewById(R.id.textViewHumidityBack);
+        textViewBedTemperatureFront = (TextView) findViewById(R.id.textViewBedTemperatureFront);
+        textViewBedTemperatureBack = (TextView) findViewById(R.id.textViewBedTemperatureBack);
+        textViewDegreeBody = (TextView) findViewById(R.id.textViewDegreeBody);
+        textViewHeartRate = (TextView) findViewById(R.id.textViewHeartRate);
         imageViewHeatBoardWorkStateFL = (ImageView) findViewById(R.id.imageViewHeatBoardWorkStateFL);
         imageViewHeatBoardWorkStateFR = (ImageView) findViewById(R.id.imageViewHeatBoardWorkStateFR);
         imageViewHeatBoardWorkStateBL = (ImageView) findViewById(R.id.imageViewHeatBoardWorkStateBL);
@@ -222,6 +206,9 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageViewIgniteBoardWorkStateFR = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateFR);
         imageViewIgniteBoardWorkStateBL = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateBL);
         imageViewIgniteBoardWorkStateBR = (ImageView) findViewById(R.id.imageViewIgniteBoardWorkStateBR);
+        imageViewFanWorkStateOn = (ImageView) findViewById(R.id.imageViewFanWorkStateOn);
+        imageViewFanWorkStateOff = (ImageView) findViewById(R.id.imageViewFanWorkStateOff);
+        imageViewFanWorkStateStop = (ImageView) findViewById(R.id.imageViewFanWorkStateStop);
 
         //开始周期性获取艾灸机数据
         new GetDeviceStateThread().start();
@@ -271,111 +258,129 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
             int tmp;
 
-            tmp = jsonData.getInt("degreeBackLeft");
-            textViewTemperatureBL.setText(String.valueOf(tmp));
+            tmp = jsonData.getInt("degreeBack");
+            textViewBedTemperatureBack.setText(String.valueOf(tmp));
 
-            tmp = jsonData.getInt("degreeBackRight");
-            textViewTemperatureBR.setText(String.valueOf(tmp));
+            tmp = jsonData.getInt("degreeFore");
+            textViewBedTemperatureFront.setText(String.valueOf(tmp));
 
-            tmp = jsonData.getInt("degreeForeLeft");
-            textViewTemperatureFL.setText(String.valueOf(tmp));
-
-            tmp = jsonData.getInt("degreeForeRight");
-            textViewTemperatureFR.setText(String.valueOf(tmp));
-
-            tmp = jsonData.getInt("humidityBack");
-            textViewHumidityBack.setText(String.valueOf(tmp));
-
-            tmp = jsonData.getInt("humidityFore");
-            textViewHumidityFront.setText(String.valueOf(tmp));
+            tmp = jsonData.getInt("posMainMotor");
+            textViewMainBoxPosition.setText(String.valueOf(tmp));
 
             tmp = jsonData.getInt("stateDianBackLeft");
+            boolean ignite3;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonIgniteBL.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteBL.setTag(1);
-            } else if (1 == tmp) {
+                ignite3 = false;
+
+            } else {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonIgniteBL.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteBL.setTag(0);
+                ignite3 = true;
             }
 
             tmp = jsonData.getInt("stateDianBackRight");
+            boolean ignite4;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonIgniteBR.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteBR.setTag(1);
-            } else if (1 == tmp) {
+                ignite4 = false;
+            } else {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonIgniteBR.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteBR.setTag(0);
+                ignite4 = true;
             }
 
             tmp = jsonData.getInt("stateDianForeLeft");
+            boolean ignite1;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonIgniteFL.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteFL.setTag(1);
-            } else if (1 == tmp) {
+                ignite1 = false;
+            } else {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonIgniteFL.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteFL.setTag(0);
+                ignite1 = true;
             }
 
             tmp = jsonData.getInt("stateDianForeRight");
+            boolean ignite2;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonIgniteFR.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteFR.setTag(1);
-            } else if (1 == tmp) {
+                ignite2 = false;
+            } else {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonIgniteFR.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteFR.setTag(0);
+                ignite2 = true;
             }
 
+            if (ignite1 || ignite3) {
+                imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonIgniteMain.setTag(0);
+            } else {
+                imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonIgniteMain.setTag(1);
+            }
+
+            if (ignite2 || ignite4) {
+                imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonIgniteBackup.setTag(0);
+            } else {
+                imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonIgniteBackup.setTag(1);
+            }
+
+
+
             tmp = jsonData.getInt("stateHotBackLeft");
+            boolean heat3;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatBL.setTag(1);
-            } else if (1 == tmp) {
+                heat3 = false;
+            } else {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonHeatBL.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatBL.setTag(0);
+                heat3 = true;
             }
 
             tmp = jsonData.getInt("stateHotBackRight");
+            boolean heat4;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatBR.setTag(1);
-            } else if (1 == tmp) {
+                heat4 = false;
+            } else {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonHeatBR.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatBR.setTag(0);
+                heat4 = true;
             }
 
             tmp = jsonData.getInt("stateHotForeLeft");
+            boolean heat1;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatFL.setTag(1);
-            } else if (1 == tmp) {
+                heat1 = false;
+            } else {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonHeatFL.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatFL.setTag(0);
+                heat1 = true;
             }
 
             tmp = jsonData.getInt("stateHotForeRight");
+            boolean heat2;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
-                imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatFR.setTag(1);
-            } else if (1 == tmp) {
+                heat2 = false;
+            } else {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
-                imageButtonHeatFR.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatFR.setTag(0);
+                heat2 = true;
             }
+
+            if (heat1 || heat2) {
+                imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatFront.setTag(0);
+            } else {
+                imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatFront.setTag(1);
+            }
+            if (heat3 || heat4) {
+                imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_pressed);
+                imageButtonHeatBack.setTag(0);
+            } else {
+                imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_released);
+                imageButtonHeatBack.setTag(1);
+            }
+
 
             tmp = jsonData.getInt("currentTime") - jsonData.getInt("startTime");
             textViewWorkTimeMin.setText(String.valueOf(tmp / 60));
@@ -386,14 +391,26 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_pressed);
                 imageButtonFanOn.setImageResource(R.drawable.pic_button_on_released);
                 imageButtonFanOff.setImageResource(R.drawable.pic_button_off_released);
+
+                imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lighton);
+                imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lightoff);
+                imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lightoff);
             } else if (1 == tmp) {
                 imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_released);
                 imageButtonFanOn.setImageResource(R.drawable.pic_button_on_pressed);
                 imageButtonFanOff.setImageResource(R.drawable.pic_button_off_released);
+
+                imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lightoff);
+                imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lighton);
+                imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lightoff);
             } else if (2 == tmp) {
                 imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_released);
                 imageButtonFanOn.setImageResource(R.drawable.pic_button_on_released);
                 imageButtonFanOff.setImageResource(R.drawable.pic_button_off_pressed);
+
+                imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lightoff);
+                imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lightoff);
+                imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lighton);
             }
 
             tmp = jsonData.getInt("stateMainMotor");
@@ -413,6 +430,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_pressed);
                 imageButtonMainBoxCtrlDown.setTag(true);
             }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -442,50 +460,39 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.imageButtonMainBoxCtrlUp:
                 if ((boolean) view.getTag()) {
-                    ManageApplication.getInstance().getCloudManage().setMotor("MAINMOTOR", 0);
+                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
                 } else {
-                    ManageApplication.getInstance().getCloudManage().setMotor("MAINMOTOR", 1);
+                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 1);
                 }
                 break;
             case R.id.imageButtonMainBoxCtrlDown:
                 if ((boolean) view.getTag()) {
-                    ManageApplication.getInstance().getCloudManage().setMotor("MAINMOTOR", 0);
+                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
                 } else {
-                    ManageApplication.getInstance().getCloudManage().setMotor("MAINMOTOR", 2);
+                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 2);
                 }
                 break;
-            case R.id.imageButtonIgniteFL:
-                ManageApplication.getInstance().getCloudManage().setSwitch("FIRE_FL", (int) view.getTag());
+            case R.id.imageButtonIgniteMain:
+                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_Main", (int) view.getTag());
                 break;
-            case R.id.imageButtonIgniteFR:
-                ManageApplication.getInstance().getCloudManage().setSwitch("FIRE_FR", (int) view.getTag());
+            case R.id.imageButtonIgniteBackup:
+                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
                 break;
-            case R.id.imageButtonIgniteBL:
-                ManageApplication.getInstance().getCloudManage().setSwitch("FIRE_BL", (int) view.getTag());
+            case R.id.imageButtonHeatFront:
+                ManageApplication.getInstance().getCloudManage().bedControl("HOT_PREV", (int) view.getTag());
                 break;
-            case R.id.imageButtonIgniteBR:
-                ManageApplication.getInstance().getCloudManage().setSwitch("FIRE_BR", (int) view.getTag());
+            case R.id.imageButtonHeatBack:
+                ManageApplication.getInstance().getCloudManage().bedControl("HOT_NEXT", (int) view.getTag());
                 break;
-            case R.id.imageButtonHeatFL:
-                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_FL", (int) view.getTag());
-                break;
-            case R.id.imageButtonHeatFR:
-                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_FR", (int) view.getTag());
-                break;
-            case R.id.imageButtonHeatBL:
-                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_BL", (int) view.getTag());
-                break;
-            case R.id.imageButtonHeatBR:
-                ManageApplication.getInstance().getCloudManage().setSwitch("HOT_BR", (int) view.getTag());
-                break;
+
             case R.id.imageButtonFanOn:
-                ManageApplication.getInstance().getCloudManage().setSwitch("WIND", 1);
+                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 1);
                 break;
             case R.id.imageButtonFanOff:
-                ManageApplication.getInstance().getCloudManage().setSwitch("WIND", 2);
+                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 2);
                 break;
             case R.id.imageButtonFanStop:
-                ManageApplication.getInstance().getCloudManage().setSwitch("WIND", 0);
+                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 0);
                 break;
             default:
                 break;

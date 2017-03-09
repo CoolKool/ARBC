@@ -114,4 +114,13 @@
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="short_stop">停</string>
+    <string name="degree_body">体温</string>
+    <string name="heart_rate">心率</string>
+    <string name="fan_work_state">风机阀门状态</string>
+    <string name="bed_temperature_front">床前温度</string>
+    <string name="bed_temperature_back">床后温度</string>
+    <string name="ignite_main">主</string>
+    <string name="ignite_backup">备</string>
+    <string name="heat_front">前</string>
+    <string name="heat_back">后</string>
 </resources>
