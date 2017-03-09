@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uestc.arbc.background.CloudManage;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
 
@@ -26,9 +27,6 @@ import uestc.arbc.background.MyHandler;
 
 public class WorkMainActivity extends Activity implements View.OnClickListener {
     private final static String TAG = "WorkMainActivity";
-
-    private boolean getDeviceState = true;
-    private final static long DEVICE_STATE_DELAY = 1000;//每1秒获取一次艾灸机信息
 
     TextView textViewStoreID;
     TextView textViewStoreName;
@@ -67,6 +65,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     ImageView imageViewFanWorkStateStop;
     TextView textViewTime;
 
+    CloudManage.DeviceState deviceState = null;
+
     MyHandler handler = new MyHandler(TAG) {
 
         AlertDialog dialogCloud = null;
@@ -84,8 +84,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                         dialogCloud.dismiss();
                         dialogCloud = null;
                     }
-                    getDeviceState = true;
-                    new GetDeviceStateThread().start();
+                    deviceState.startLoop();
                     break;
                 case ManageApplication.MESSAGE_SERVER_DISCONNECTED:
                     if (null == dialogCloud) {
@@ -96,7 +95,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                                 .setCancelable(false).create();
                         dialogCloud.show();
                     }
-                    getDeviceState = false;
+                    deviceState.stopLoop();
                     break;
                 case ManageApplication.MESSAGE_DEVICE_CONNECTED:
                     //nothing need to do
@@ -187,9 +186,12 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
         //信息显示面板
         textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
+        textViewStoreID.setText("" + ManageApplication.getInstance().storeID);
         textViewStoreName = (TextView) findViewById(R.id.textViewStoreName);
-        textViewStoreName.setText(ManageApplication.getInstance().storeName);
+        textViewStoreName.setText("" + ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
+        textViewBedID.setText("" + ManageApplication.getInstance().bedID);
+
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
         textViewWorkTimeMin = (TextView) findViewById(R.id.textViewWorkTimeMin);
@@ -210,44 +212,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageViewFanWorkStateOff = (ImageView) findViewById(R.id.imageViewFanWorkStateOff);
         imageViewFanWorkStateStop = (ImageView) findViewById(R.id.imageViewFanWorkStateStop);
 
-        //开始周期性获取艾灸机数据
-        new GetDeviceStateThread().start();
-
-    }
-
-    private class GetDeviceStateThread extends Thread {
-        @Override
-        public void run() {
-            while (getDeviceState) {
-                getOnes();
-                SystemClock.sleep(DEVICE_STATE_DELAY);
-            }
-        }
-
-        private void getOnes() {
-            try {
-                JSONObject jsonObjectDeviceState = ((ManageApplication) getApplication()).getCloudManage().getDeviceState();
-                if (null != jsonObjectDeviceState) {
-                    if (jsonObjectDeviceState.getInt("errorCode") == 0) {
-                        JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
-                        if (jsonData.getInt("stateNetBoard") == 1) {
-                            Message message = new Message();
-                            message.what = ManageApplication.MESSAGE_DEVICE_STATE;
-                            message.obj = jsonObjectDeviceState;
-                            handler.sendMessage(message);
-                        } else if (jsonData.getInt("stateNetBoard") == 0) {
-                            Message message = new Message();
-                            message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
-                            handler.sendMessage(message);
-                        }
-                    } else {
-                        Toast.makeText(WorkMainActivity.this, jsonObjectDeviceState.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        deviceState = ManageApplication.getInstance().getCloudManage().makeDeviceState(handler);
+        deviceState.setDelay(1000);
     }
 
     private void updateDeviceState(JSONObject jsonObject) {
@@ -497,7 +463,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             default:
                 break;
         }
-        new GetDeviceStateThread().getOnes();
+        deviceState.getOnce();
     }
 
     @Override
@@ -510,7 +476,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onPause() {
         ((ManageApplication) getApplication()).removeCurrentHandler();
-        getDeviceState = false;
+        deviceState.stopLoop();
         super.onPause();
     }
 
@@ -533,14 +499,13 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getDeviceState = true;
-        new GetDeviceStateThread().start();
+        deviceState.startLoop();
     }
 
     @Override
     protected void onDestroy() {
         ((ManageApplication) getApplication()).removeCurrentHandler();
-        getDeviceState = false;
+        deviceState.stopLoop();
         super.onDestroy();
     }
 }

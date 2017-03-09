@@ -628,4 +628,93 @@ public class CloudManage {
 
         return upload(jsonObject);
     }
+
+    public DeviceState makeDeviceState(MyHandler handler) {
+        return new DeviceState(handler);
+    }
+
+    public class DeviceState {
+        private boolean running = false;
+        private long DEVICE_STATE_DELAY = 1000;
+        private MyHandler handler = null;
+
+        DeviceState(MyHandler handler) {
+            this.handler = handler;
+        }
+
+        public void getOnce() {
+            try {
+                JSONObject jsonObjectDeviceState = getDeviceState();
+                if (null != jsonObjectDeviceState) {
+                    if (jsonObjectDeviceState.getInt("errorCode") == 0) {
+                        JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
+                        if (jsonData.getInt("stateNet") == 1) {
+                            Message message = new Message();
+                            message.what = ManageApplication.MESSAGE_DEVICE_STATE;
+                            message.obj = jsonObjectDeviceState;
+                            handler.sendMessage(message);
+                        } else {
+                            Message message = new Message();
+                            message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
+                            handler.sendMessage(message);
+                        }
+                    } else {
+                        Log.d(TAG, "get deviceState error:" + jsonObjectDeviceState.toString());
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private class GetDeviceStateThread extends Thread {
+            @Override
+            public void run() {
+                while (running) {
+                    getOnce();
+                    SystemClock.sleep(DEVICE_STATE_DELAY);
+                }
+            }
+        }
+
+        public boolean startLoop() {
+            if (running || null == handler) {
+                return false;
+            }
+            running = true;
+            new GetDeviceStateThread().start();
+            return true;
+        }
+
+        public boolean startLoop(long delay) {
+            setDelay(delay);
+            return startLoop();
+        }
+
+        public void stopLoop() {
+            running = false;
+        }
+
+        public boolean setDelay(long delay) {
+            if (delay < 0) {
+                return false;
+            } else {
+                DEVICE_STATE_DELAY = delay;
+                return true;
+            }
+        }
+
+        public boolean setHandler(MyHandler handler) {
+            if (null == handler) {
+                return false;
+            }
+
+            this.handler = handler;
+            return true;
+        }
+
+        public long getDelay() {
+            return DEVICE_STATE_DELAY;
+        }
+    }
 }
