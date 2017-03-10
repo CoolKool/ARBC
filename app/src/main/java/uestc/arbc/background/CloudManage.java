@@ -611,6 +611,40 @@ public class CloudManage {
         return upload(jsonObject);
     }
 
+    public JSONObject getCheckoutInfo() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Check_Info");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
+    public JSONObject checkoutSubmit() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "PAD_Check_Submit");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
     public JSONObject devicePause() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();

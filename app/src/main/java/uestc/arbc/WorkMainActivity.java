@@ -2,19 +2,26 @@ package uestc.arbc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
-import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import uestc.arbc.background.CloudManage;
 import uestc.arbc.background.ManageApplication;
@@ -44,6 +51,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     ImageButton imageButtonFanOn;
     ImageButton imageButtonFanOff;
     ImageButton imageButtonFanStop;
+
+    ImageButton imageButtonCancel;
+    Button buttonPause;
+    Button buttonCheckout;
 
     TextView textViewMainBoxPosition;
     TextView textViewWorkTimeMin;
@@ -90,9 +101,15 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     if (null == dialogCloud) {
                         dialogCloud = new AlertDialog.Builder(WorkMainActivity.this).setTitle("系统提示")//设置对话框标题
 
-                                .setMessage("云端连接异常")//设置显示的内容
+                                .setMessage("云端连接异常，请等待连接或退出程序")//设置显示的内容
 
-                                .setCancelable(false).create();
+                                .setCancelable(false).setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        System.exit(0);
+                                    }
+                                }).create();
                         dialogCloud.show();
                     }
                     deviceState.stopLoop();
@@ -146,7 +163,12 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.imageButtonCancel).setOnClickListener(this);
 
         //暂停按钮
-        findViewById(R.id.buttonPause).setOnClickListener(this);
+        buttonPause = (Button) findViewById(R.id.buttonPause);
+        buttonPause.setOnClickListener(this);
+
+        //结帐按钮
+        buttonCheckout = (Button) findViewById(R.id.buttonCheckout);
+        buttonCheckout.setOnClickListener(this);
 
         //接下来一堆控制按钮
         imageButtonMainBoxCtrlUP = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlUp);
@@ -182,15 +204,16 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonFanStop = (ImageButton) findViewById(R.id.imageButtonFanStop);
         imageButtonFanStop.setOnClickListener(this);
 
+
         Log.i(TAG, "button init done");
 
         //信息显示面板
         textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
-        textViewStoreID.setText("" + ManageApplication.getInstance().storeID);
+        textViewStoreID.setText(String.valueOf(ManageApplication.getInstance().storeID));
         textViewStoreName = (TextView) findViewById(R.id.textViewStoreName);
-        textViewStoreName.setText("" + ManageApplication.getInstance().storeName);
+        textViewStoreName.setText(ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
-        textViewBedID.setText("" + ManageApplication.getInstance().bedID);
+        textViewBedID.setText(String.valueOf(ManageApplication.getInstance().bedID));
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -424,6 +447,9 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             case R.id.imageButtonCancel:
                 finish();
                 break;
+            case R.id.buttonCheckout:
+                checkout();
+                break;
             case R.id.imageButtonMainBoxCtrlUp:
                 if ((boolean) view.getTag()) {
                     ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
@@ -465,6 +491,139 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         }
         deviceState.getOnce();
     }
+
+    void checkout() {
+        //// TODO: 2017/3/10
+        try {
+            JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCheckoutInfo();
+            if (null == jsonObject) {
+                Log.i(TAG, "get checkout info fail: jsonObject is null");
+                return;
+            }
+            if (jsonObject.getInt("errorCode") != 0) {
+                Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                return;
+            }
+            JSONObject jsonData = jsonObject.getJSONObject("data");
+            if (null == jsonData) {
+                Log.i(TAG, "get checkout info fail: jsonData is null");
+                return;
+            }
+
+            listCheckoutInfo.clear();
+            listCheckoutInfo.add(new CheckoutInfo("客户信息", jsonData.getString("userInfo")));
+            listCheckoutInfo.add(new CheckoutInfo("保健床名", jsonData.getString("bedName")));
+            listCheckoutInfo.add(new CheckoutInfo("工作时间", String.valueOf(jsonData.getInt("workTime"))));
+            listCheckoutInfo.add(new CheckoutInfo("添加盒数", String.valueOf(jsonData.getInt("addAirui"))));
+            listCheckoutInfo.add(new CheckoutInfo("服务项目", jsonData.getString("serverItem")));
+            listCheckoutInfo.add(new CheckoutInfo("消费信息", jsonData.getString("consumeInfo")));
+            listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(jsonData.getInt("price"))));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View layout = getLayoutInflater().inflate(R.layout.checkout_frame, null);
+            ListView listViewCheckoutList = (ListView) layout.findViewById(R.id.listViewCheckoutList);
+            listViewCheckoutList.setAdapter(checkoutAdapter);
+            builder.setView(layout);
+            builder.setTitle("结帐信息：");
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton("结帐", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        JSONObject jsonObjectSubmit = ManageApplication.getInstance().getCloudManage().checkoutSubmit();
+                        if (null == jsonObjectSubmit) {
+                            Log.i(TAG, "checkout submit fail: jsonObjectSubmit is null");
+                            return;
+                        }
+                        if (jsonObjectSubmit.getInt("errorCode") != 0) {
+                            Toast.makeText(WorkMainActivity.this, jsonObjectSubmit.getString("message"), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        JSONObject jsonSubmitData = jsonObjectSubmit.getJSONObject("data");
+                        if (null == jsonSubmitData) {
+                            Log.i(TAG, "checkout submit fail: jsonSubmitData is null");
+                            return;
+                        }
+                        final String stringCheckoutSucceed = "结帐成功，单号:" + jsonSubmitData.getLong("checkID");
+                        dialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(WorkMainActivity.this, stringCheckoutSucceed, Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            builder.create().show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<CheckoutInfo> listCheckoutInfo = new ArrayList<>();
+
+    private class CheckoutInfo {
+        String stringBillInfo;
+        String stringCheckoutExplain;
+
+        CheckoutInfo(@NonNull String stringBillInfo, @NonNull String stringCheckoutExplain) {
+            this.stringBillInfo = stringBillInfo;
+            this.stringCheckoutExplain = stringCheckoutExplain;
+        }
+    }
+
+    private BaseAdapter checkoutAdapter = new BaseAdapter() {
+        @Override
+        public int getCount() {
+            return listCheckoutInfo.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return listCheckoutInfo.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (null == convertView) {
+                convertView = getLayoutInflater().inflate(R.layout.checkout_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.textViewBillInfo = (TextView) convertView.findViewById(R.id.textViewBillInfo);
+                viewHolder.textViewCheckoutExplain = (TextView) convertView.findViewById(R.id.textViewCheckoutExplain);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            final String stringBillInfo = listCheckoutInfo.get(position).stringBillInfo;
+            final String stringCheckoutExplain = listCheckoutInfo.get(position).stringCheckoutExplain;
+            viewHolder.textViewBillInfo.setText(stringBillInfo);
+            viewHolder.textViewCheckoutExplain.setText(stringCheckoutExplain);
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView textViewBillInfo;
+            TextView textViewCheckoutExplain;
+        }
+    };
 
     @Override
     public void finish() {
