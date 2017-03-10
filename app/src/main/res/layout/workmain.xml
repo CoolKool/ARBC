@@ -131,7 +131,7 @@
                 <View
                     android:id="@+id/viewMainBox"
                     android:layout_width="10dp"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@color/colorLightBlue" />
@@ -211,7 +211,7 @@
                 <View
                     android:id="@+id/viewIgnite"
                     android:layout_width="10dp"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@color/colorLightBlue" />
@@ -407,7 +407,7 @@
                 <View
                     android:id="@+id/viewHeat"
                     android:layout_width="10dp"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@color/colorLightBlue" />
@@ -604,7 +604,7 @@
                 <View
                     android:id="@+id/viewFan"
                     android:layout_width="10dp"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@color/colorLightBlue" />

@@ -2,6 +2,7 @@ package uestc.arbc.background;
 
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -21,8 +22,11 @@ public class TimeThread extends Thread {
         Log.i(TAG, "initialed");
     }
 
-    public static String getTime() {
+    public static String getTime(@Nullable Long currentTime) {
         Calendar calendar = Calendar.getInstance();
+        if (null != currentTime) {
+            calendar.setTimeInMillis(currentTime);
+        }
         int tmpInt;
         String hour, min, sec, time;
 
@@ -84,7 +88,7 @@ public class TimeThread extends Thread {
                     hour + ":" + min + ":" + sec;*/
 
             Message message = new Message();
-            message.obj = getTime();
+            message.obj = getTime(null);
             message.what = ManageApplication.MESSAGE_TIME;
 
             ManageApplication.getInstance().sendMessage(message);

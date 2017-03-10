@@ -26,6 +26,7 @@ import java.util.List;
 import uestc.arbc.background.CloudManage;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
+import uestc.arbc.background.TimeThread;
 
 /**
  * activity working
@@ -160,7 +161,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         Log.i(TAG, "time init done");
 
         //关闭按钮
-        findViewById(R.id.imageButtonCancel).setOnClickListener(this);
+        imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
+        imageButtonCancel.setOnClickListener(this);
 
         //暂停按钮
         buttonPause = (Button) findViewById(R.id.buttonPause);
@@ -209,11 +211,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
         //信息显示面板
         textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
-        textViewStoreID.setText(String.valueOf(ManageApplication.getInstance().storeID));
+        textViewStoreID.setText("店铺号：" + String.valueOf(ManageApplication.getInstance().storeID));
         textViewStoreName = (TextView) findViewById(R.id.textViewStoreName);
         textViewStoreName.setText(ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
-        textViewBedID.setText(String.valueOf(ManageApplication.getInstance().bedID));
+        textViewBedID.setText("床号：" + String.valueOf(ManageApplication.getInstance().bedID));
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -240,7 +242,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     }
 
     private void updateDeviceState(JSONObject jsonObject) {
-        //TODO 根据服务器返回的json更新UI界面
 
         try {
             JSONObject jsonData = jsonObject.getJSONObject("data");
@@ -314,7 +315,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             }
 
 
-
             tmp = jsonData.getInt("stateHotBackLeft");
             boolean heat3;
             if (0 == tmp) {
@@ -371,9 +371,9 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             }
 
 
-            tmp = jsonData.getInt("currentTime") - jsonData.getInt("startTime");
-            textViewWorkTimeMin.setText(String.valueOf(tmp / 60));
-            textViewWorkTimeSec.setText(String.valueOf(tmp % 60));
+            long time = jsonData.getLong("currentTime") - jsonData.getLong("startTime");
+            textViewWorkTimeMin.setText(String.valueOf(time / 60));
+            textViewWorkTimeSec.setText(String.valueOf(time % 60));
 
             tmp = jsonData.getInt("stateWind");
             if (0 == tmp) {
@@ -465,7 +465,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.imageButtonIgniteMain:
-                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_Main", (int) view.getTag());
+                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_MAIN", (int) view.getTag());
                 break;
             case R.id.imageButtonIgniteBackup:
                 ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
@@ -513,11 +513,14 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             listCheckoutInfo.clear();
             listCheckoutInfo.add(new CheckoutInfo("客户信息", jsonData.getString("userInfo")));
             listCheckoutInfo.add(new CheckoutInfo("保健床名", jsonData.getString("bedName")));
-            listCheckoutInfo.add(new CheckoutInfo("工作时间", String.valueOf(jsonData.getInt("workTime"))));
-            listCheckoutInfo.add(new CheckoutInfo("添加盒数", String.valueOf(jsonData.getInt("addAirui"))));
-            listCheckoutInfo.add(new CheckoutInfo("服务项目", jsonData.getString("serverItem")));
-            listCheckoutInfo.add(new CheckoutInfo("消费信息", jsonData.getString("consumeInfo")));
-            listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(jsonData.getInt("price"))));
+            listCheckoutInfo.add(new CheckoutInfo("开始时间", TimeThread.getTime(jsonData.getLong("startTime") * 1000)));
+            listCheckoutInfo.add(new CheckoutInfo("工作时间", jsonData.getLong("workTime") / 60 + "分" + jsonData.getLong("workTime") % 60 + "秒"));
+            listCheckoutInfo.add(new CheckoutInfo("艾绒类型", jsonData.getString("productName")));
+            listCheckoutInfo.add(new CheckoutInfo("艾绒价格", String.valueOf(jsonData.getDouble("productMoney"))));
+            listCheckoutInfo.add(new CheckoutInfo("服务项目", jsonData.getString("serveItem")));
+            listCheckoutInfo.add(new CheckoutInfo("服务价格", String.valueOf(jsonData.getDouble("serveMoney"))));
+            //// TODO: 2017/3/10
+            listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(String.valueOf(jsonData.getDouble("totalMoney")))));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             View layout = getLayoutInflater().inflate(R.layout.checkout_frame, null);
@@ -534,33 +537,29 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             builder.setPositiveButton("结帐", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        JSONObject jsonObjectSubmit = ManageApplication.getInstance().getCloudManage().checkoutSubmit();
-                        if (null == jsonObjectSubmit) {
-                            Log.i(TAG, "checkout submit fail: jsonObjectSubmit is null");
-                            return;
-                        }
-                        if (jsonObjectSubmit.getInt("errorCode") != 0) {
-                            Toast.makeText(WorkMainActivity.this, jsonObjectSubmit.getString("message"), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        JSONObject jsonSubmitData = jsonObjectSubmit.getJSONObject("data");
-                        if (null == jsonSubmitData) {
-                            Log.i(TAG, "checkout submit fail: jsonSubmitData is null");
-                            return;
-                        }
-                        final String stringCheckoutSucceed = "结帐成功，单号:" + jsonSubmitData.getLong("checkID");
-                        dialog.dismiss();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(WorkMainActivity.this, stringCheckoutSucceed, Toast.LENGTH_LONG).show();
-                            }
-                        });
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    final JSONObject jsonObjectSubmit = ManageApplication.getInstance().getCloudManage().checkoutSubmit();
+                    if (null == jsonObjectSubmit) {
+                        Log.i(TAG, "checkout submit fail: jsonObjectSubmit is null");
+                        return;
                     }
+                    dialog.dismiss();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (jsonObjectSubmit.getInt("errorCode") != 0) {
+                                    Toast.makeText(WorkMainActivity.this, jsonObjectSubmit.getString("message"), Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                deviceState.stopLoop();
+                                Toast.makeText(WorkMainActivity.this, "结帐成功!", Toast.LENGTH_LONG).show();
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             });
             builder.create().show();

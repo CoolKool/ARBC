@@ -4,10 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <view
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorGreen" />
 
     <TextView
         android:id="@+id/textViewBillInfo"
@@ -16,12 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20sp"
-        android:textColor="@color/colorBlack" />
-
-    <view
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorGreen" />
+        android:textColor="@color/colorWhite" />
 
     <TextView
         android:id="@+id/textViewCheckoutExplain"
@@ -30,11 +21,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20sp"
-        android:textColor="@color/colorBlack" />
-
-    <view
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorGreen" />
+        android:textColor="@color/colorWhite" />
 
 </LinearLayout>

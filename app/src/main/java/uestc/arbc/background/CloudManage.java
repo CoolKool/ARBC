@@ -91,7 +91,7 @@ public class CloudManage {
                         } else {
                             connectDelay = 0;
                             disconnectDelay++;
-                            if (disconnectDelay > 3) {
+                            if (disconnectDelay > 10) {
                                 Message disconnected = new Message();
                                 disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
                                 ManageApplication.getInstance().sendMessage(disconnected);
@@ -668,9 +668,10 @@ public class CloudManage {
     }
 
     public class DeviceState {
-        private boolean running = false;
+        private volatile boolean running = false;
         private long DEVICE_STATE_DELAY = 1000;
         private MyHandler handler = null;
+        private volatile int failedTime = 0;
 
         DeviceState(MyHandler handler) {
             this.handler = handler;
@@ -680,6 +681,7 @@ public class CloudManage {
             try {
                 JSONObject jsonObjectDeviceState = getDeviceState();
                 if (null != jsonObjectDeviceState) {
+                    failedTime = 0;
                     if (jsonObjectDeviceState.getInt("errorCode") == 0) {
                         JSONObject jsonData = jsonObjectDeviceState.getJSONObject("data");
                         if (jsonData.getInt("stateNet") == 1) {
@@ -694,6 +696,13 @@ public class CloudManage {
                         }
                     } else {
                         Log.d(TAG, "get deviceState error:" + jsonObjectDeviceState.toString());
+                    }
+                } else {
+                    failedTime++;
+                    if (failedTime > 3) {
+                        Message message = new Message();
+                        message.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
+                        handler.sendMessage(message);
                     }
                 }
             } catch (JSONException e) {

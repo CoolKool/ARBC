@@ -183,6 +183,7 @@ public class MainActivity extends Activity {
             ListView listViewBedList = (ListView) layout.findViewById(R.id.listViewBedList);
             listViewBedList.setAdapter(bedAdapter);
             builder.setView(layout);
+            builder.setCancelable(false);
             alertDialogSelectBed = builder.create();
             alertDialogSelectBed.show();
         }
