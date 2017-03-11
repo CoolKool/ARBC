@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,8 +10,8 @@
     <RelativeLayout
         android:id="@+id/relativeLayoutTitle"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentTop="true">
+        android:layout_height="0dp"
+        android:layout_weight="80">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,14 +35,14 @@
     <LinearLayout
         android:id="@+id/linearLayoutPanel"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
-        android:layout_below="@id/relativeLayoutTitle"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="470"
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -366,9 +366,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_marginStart="100dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -470,9 +470,10 @@
                     android:id="@+id/textViewCustomerInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/editTextCustomer"
-                    android:layout_alignBaseline="@id/editTextCustomer"
+                    android:layout_below="@id/editTextCustomer"
+                    android:layout_alignStart="@id/editTextCustomer"
                     android:gravity="center"
+                    tools:text="@string/guest"
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp" />
             </RelativeLayout>
@@ -484,8 +485,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="218dp"
-        android:layout_below="@id/linearLayoutPanel">
+        android:layout_height="0dp"
+        android:layout_weight="170">
 
         <Button
             android:id="@+id/buttonOpen"
@@ -507,4 +508,4 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
