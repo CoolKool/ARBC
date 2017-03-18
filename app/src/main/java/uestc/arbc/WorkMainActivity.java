@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uestc.arbc.background.CloudManage;
+import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
 import uestc.arbc.background.TimeThread;
@@ -42,6 +42,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     ImageButton imageButtonMainBoxCtrlUP;
     ImageButton imageButtonMainBoxCtrlDown;
+    ImageButton imageButtonMainBoxCtrlStop;
 
     ImageButton imageButtonHeatFront;
     ImageButton imageButtonHeatBack;
@@ -84,7 +85,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         AlertDialog dialogCloud = null;
         AlertDialog dialogLocal = null;
 
-        //TODO 处理消息
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -154,11 +154,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     private void init() {
 
-        Log.i(TAG, "init start");
+        L.d(TAG, "init start");
 
         //显示时间的控件
         textViewTime = (TextView) findViewById(R.id.textViewTime);
-        Log.i(TAG, "time init done");
+        L.d(TAG, "time init done");
 
         //关闭按钮
         imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
@@ -174,17 +174,15 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
         //接下来一堆控制按钮
         imageButtonMainBoxCtrlUP = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlUp);
-        imageButtonMainBoxCtrlUP.setTag(false);
         imageButtonMainBoxCtrlUP.setOnClickListener(this);
-
         imageButtonMainBoxCtrlDown = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlDown);
-        imageButtonMainBoxCtrlDown.setTag(false);
         imageButtonMainBoxCtrlDown.setOnClickListener(this);
+        imageButtonMainBoxCtrlStop = (ImageButton) findViewById(R.id.imageButtonMainBoxCtrlStop);
+        imageButtonMainBoxCtrlStop.setOnClickListener(this);
 
         imageButtonIgniteMain = (ImageButton) findViewById(R.id.imageButtonIgniteMain);
         imageButtonIgniteMain.setTag(1);
         imageButtonIgniteMain.setOnClickListener(this);
-
         imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
         imageButtonIgniteBackup.setTag(1);
         imageButtonIgniteBackup.setOnClickListener(this);
@@ -192,22 +190,19 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
         imageButtonHeatFront.setTag(1);
         imageButtonHeatFront.setOnClickListener(this);
-
         imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
         imageButtonHeatBack.setTag(1);
         imageButtonHeatBack.setOnClickListener(this);
 
         imageButtonFanOn = (ImageButton) findViewById(R.id.imageButtonFanOn);
         imageButtonFanOn.setOnClickListener(this);
-
         imageButtonFanOff = (ImageButton) findViewById(R.id.imageButtonFanOff);
         imageButtonFanOff.setOnClickListener(this);
-
         imageButtonFanStop = (ImageButton) findViewById(R.id.imageButtonFanStop);
         imageButtonFanStop.setOnClickListener(this);
 
 
-        Log.i(TAG, "button init done");
+        L.d(TAG, "button init done");
 
         //信息显示面板
         textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
@@ -258,118 +253,143 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             textViewMainBoxPosition.setText(String.valueOf(tmp));
 
             tmp = jsonData.getInt("stateDianBackLeft");
-            boolean ignite3;
+            Boolean ignite3;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
                 ignite3 = false;
-
-            } else {
+            } else if (1 == tmp) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
                 ignite3 = true;
+            } else {
+                L.e(TAG, "value of stateDianBackLeft is" + tmp);
+                ignite3 = null;
             }
 
             tmp = jsonData.getInt("stateDianBackRight");
-            boolean ignite4;
+            Boolean ignite4;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
                 ignite4 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
                 ignite4 = true;
+            } else {
+                L.e(TAG, "value of stateDianBackRight is" + tmp);
+                ignite4 = null;
             }
 
             tmp = jsonData.getInt("stateDianForeLeft");
-            boolean ignite1;
+            Boolean ignite1;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
                 ignite1 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
                 ignite1 = true;
+            } else {
+                L.e(TAG, "value of stateDianForeLeft is" + tmp);
+                ignite1 = null;
             }
 
             tmp = jsonData.getInt("stateDianForeRight");
-            boolean ignite2;
+            Boolean ignite2;
             if (0 == tmp) {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
                 ignite2 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
                 ignite2 = true;
-            }
-
-            if (ignite1 || ignite3) {
-                imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteMain.setTag(0);
             } else {
-                imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteMain.setTag(1);
+                L.e(TAG, "value of stateDianForeRight is" + tmp);
+                ignite2 = null;
             }
 
-            if (ignite2 || ignite4) {
-                imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonIgniteBackup.setTag(0);
-            } else {
-                imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonIgniteBackup.setTag(1);
-            }
+            if (null != ignite1 && null != ignite2 && null != ignite3 && null != ignite4) {
+                if (ignite1 || ignite3) {
+                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonIgniteMain.setTag(0);
+                } else {
+                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonIgniteMain.setTag(1);
+                }
 
+                if (ignite2 || ignite4) {
+                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonIgniteBackup.setTag(0);
+                } else {
+                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonIgniteBackup.setTag(1);
+                }
+            }
 
             tmp = jsonData.getInt("stateHotBackLeft");
-            boolean heat3;
+            Boolean heat3;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
                 heat3 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
                 heat3 = true;
+            } else {
+                L.e(TAG, "value of stateHotBackLeft is" + tmp);
+                heat3 = null;
             }
 
             tmp = jsonData.getInt("stateHotBackRight");
-            boolean heat4;
+            Boolean heat4;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
                 heat4 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
                 heat4 = true;
+            } else {
+                L.e(TAG, "value of stateHotBackRight is" + tmp);
+                heat4 = null;
             }
 
             tmp = jsonData.getInt("stateHotForeLeft");
-            boolean heat1;
+            Boolean heat1;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
                 heat1 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
                 heat1 = true;
+            } else {
+                L.e(TAG, "value of stateHotForeLeft is" + tmp);
+                heat1 = null;
             }
 
             tmp = jsonData.getInt("stateHotForeRight");
-            boolean heat2;
+            Boolean heat2;
             if (0 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
                 heat2 = false;
-            } else {
+            } else if (1 == tmp) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
                 heat2 = true;
+            } else {
+                L.e(TAG, "value of stateHotForeRight is" + tmp);
+                heat2 = null;
             }
 
-            if (heat1 || heat2) {
-                imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatFront.setTag(0);
-            } else {
-                imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatFront.setTag(1);
+            if (null != heat1 && null != heat2 && null != heat3 && null != heat4) {
+                if (heat1 || heat2) {
+                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonHeatFront.setTag(0);
+                } else {
+                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonHeatFront.setTag(1);
+                }
+                if (heat3 || heat4) {
+                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonHeatBack.setTag(0);
+                } else {
+                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonHeatBack.setTag(1);
+                }
             }
-            if (heat3 || heat4) {
-                imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_pressed);
-                imageButtonHeatBack.setTag(0);
-            } else {
-                imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_released);
-                imageButtonHeatBack.setTag(1);
-            }
-
 
             long time = jsonData.getLong("currentTime") - jsonData.getLong("startTime");
             textViewWorkTimeMin.setText(String.valueOf(time / 60));
@@ -400,24 +420,25 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lighton);
+            } else {
+                L.e(TAG, "value of stateWind is" + tmp);
             }
 
             tmp = jsonData.getInt("stateMainMotor");
             if (0 == tmp) {
                 imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlUP.setTag(false);
                 imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlDown.setTag(false);
+                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_pressed);
             } else if (1 == tmp) {
                 imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_pressed);
-                imageButtonMainBoxCtrlUP.setTag(true);
                 imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlDown.setTag(false);
+                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_released);
             } else if (2 == tmp) {
                 imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlUP.setTag(false);
                 imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_pressed);
-                imageButtonMainBoxCtrlDown.setTag(true);
+                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_released);
+            } else {
+                L.e(TAG, "value of stateMainMotor is" + tmp);
             }
 
 
@@ -431,7 +452,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            //// TODO: 2017/1/2  
             case R.id.buttonPause:
                 JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().devicePause();
                 if (null != jsonObject) {
@@ -444,35 +464,39 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     }
                 }
                 break;
+
             case R.id.imageButtonCancel:
                 finish();
                 break;
+
             case R.id.buttonCheckout:
                 checkout();
                 break;
+
             case R.id.imageButtonMainBoxCtrlUp:
-                if ((boolean) view.getTag()) {
-                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
-                } else {
-                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 1);
-                }
+                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 1);
                 break;
+
             case R.id.imageButtonMainBoxCtrlDown:
-                if ((boolean) view.getTag()) {
-                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
-                } else {
-                    ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 2);
-                }
+                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 2);
                 break;
+
+            case R.id.imageButtonMainBoxCtrlStop:
+                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
+                break;
+
             case R.id.imageButtonIgniteMain:
                 ManageApplication.getInstance().getCloudManage().bedControl("FIRE_MAIN", (int) view.getTag());
                 break;
+
             case R.id.imageButtonIgniteBackup:
                 ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
                 break;
+
             case R.id.imageButtonHeatFront:
                 ManageApplication.getInstance().getCloudManage().bedControl("HOT_PREV", (int) view.getTag());
                 break;
+
             case R.id.imageButtonHeatBack:
                 ManageApplication.getInstance().getCloudManage().bedControl("HOT_NEXT", (int) view.getTag());
                 break;
@@ -480,12 +504,15 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             case R.id.imageButtonFanOn:
                 ManageApplication.getInstance().getCloudManage().bedControl("WIND", 1);
                 break;
+
             case R.id.imageButtonFanOff:
                 ManageApplication.getInstance().getCloudManage().bedControl("WIND", 2);
                 break;
+
             case R.id.imageButtonFanStop:
                 ManageApplication.getInstance().getCloudManage().bedControl("WIND", 0);
                 break;
+
             default:
                 break;
         }
@@ -497,7 +524,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         try {
             JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCheckoutInfo();
             if (null == jsonObject) {
-                Log.i(TAG, "get checkout info fail: jsonObject is null");
+                L.e(TAG, "get checkout info fail: jsonObject is null");
                 return;
             }
             if (jsonObject.getInt("errorCode") != 0) {
@@ -506,7 +533,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             }
             JSONObject jsonData = jsonObject.getJSONObject("data");
             if (null == jsonData) {
-                Log.i(TAG, "get checkout info fail: jsonData is null");
+                L.e(TAG, "get checkout info fail: jsonData is null");
                 return;
             }
 
@@ -519,7 +546,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             listCheckoutInfo.add(new CheckoutInfo("艾绒价格", String.valueOf(jsonData.getDouble("productMoney"))));
             listCheckoutInfo.add(new CheckoutInfo("服务项目", jsonData.getString("serveItem")));
             listCheckoutInfo.add(new CheckoutInfo("服务价格", String.valueOf(jsonData.getDouble("serveMoney"))));
-            //// TODO: 2017/3/10
             listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(String.valueOf(jsonData.getDouble("totalMoney")))));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -540,7 +566,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
                     final JSONObject jsonObjectSubmit = ManageApplication.getInstance().getCloudManage().checkoutSubmit();
                     if (null == jsonObjectSubmit) {
-                        Log.i(TAG, "checkout submit fail: jsonObjectSubmit is null");
+                        L.e(TAG, "checkout submit fail: jsonObjectSubmit is null");
                         return;
                     }
                     dialog.dismiss();
@@ -626,7 +652,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void finish() {
-        //TODO 退出时干嘛？
         ManageApplication.getInstance().removeCurrentHandler();
         super.finish();
     }
@@ -642,23 +667,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         ManageApplication.getInstance().setCurrentActivityHandler(handler);
-        /*
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                }, 1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        */
         deviceState.startLoop();
     }
 

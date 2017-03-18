@@ -3,7 +3,6 @@ package uestc.arbc.background;
 
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,8 +19,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 /*
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import android.content.Context;
 import android.net.DhcpInfo;
@@ -75,7 +74,7 @@ public class CloudManage {
                     int connectDelay = 0;
                     int disconnectDelay = 0;
 
-                    Log.i(TAG, "connectionStateWatcher is running");
+                    L.i(TAG, "connectionStateWatcher is running");
                     while (cloudManageKeepRunning && isRunning) {
 
                         if (isServerConnected) {
@@ -100,7 +99,7 @@ public class CloudManage {
 
                         SystemClock.sleep(1000);
                     }
-                    Log.i(TAG, "connection state watcher closed");
+                    L.i(TAG, "connection state watcher closed");
                 }
             };
             new Thread(runnable).start();
@@ -117,11 +116,11 @@ public class CloudManage {
                 udpPacket = new DatagramPacket(data, data.length);
             } catch (SocketException e) {
                 e.printStackTrace();
-                Log.i(TAG, "udp init failed");
+                L.e(TAG, "udp init failed");
                 return;
             }
             connectionStateWatcher();
-            Log.i(TAG, "udp listener is running");
+            L.i(TAG, "udp listener is running");
             while (cloudManageKeepRunning) {
                 try {
                     udpSocket.receive(udpPacket);
@@ -130,7 +129,7 @@ public class CloudManage {
                         if (0 == udpPacket.getData()[packetLength - 1]) {
                             packetLength--;
                         }
-                        Log.v(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, packetLength));
+                        L.v(TAG, "received a broadcast,ip is:" + udpPacket.getAddress().toString() + " data is:" + new String(udpPacket.getData(), 0, packetLength));
                         String string = new String(udpPacket.getData(), 0, packetLength, "UTF-8");
                         String[] strings = string.split(" ");
                         // 广播处理
@@ -147,15 +146,15 @@ public class CloudManage {
                         e.printStackTrace();
                     }
                 } catch (IOException e) {
-                    Log.i(TAG, "IOException while receiving udpPacket");
-                    //e.printStackTrace();
+                    L.i(TAG, "IOException while receiving udpPacket");
+                    e.printStackTrace();
                     break;
                 }
             }
 
             udpSocket.close();
             isRunning = false;
-            Log.i(TAG, "udp listener closed");
+            L.i(TAG, "udp listener closed");
         }
     }
 
@@ -203,7 +202,7 @@ public class CloudManage {
                 socket.send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.i(TAG,"broadcast():send() failed of IOException");
+                L.e(TAG,"broadcast():send() failed of IOException");
             }
         }
     */
@@ -229,11 +228,11 @@ public class CloudManage {
 
                 Socket socket = new Socket();
                 try {
-                    Log.d(TAG, "upload(): Json to upload is:" + jsonObject.toString());
+                    L.d(TAG, "upload(): Json to upload is:" + jsonObject.toString());
                     //连接服务器 并设置连接超时//
-                    Log.v(TAG, "upload(): Connecting to Server");
+                    L.v(TAG, "upload(): Connecting to Server");
                     socket.connect(new InetSocketAddress(SERVER_IP_ADDRESS, SERVER_PORT), TIME_OUT);
-                    Log.v(TAG, "upload(): Server Connected");
+                    L.v(TAG, "upload(): Server Connected");
                     ////
 
                     //获取输入输出流//
@@ -242,11 +241,11 @@ public class CloudManage {
                     ////
 
                     //发出信息//
-                    Log.v(TAG, "upload(): message sending");
+                    L.v(TAG, "upload(): message sending");
                     byte[] jsonBytes = jsonObject.toString().getBytes("UTF-8");//使用UTF-8编码
                     dataOutputStream.write(jsonBytes);
                     dataOutputStream.flush();
-                    Log.v(TAG, "upload(): message sent");
+                    L.v(TAG, "upload(): message sent");
                     socket.shutdownOutput();
                     ////
 
@@ -254,28 +253,28 @@ public class CloudManage {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     byte[] bytes = new byte[2048];
                     int len;
-                    Log.v(TAG, "upload(): receiving message");
+                    L.v(TAG, "upload(): receiving message");
                     while ((len = dataInputStream.read(bytes)) > 0) {
-                        byteArrayOutputStream.write(bytes, 0, len - 1);
+                        byteArrayOutputStream.write(bytes, 0, len);
                     }
                     ////
 
                     //将接收的数据转化为String//
                     String strReceived = byteArrayOutputStream.toString("UTF-8");
-                    Log.d(TAG, "upload() 收到服务器消息:" + strReceived);
+                    L.d(TAG, "upload() 收到服务器消息:" + strReceived);
                     try {
                         jsonReturn = new JSONObject(strReceived);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    Log.v(TAG, "upload(): finished succeed");
+                    L.v(TAG, "upload(): finished succeed");
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "upload(): timeout，ConnectException");
+                    L.e(TAG, "upload(): timeout，ConnectException");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "upload(): failed，IOException");
+                    L.e(TAG, "upload(): failed，IOException");
                 } finally {
                     isUploadDone = true;
 
@@ -317,7 +316,7 @@ public class CloudManage {
                 localServer.localServerSocket.close();
                 localServer = null;
             } catch (IOException e) {
-                Log.i(TAG, "IOException while close server socket");
+                L.i(TAG, "IOException while close server socket");
             }
         }
         if (null != cloudBroadcastReceiver) {
@@ -347,9 +346,9 @@ public class CloudManage {
                     //若serverKeepRun为true就一直运行，外界可以通过改变该值通知服务端线程结束运行
                     while (cloudManageKeepRunning && localServerKeepRunning) {
                         //等待连接
-                        Log.i(TAG, "LocalServer: waiting for connect");
+                        L.d(TAG, "LocalServer: waiting for connect");
                         Socket clientSocket = localServerSocket.accept();
-                        Log.i(TAG, "LocalServer: client connected - InetAddress:" + clientSocket.getInetAddress().toString());
+                        L.d(TAG, "LocalServer: client connected - InetAddress:" + clientSocket.getInetAddress().toString());
 
                         //获得输入输出流
                         DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
@@ -361,11 +360,11 @@ public class CloudManage {
                         byte[] bytesReceive = new byte[2048];//储存接收的字节流
                         int len;//记录每次读取的字节流长度
 
-                        Log.i(TAG, "LocalServer: reading message");
+                        L.v(TAG, "LocalServer: reading message");
                         while ((len = dataInputStream.read(bytesReceive)) != -1) {
                             byteArrayOutputStream.write(bytesReceive, 0, len);
                         }
-                        Log.i(TAG, "LocalServer: message received");
+                        L.v(TAG, "LocalServer: message received");
                         ////
 
 
@@ -380,7 +379,7 @@ public class CloudManage {
                             clientSocket.shutdownOutput();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.i(TAG, "LocalServer: failed to response : JSONException");
+                            L.e(TAG, "LocalServer: failed to response : JSONException");
                         }
                         ////
 
@@ -394,7 +393,7 @@ public class CloudManage {
                         try {
                             JSONObject jsonReceived = new JSONObject(strReceived);
                             //TODO 根据获取的数据采取相应操作
-                            Log.i(TAG, "LocalServer: 接收到客户端消息:" + jsonReceived.toString());
+                            L.d(TAG, "LocalServer: 接收到客户端消息:" + jsonReceived.toString());
 
                             String require = jsonReceived.getString("require");
 
@@ -413,25 +412,25 @@ public class CloudManage {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.i(TAG, "LocalServer: failed while converting String to JSONObject : JSONException");
+                            L.e(TAG, "LocalServer: failed while converting String to JSONObject : JSONException");
                         }
                         ////
 
                         //关闭该连接//
-                        Log.i(TAG, "LocalServer: closing clientSocket");
+                        L.d(TAG, "LocalServer: closing clientSocket");
                         clientSocket.close();
-                        Log.i(TAG, "LocalServer: clientSocket closed");
+                        L.d(TAG, "LocalServer: clientSocket closed");
                         ////
                     }
                 } catch (IOException e) {
-                    //e.printStackTrace();
-                    Log.i(TAG, "LocalServer: LocalServer will close itself because of IOException");
+                    e.printStackTrace();
+                    L.i(TAG, "LocalServer: LocalServer will close itself because of IOException");
                 } finally {
                     //关闭服务端
                     localServerKeepRunning = false;
                     //表明服务端已经结束运行
                     isLocalServerRunning = false;
-                    Log.i(TAG, "LocalServer: LocalServer is closed");
+                    L.i(TAG, "LocalServer: LocalServer is closed");
                 }
                 SystemClock.sleep(500);//若非正常退出，则延迟500ms后重启服务端
             }
@@ -451,9 +450,10 @@ public class CloudManage {
 
     void init() {
         cloudManageKeepRunning = true;
+        //// TODO: if server need
         //startLocalServer();
         startCloudBroadcastReceiver();
-        Log.i(TAG, "initialed");
+        L.i(TAG, "initialed");
     }
 
     private void startCloudBroadcastReceiver() {
@@ -695,7 +695,7 @@ public class CloudManage {
                             handler.sendMessage(message);
                         }
                     } else {
-                        Log.d(TAG, "get deviceState error:" + jsonObjectDeviceState.toString());
+                        L.e(TAG, "get deviceState error:" + jsonObjectDeviceState.toString());
                     }
                 } else {
                     failedTime++;

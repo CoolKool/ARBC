@@ -2,12 +2,6 @@ package uestc.arbc.background;
 
 import android.app.Application;
 import android.os.Message;
-import android.util.Log;
-
-import org.json.JSONException;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -30,7 +24,7 @@ public class ManageApplication extends Application {
 
     //定义各种消息的值
     public final static int MESSAGE_TIME = 1;//更新时间UI
-    public final static int MESSAGE_NETWORK_BAD = 2;//断网
+    //public final static int MESSAGE_NETWORK_BAD = 2;//断网
 
     public final static int MESSAGE_SERVER_CONNECTED = 4;//云端连接
     public final static int MESSAGE_SERVER_DISCONNECTED = 5;//云端断连
@@ -65,7 +59,7 @@ public class ManageApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "creating");
+        L.i(TAG, "onCreate()");
         //app开始运行时将会首先实例化该类，此时将其保存下来，以后可以在任何地方通过静态方法获得该实例
         //从而得到其中的数据
         instance = this;
@@ -92,7 +86,7 @@ public class ManageApplication extends Application {
     }
 
     public void close () {
-        Log.i(TAG, "closing");
+        L.i(TAG, "close()");
         closeTimeThread();
         cloudManage.close();
         dataSQL.close();
@@ -101,13 +95,13 @@ public class ManageApplication extends Application {
     //activity或线程启动时将其handler发送到此保存，用以和activity通信
     public void setCurrentActivityHandler(MyHandler handler) {
         currentActivityHandler = handler;
-        Log.i(TAG,"current handler has set to: " + handler.getHandlerName());
+        L.d(TAG, "current handler has set to: " + handler.getHandlerName());
     }
 
     //activity或线程退出时移出其handler
     public void removeCurrentHandler() {
         currentActivityHandler = null;
-        Log.i(TAG,"current handler has set to null");
+        L.d(TAG, "current handler has set to null");
     }
 
 
@@ -139,31 +133,9 @@ public class ManageApplication extends Application {
        }
     }
 
-    public static String string2MD5(String string) {
-        String reStr;
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] bytes = md5.digest(string.getBytes());
-            StringBuilder stringBuilder = new StringBuilder();
-            for (byte b : bytes){
-                int bt = b&0xff;
-                if (bt < 16){
-                    stringBuilder.append(0);
-                }
-                stringBuilder.append(Integer.toHexString(bt));
-            }
-            reStr = stringBuilder.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            reStr = "MD5 error";
-            Log.i(TAG,"make MD5 error");
-        }
-        return reStr;
-    }
-
     @Override
     public void onTerminate() {
-        Log.i(TAG, "terminating");
+        L.i(TAG, "onTerminate()");
         super.onTerminate();
     }
 }

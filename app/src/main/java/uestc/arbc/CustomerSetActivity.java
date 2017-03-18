@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,8 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import uestc.arbc.background.CloudManage;
+import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
-import uestc.arbc.background.MyHandler;
 
 /**CustomerSet
  * Created by CK on 2017/1/2.
@@ -81,13 +78,13 @@ public class CustomerSetActivity extends Activity {
                 ((TextView) view).setTextColor(Color.BLACK);
                 ((TextView) view).setTextSize(25);
                 userSex = arr[i];
-                Log.i(TAG, "user sex is:" + userSex);
+                L.d(TAG, "user sex is:" + userSex);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 userSex = "男";
-                Log.i(TAG, "user sex is:" + userSex);
+                L.d(TAG, "user sex is:" + userSex);
             }
         });
 

@@ -11,13 +11,13 @@ import android.os.Handler;
 public class MyHandler extends Handler {
     private String handlerName = "NoName";
 
-    public MyHandler(String handlerName) {
+    protected MyHandler(String handlerName) {
         if (null != handlerName) {
             this.handlerName = handlerName;
         }
     }
 
-   public String getHandlerName() {
+    String getHandlerName() {
         return handlerName;
     }
 }

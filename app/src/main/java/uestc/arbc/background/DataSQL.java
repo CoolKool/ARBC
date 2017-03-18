@@ -3,7 +3,6 @@ package uestc.arbc.background;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +20,11 @@ public class DataSQL {
     private SQLiteDatabase db = null;
 
     //构造函数，打开数据库，如果local或cloud表不存在则创建
-    public DataSQL() {
+    DataSQL() {
         try {
 
             db = SQLiteDatabase.openOrCreateDatabase(ManageApplication.getInstance().getFilesDir().getPath()+"/arbc.db", null);
-            Log.i(TAG,"Database path:" + ManageApplication.getInstance().getFilesDir().getPath()+"/arbc.db");
+            L.i(TAG, "Database path:" + ManageApplication.getInstance().getFilesDir().getPath() + "/arbc.db");
             /*if (null != db) {
 
                 if (!isTableExists("Local")) {
@@ -40,11 +39,11 @@ public class DataSQL {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i(TAG, "initialed");
+        L.i(TAG, "initialed");
     }
 
     //检测数据库打开是否成功，return true/false
-    public boolean isStartSucceed () {
+    boolean isStartSucceed() {
         return (null != db);
     }
 
@@ -64,7 +63,7 @@ public class DataSQL {
     }
 
     //创建表 示例 createTable("cloud","(id integer,data varchar)") 出错时返回false
-    public synchronized boolean createTable(String table,String tableFormat) {
+    private synchronized boolean createTable(String table, String tableFormat) {
         if (null == db || isTableExists(table)) {
             return false;
         }
@@ -125,7 +124,7 @@ public class DataSQL {
     }
 
     //在表的末尾插入数据 示例 insert("cloud","('string add single quote mark')")
-    public synchronized boolean insert(String table, String values) {
+    private synchronized boolean insert(String table, String values) {
         if (!isTableExists(table)) {
             return false;
         }
@@ -142,7 +141,7 @@ public class DataSQL {
     }
 
     //往表末尾插入数据，第二个参数为String型
-    public synchronized boolean pushString(String table, String json) {
+    private synchronized boolean pushString(String table, String json) {
         return insert(table, "('" + json + "')");
     }
 
@@ -159,7 +158,7 @@ public class DataSQL {
     }
 
     //从表头获取数据，返回值为String型
-    public synchronized String getString(String table) {
+    private synchronized String getString(String table) {
         if (!isTableExists(table)) {
             return null;
         }
@@ -167,10 +166,10 @@ public class DataSQL {
         String jsonString;
         try {
             cursor = db.query(table, null, null, null, null, null, null);
-            //Log.d(TAG, "table " + table + " is:");
+            /*Log.d(TAG, "table " + table + " is:");
             while (cursor.moveToNext()) {
-                //Log.d(TAG, cursor.getString(0));
-            }
+                L.d(TAG, cursor.getString(0));
+            }*/
             cursor.moveToFirst();
             jsonString = cursor.getString(0);
 
@@ -188,18 +187,18 @@ public class DataSQL {
         if (null == jsonString) {
             return null;
         }
-        JSONObject jsonObject = null;
+
         try {
-            jsonObject = new JSONObject(jsonString);
+            return new JSONObject(jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
-        return jsonObject;
+
     }
 
     //关闭数据库
-    public void close(){
+    void close() {
         try {
             db.close();
             db = null;
@@ -207,10 +206,5 @@ public class DataSQL {
             e.printStackTrace();
         }
     }
-/*
-    @Override
-    protected void finalize() throws Throwable {
-        close();
-        super.finalize();
-    }*/
+
 }

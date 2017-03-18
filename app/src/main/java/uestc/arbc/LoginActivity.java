@@ -5,9 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import uestc.arbc.background.DataSQL;
+import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.CloudManage;
 
@@ -49,18 +48,15 @@ public class LoginActivity extends Activity {
         EditText editTextAccount = (EditText) findViewById(R.id.editTextAccount);
         loginMode = getIntent().getIntExtra("RequestCode", -1);
         if (-1 == loginMode) {
-            Log.i(TAG, "loginMode wrong,未知的登录请求");
+            L.e(TAG, "loginMode wrong,未知的登录请求");
             finish();
         }
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
             textViewTitle.setText("设备首次使用注册");
             editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
-            //editTextAccount.setHint("请输入艾灸床号");
         } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode){
             textViewTitle.setText("智能艾灸床登录");
             editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
-            //editTextAccount.setHint("请输入帐号");
-
 
             JSONObject jsonObject = dataSQL.getJson(ManageApplication.TABLE_NAME_USER_ACCOUNT);
             if (null != jsonObject) {
@@ -72,7 +68,7 @@ public class LoginActivity extends Activity {
                 }
             }
         } else {
-            Log.i(TAG, "loginMode wrong,未知的登录请求");
+            L.e(TAG, "loginMode wrong,未知的登录请求");
             finish();
         }
 
@@ -109,25 +105,20 @@ public class LoginActivity extends Activity {
         JSONObject data = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
-            Log.v(TAG, "device sign");
+            L.d(TAG, "device sign");
 
             try {
                 data.put("account", stringAccount);
-                /*if (stringAccount.contains("store")) {
-                    data.put("code", ManageApplication.string2MD5(stringPassword));
-                } else {
-                    data.put("code", stringPassword);
-                }*/
                 data.put("code", stringPassword);
                 jsonObject.put("token", "0");
                 jsonObject.put("require", "PAD_DeviceSign");
                 jsonObject.put("data", data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.v(TAG, "device sign,create JSONObject failed");
+                L.e(TAG, "device sign,create JSONObject failed");
             }
         } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
-            Log.v(TAG, "user login");
+            L.d(TAG, "user login");
 
             try {
                 data.put("storeID",ManageApplication.getInstance().storeID);
@@ -139,7 +130,7 @@ public class LoginActivity extends Activity {
                 jsonObject.put("data", data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.v(TAG, "user login,create JSONObject failed");
+                L.e(TAG, "user login,create JSONObject failed");
             }
         }
 
@@ -212,7 +203,7 @@ public class LoginActivity extends Activity {
                                 jsonData.put("bedID", 0);
                             }*/
                             jsonData.put("password", stringPassword);
-                            Log.i(TAG, "deviceInfo is:" + jsonData.toString());
+                            L.d(TAG, "deviceInfo is:" + jsonData.toString());
                             dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
                             setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         } catch (JSONException e) {
@@ -246,25 +237,4 @@ public class LoginActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                }, 1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        */
-    }
 }

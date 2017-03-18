@@ -12,7 +12,6 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
 
@@ -64,30 +64,7 @@ public class FeedbackActivity extends Activity {
         init();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /*
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
-                }, 1000);
-            }
-        });
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                */
-    }
-
     private void init() {
-        //// TODO: 2017/1/5
         textViewInfoLeft = (TextView) findViewById(R.id.textViewInfoLeft);
         textViewInfoRight = (TextView) findViewById(R.id.textViewInfoRight);
         editTextFeedback = (EditText) findViewById(R.id.editTextFeedback);
@@ -169,7 +146,6 @@ public class FeedbackActivity extends Activity {
             textViewInfoLeft.append("\n共运行");
             textViewInfoLeft.append(spannableStringWorkTime);
 
-            //// TODO: 2017/1/6  
             SpannableString spannableStringWorkTotalTime = new SpannableString("" + workTotalTime);
             spannableStringWorkTotalTime.setSpan(new ForegroundColorSpan(0xffe8ba0e), 0, spannableStringWorkTotalTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             textViewInfoLeft.append("次，已工作");
@@ -208,7 +184,6 @@ public class FeedbackActivity extends Activity {
         if (null != drawable) {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             spannableString.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM), insertPosition, insertPosition + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            Log.i(TAG, "drawable not null");
         }
 
         return spannableString;
@@ -223,7 +198,7 @@ public class FeedbackActivity extends Activity {
         new ProposalAsyncTask().execute(content);
     }
 
-    class ProposalAsyncTask extends AsyncTask<String, Integer, Integer> {
+    private class ProposalAsyncTask extends AsyncTask<String, Integer, Integer> {
         ProgressDialog dialog = new ProgressDialog(FeedbackActivity.this);
         JSONObject jsonObjectResponse;
 

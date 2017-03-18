@@ -2,9 +2,8 @@ package uestc.arbc;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 
-/**
+/**TestReportActivity
  * Created by CK on 2016/11/6.
  */
 
@@ -13,6 +12,5 @@ public class TestReportActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testreport);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 }
