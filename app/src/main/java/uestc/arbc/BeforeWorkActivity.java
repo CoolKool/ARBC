@@ -34,23 +34,19 @@ public class BeforeWorkActivity extends Activity {
 
     private final static String TAG = "BeforeWorkActivity";
 
-    private ImageButton imageButtonHeatFL;
-    private ImageButton imageButtonHeatFR;
-    private ImageButton imageButtonHeatBL;
-    private ImageButton imageButtonHeatBR;
+    private ImageButton imageButtonHeatFront;
+    private ImageButton imageButtonHeatBack;
 
-    private ImageButton imageButtonIgniteFL;
-    private ImageButton imageButtonIgniteFR;
-    private ImageButton imageButtonIgniteBL;
-    private ImageButton imageButtonIgniteBR;
+    private ImageButton imageButtonIgniteMain;
+    private ImageButton imageButtonIgniteBackup;
+
     private EditText editTextCustomer;
-
-
 
     private int rawNum;
     private int consumeTypeID;
     private int herbTypeID;
     private long customerID = 0;
+    private String customerName = "散客";
     private TextView textViewCustomerInfo;
 
     @Override
@@ -90,7 +86,7 @@ public class BeforeWorkActivity extends Activity {
 
         //为艾草类型和服务费类型选择框填充数据
         Spinner spinnerRawType = (Spinner) findViewById(R.id.spinnerRawType);
-        Spinner spinnerConsumeType = (Spinner) findViewById(R.id.spinnerServiceCharge);
+        Spinner spinnerConsumeType = (Spinner) findViewById(R.id.spinnerServiceType);
         if (null != spinnerRawType) {
             try {
                 JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getRawType();
@@ -201,34 +197,22 @@ public class BeforeWorkActivity extends Activity {
             });
         }
 
-        imageButtonHeatFL = (ImageButton) findViewById(R.id.imageButtonHeatFL);
-        imageButtonHeatFR = (ImageButton) findViewById(R.id.imageButtonHeatFR);
-        imageButtonHeatBL = (ImageButton) findViewById(R.id.imageButtonHeatBL);
-        imageButtonHeatBR = (ImageButton) findViewById(R.id.imageButtonHeatBR);
+        imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
+        imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
 
-        imageButtonIgniteFL = (ImageButton) findViewById(R.id.imageButtonIgniteFL);
-        imageButtonIgniteFR = (ImageButton) findViewById(R.id.imageButtonIgniteFR);
-        imageButtonIgniteBL = (ImageButton) findViewById(R.id.imageButtonIgniteBL);
-        imageButtonIgniteBR = (ImageButton) findViewById(R.id.imageButtonIgniteBR);
+        imageButtonIgniteMain = (ImageButton) findViewById(R.id.imageButtonIgniteMain);
+        imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
 
-        setState(imageButtonHeatFL, true);
-        setState(imageButtonHeatFR, true);
-        setState(imageButtonHeatBL, true);
-        setState(imageButtonHeatBR, true);
-        setState(imageButtonIgniteFL, true);
-        setState(imageButtonIgniteFR, false);
-        setState(imageButtonIgniteBL, true);
-        setState(imageButtonIgniteBR, false);
+        setState(imageButtonHeatFront, true);
+        setState(imageButtonHeatBack, true);
+        setState(imageButtonIgniteMain, true);
+        setState(imageButtonIgniteBackup, false);
 
-        imageButtonHeatFL.setOnClickListener(heatListener);
-        imageButtonHeatFR.setOnClickListener(heatListener);
-        imageButtonHeatBL.setOnClickListener(heatListener);
-        imageButtonHeatBR.setOnClickListener(heatListener);
+        imageButtonHeatFront.setOnClickListener(heatListener);
+        imageButtonHeatBack.setOnClickListener(heatListener);
 
-        imageButtonIgniteFL.setOnClickListener(igniteListener);
-        imageButtonIgniteFR.setOnClickListener(igniteListener);
-        imageButtonIgniteBL.setOnClickListener(igniteListener);
-        imageButtonIgniteBR.setOnClickListener(igniteListener);
+        imageButtonIgniteMain.setOnClickListener(igniteListener);
+        imageButtonIgniteBackup.setOnClickListener(igniteListener);
 
         //为用户输入框添加监听
         textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
@@ -260,6 +244,7 @@ public class BeforeWorkActivity extends Activity {
                             Toast.makeText(BeforeWorkActivity.this, "欢迎 " + jsonData.getString("userName"), Toast.LENGTH_SHORT).show();
                             textViewCustomerInfo.setText(jsonData.getString("userName") + "," + jsonData.getString("userSex") + "," + jsonData.getInt("userAge") + "岁");
                             customerID = jsonData.getLong("userID");
+                            customerName = jsonData.getString("userName");
                         } else if (jsonObject.getInt("errorCode") == -1){
                             Toast.makeText(BeforeWorkActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                             customerID = 0;
@@ -307,58 +292,30 @@ public class BeforeWorkActivity extends Activity {
         }
     }
 
+    private void changeState(ImageButton imageButton) {
+        int state = (int) imageButton.getTag();
+        if (0 == state) {
+            setState(imageButton, true);
+        } else {
+            setState(imageButton, false);
+        }
+    }
+
     View.OnClickListener heatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == (int) view.getTag()) {
-                if (view.getId() == R.id.imageButtonHeatFL || view.getId() == R.id.imageButtonHeatFR) {
-                    setState(imageButtonHeatFL, false);
-                    setState(imageButtonHeatFR, false);
-                } else {
-                    setState(imageButtonHeatBL, false);
-                    setState(imageButtonHeatBR, false);
-                }
-            } else {
-                if (view.getId() == R.id.imageButtonHeatFL || view.getId() == R.id.imageButtonHeatFR) {
-                    setState(imageButtonHeatFL, true);
-                    setState(imageButtonHeatFR, true);
-                } else {
-                    setState(imageButtonHeatBL, true);
-                    setState(imageButtonHeatBR, true);
-                }
-
-            }
+            changeState((ImageButton) view);
         }
     };
 
     View.OnClickListener igniteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (1 == (int) view.getTag()) {
-                if (view.getId() == R.id.imageButtonIgniteFL || view.getId() == R.id.imageButtonIgniteBL) {
-                    setState(imageButtonIgniteFL, false);
-                    setState(imageButtonIgniteBL, false);
-                    setState(imageButtonIgniteFR, true);
-                    setState(imageButtonIgniteBR, true);
-                } else {
-                    setState(imageButtonIgniteFL, true);
-                    setState(imageButtonIgniteBL, true);
-                    setState(imageButtonIgniteFR, false);
-                    setState(imageButtonIgniteBR, false);
-                }
+            changeState((ImageButton) view);
+            if (view.getId() == R.id.imageButtonIgniteMain) {
+                setState(imageButtonIgniteBackup, false);
             } else {
-                if (view.getId() == R.id.imageButtonIgniteFL || view.getId() == R.id.imageButtonIgniteBL) {
-                    setState(imageButtonIgniteFL, true);
-                    setState(imageButtonIgniteBL, true);
-                    setState(imageButtonIgniteFR, false);
-                    setState(imageButtonIgniteBR, false);
-                } else {
-                    setState(imageButtonIgniteFL, false);
-                    setState(imageButtonIgniteBL, false);
-                    setState(imageButtonIgniteFR, true);
-                    setState(imageButtonIgniteBR, true);
-                }
-
+                setState(imageButtonIgniteMain, false);
             }
         }
     };
@@ -381,25 +338,25 @@ public class BeforeWorkActivity extends Activity {
 
             jsonTemp = new JSONObject();
             jsonTemp.put("switchID", 12);
-            jsonTemp.put("state", (int) imageButtonHeatFL.getTag());
+            jsonTemp.put("state", (int) imageButtonHeatFront.getTag());
             hotSet.put(jsonTemp);
 
             jsonTemp = new JSONObject();
             jsonTemp.put("switchID", 34);
-            jsonTemp.put("state", (int) imageButtonHeatBL.getTag());
+            jsonTemp.put("state", (int) imageButtonHeatBack.getTag());
             hotSet.put(jsonTemp);
 
-            if (((int) imageButtonIgniteFL.getTag()) == 1) {
+            if (((int) imageButtonIgniteMain.getTag()) == 1) {
                 jsonTemp = new JSONObject();
                 jsonTemp.put("switchID", 13);
-                jsonTemp.put("state", (int) imageButtonIgniteFL.getTag());
+                jsonTemp.put("state", 1);
                 fireSet.put(jsonTemp);
             }
 
-            if (((int) imageButtonIgniteFR.getTag()) == 1) {
+            if (((int) imageButtonIgniteBackup.getTag()) == 1) {
                 jsonTemp = new JSONObject();
                 jsonTemp.put("switchID", 24);
-                jsonTemp.put("state", (int) imageButtonIgniteFR.getTag());
+                jsonTemp.put("state", 1);
                 fireSet.put(jsonTemp);
             }
             jsonObject.put("hotSet", hotSet);
@@ -485,6 +442,7 @@ public class BeforeWorkActivity extends Activity {
                     break;
                 case 0:
                     Toast.makeText(BeforeWorkActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
+                    ManageApplication.getInstance().customerName = customerName;
                     Intent intent = new Intent();
                     intent.setClass(BeforeWorkActivity.this, WorkMainActivity.class);
                     startActivity(intent);

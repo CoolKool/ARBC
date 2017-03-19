@@ -58,7 +58,7 @@ public class LoginActivity extends Activity {
             textViewTitle.setText("智能艾灸床登录");
             editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
 
-            JSONObject jsonObject = dataSQL.getJson(ManageApplication.TABLE_NAME_USER_ACCOUNT);
+            JSONObject jsonObject = dataSQL.getJson(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
             if (null != jsonObject) {
                 try {
                     String account = jsonObject.getString("account");
@@ -212,12 +212,12 @@ public class LoginActivity extends Activity {
                         finish();
                     } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
                         //工作人员登录成功
-                        dataSQL.deleteTable(ManageApplication.TABLE_NAME_USER_ACCOUNT);
-                        dataSQL.createJsonTable(ManageApplication.TABLE_NAME_USER_ACCOUNT);
+                        dataSQL.deleteTable(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
+                        dataSQL.createJsonTable(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("account",stringAccount);
-                            dataSQL.pushJson(ManageApplication.TABLE_NAME_USER_ACCOUNT,jsonObject);
+                            dataSQL.pushJson(ManageApplication.TABLE_NAME_WORKER_ACCOUNT, jsonObject);
                             JSONObject jsonData = jsonObjectResponse.getJSONObject("data");
                             ManageApplication.getInstance().workerID = jsonData.getInt("workerID");
                             ManageApplication.getInstance().workerName = jsonData.getString("workerName");

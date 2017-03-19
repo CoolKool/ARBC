@@ -39,6 +39,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     TextView textViewStoreID;
     TextView textViewStoreName;
     TextView textViewBedID;
+    TextView textViewCustomer;
 
     ImageButton imageButtonMainBoxCtrlUP;
     ImageButton imageButtonMainBoxCtrlDown;
@@ -108,7 +109,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        System.exit(0);
+                                        finish();
                                     }
                                 }).create();
                         dialogCloud.show();
@@ -137,6 +138,17 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                         updateDeviceState((JSONObject) msg.obj);
                     }
                     break;
+
+                case ManageApplication.MESSAGE_WORK_ERROR:
+                    try {
+                        Toast.makeText(WorkMainActivity.this, ((JSONObject) msg.obj).getString("errorCode"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(WorkMainActivity.this, "error！", Toast.LENGTH_LONG).show();
+                    }
+                    finish();
+                    break;
+
                 default:
                     break;
             }
@@ -211,6 +223,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         textViewStoreName.setText(ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
         textViewBedID.setText("床号：" + String.valueOf(ManageApplication.getInstance().bedID));
+        textViewCustomer = (TextView) findViewById(R.id.textViewCustomer);
+        textViewCustomer.setText(ManageApplication.getInstance().customerName);
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -242,6 +256,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             JSONObject jsonData = jsonObject.getJSONObject("data");
 
             int tmp;
+
+            tmp = jsonData.getInt("isWork");
+            if (0 == tmp) {
+                finish();
+            }
 
             tmp = jsonData.getInt("degreeBack");
             textViewBedTemperatureBack.setText(String.valueOf(tmp));
@@ -451,9 +470,10 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        JSONObject jsonObject;
         switch (view.getId()) {
             case R.id.buttonPause:
-                JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().devicePause();
+                jsonObject = ManageApplication.getInstance().getCloudManage().devicePause();
                 if (null != jsonObject) {
                     try {
                         if (jsonObject.getInt("errorCode") != 0) {
@@ -486,11 +506,25 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.imageButtonIgniteMain:
-                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_MAIN", (int) view.getTag());
+                jsonObject = ManageApplication.getInstance().getCloudManage().bedControl("FIRE_MAIN", (int) view.getTag());
+                try {
+                    if (jsonObject.getInt("errorCode") != 0) {
+                        Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case R.id.imageButtonIgniteBackup:
-                ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
+                jsonObject = ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
+                try {
+                    if (jsonObject.getInt("errorCode") != 0) {
+                        Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case R.id.imageButtonHeatFront:
@@ -578,7 +612,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                                     Toast.makeText(WorkMainActivity.this, jsonObjectSubmit.getString("message"), Toast.LENGTH_LONG).show();
                                     return;
                                 }
-                                deviceState.stopLoop();
                                 Toast.makeText(WorkMainActivity.this, "结帐成功!", Toast.LENGTH_LONG).show();
                                 finish();
                             } catch (JSONException e) {
@@ -651,12 +684,6 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     };
 
     @Override
-    public void finish() {
-        ManageApplication.getInstance().removeCurrentHandler();
-        super.finish();
-    }
-
-    @Override
     protected void onPause() {
         ((ManageApplication) getApplication()).removeCurrentHandler();
         deviceState.stopLoop();
@@ -672,8 +699,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        ((ManageApplication) getApplication()).removeCurrentHandler();
-        deviceState.stopLoop();
+        L.d(TAG, "onDestroy()");
         super.onDestroy();
     }
 }

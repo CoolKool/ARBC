@@ -3,6 +3,7 @@ package uestc.arbc.background;
 
 import android.os.Message;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -694,6 +695,10 @@ public class CloudManage {
                             message.what = ManageApplication.MESSAGE_DEVICE_DISCONNECTED;
                             handler.sendMessage(message);
                         }
+                    } else if (jsonObjectDeviceState.getInt("errorCode") == 1) {
+                        Message message = new Message();
+                        message.what = ManageApplication.MESSAGE_WORK_ERROR;
+                        handler.sendMessage(message);
                     } else {
                         L.e(TAG, "get deviceState error:" + jsonObjectDeviceState.toString());
                     }

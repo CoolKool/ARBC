@@ -32,11 +32,20 @@
             android:src="@drawable/pic_button_cancel" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/textViewCustomerInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:text="@string/guest"
+        android:textColor="@color/colorWhite"
+        android:textSize="30sp" />
+
     <LinearLayout
         android:id="@+id/linearLayoutPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="470"
+        android:layout_weight="440"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -58,8 +67,9 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
+
                 <LinearLayout
-                    android:id="@+id/linearLayoutHeatSelectAll"
+                    android:id="@+id/LinearLayoutHeatFront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/textViewHeatBoardSwitch"
@@ -68,38 +78,9 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
-                    <!--
-                                        <ImageButton
-                                            android:id="@+id/imageButtonHeatSelectAll"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:background="@color/colorTransparent"
-                                            android:contentDescription="@string/nothing"
-                                            android:src="@drawable/pic_button_select_no" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="15dp"
-                                            android:text="@string/select_all"
-                                            android:textColor="@color/colorWhite"
-                                            android:textSize="15sp" />
-                    -->
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutHeatFL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/linearLayoutHeatSelectAll"
-                    android:layout_alignTop="@id/linearLayoutHeatSelectAll"
-                    android:layout_marginStart="30dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
-                        android:id="@+id/imageButtonHeatFL"
+                        android:id="@+id/imageButtonHeatFront"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
@@ -110,85 +91,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/front_left"
+                        android:text="@string/heat_front"
                         android:textColor="@color/colorWhite"
                         android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayoutHeatFR"
+                    android:id="@+id/linearLayoutHeatBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutHeatFL"
+                    android:layout_alignTop="@id/LinearLayoutHeatFront"
                     android:layout_below="@id/textViewHeatBoardSwitch"
                     android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutHeatFL"
+                    android:layout_toEndOf="@id/LinearLayoutHeatFront"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
-                        android:id="@+id/imageButtonHeatFR"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:rotation="90"
-                        android:src="@drawable/pic_button_leftup_released" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/front_right"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutHeatBL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutHeatFL"
-                    android:layout_below="@id/textViewHeatBoardSwitch"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutHeatFR"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageButton
-                        android:id="@+id/imageButtonHeatBL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup_released" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/back_left"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutHeatBR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutHeatFL"
-                    android:layout_below="@id/textViewHeatBoardSwitch"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutHeatBL"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageButton
-                        android:id="@+id/imageButtonHeatBR"
+                        android:id="@+id/imageButtonHeatBack"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
@@ -200,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/back_right"
+                        android:text="@string/heat_back"
                         android:textColor="@color/colorWhite"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -217,7 +138,7 @@
                     android:textSize="20sp" />
 
                 <LinearLayout
-                    android:id="@+id/linearLayoutIgniteSelectAll"
+                    android:id="@+id/LinearLayoutIgniteMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/textViewRawBoxIgnite"
@@ -226,38 +147,9 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
-                    <!--
-                                        <ImageButton
-                                            android:id="@+id/imageButtonIgniteSelectAll"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:background="@color/colorTransparent"
-                                            android:contentDescription="@string/nothing"
-                                            android:src="@drawable/pic_button_select_no" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="15dp"
-                                            android:text="@string/select_all"
-                                            android:textColor="@color/colorWhite"
-                                            android:textSize="15sp" />
-                    -->
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutIgniteFL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/linearLayoutIgniteSelectAll"
-                    android:layout_alignTop="@id/linearLayoutIgniteSelectAll"
-                    android:layout_marginStart="30dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
-                        android:id="@+id/imageButtonIgniteFL"
+                        android:id="@+id/imageButtonIgniteMain"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
@@ -268,85 +160,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/front_left"
+                        android:text="@string/ignite_main"
                         android:textColor="@color/colorWhite"
                         android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayoutIgniteFR"
+                    android:id="@+id/LinearLayoutIgniteBackup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutIgniteFL"
+                    android:layout_alignTop="@id/LinearLayoutIgniteMain"
                     android:layout_below="@id/textViewRawBoxIgnite"
                     android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutIgniteFL"
+                    android:layout_toEndOf="@id/LinearLayoutIgniteMain"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
-                        android:id="@+id/imageButtonIgniteFR"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:rotation="90"
-                        android:src="@drawable/pic_button_leftup_released" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/front_right"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutIgniteBL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutIgniteFL"
-                    android:layout_below="@id/textViewRawBoxIgnite"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutIgniteFR"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageButton
-                        android:id="@+id/imageButtonIgniteBL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorTransparent"
-                        android:contentDescription="@string/nothing"
-                        android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup_released" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="@string/back_left"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutIgniteBR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutIgniteFL"
-                    android:layout_below="@id/textViewRawBoxIgnite"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutIgniteBL"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <ImageButton
-                        android:id="@+id/imageButtonIgniteBR"
+                        android:id="@+id/imageButtonIgniteBackup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
@@ -358,10 +190,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/back_right"
+                        android:text="@string/ignite_backup"
                         android:textColor="@color/colorWhite"
                         android:textSize="15sp" />
                 </LinearLayout>
+
             </RelativeLayout>
         </RelativeLayout>
 
@@ -376,11 +209,33 @@
                 android:layout_centerInParent="true">
 
                 <TextView
+                    android:id="@+id/textViewServiceType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/serve_type"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerServiceType"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/textViewServiceType"
+                    android:layout_alignBaseline="@id/textViewServiceType"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/colorHalfTransparent"
+                    android:padding="10dp" />
+
+
+                <TextView
                     android:id="@+id/textViewRawType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewServiceType"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="50dp"
                     android:text="@string/raw_type"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
@@ -389,9 +244,9 @@
                     android:id="@+id/spinnerRawType"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/textViewRawType"
-                    android:layout_marginStart="15dp"
                     android:layout_toEndOf="@id/textViewRawType"
+                    android:layout_alignStart="@id/spinnerServiceType"
+                    android:layout_alignBaseline="@id/textViewRawType"
                     android:background="@color/colorHalfTransparent"
                     android:padding="10dp" />
 
@@ -412,37 +267,17 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/textViewRawNum"
                     android:layout_alignBaseline="@id/textViewRawNum"
-                    android:layout_alignStart="@id/spinnerRawType"
+                    android:layout_alignStart="@id/spinnerServiceType"
                     android:background="@color/colorHalfTransparent"
                     android:padding="10dp" />
 
-                <TextView
-                    android:id="@+id/textViewServiceCharge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewRawNum"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="50dp"
-                    android:text="@string/raw_num"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
-
-                <Spinner
-                    android:id="@+id/spinnerServiceCharge"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/textViewServiceCharge"
-                    android:layout_alignBaseline="@id/textViewServiceCharge"
-                    android:layout_alignStart="@id/spinnerRawType"
-                    android:background="@color/colorHalfTransparent"
-                    android:padding="10dp" />
 
                 <TextView
                     android:id="@+id/textViewUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/textViewRawType"
-                    android:layout_below="@id/textViewServiceCharge"
+                    android:layout_below="@id/textViewRawNum"
+                    android:layout_alignStart="@id/textViewRawNum"
                     android:layout_marginTop="50dp"
                     android:text="@string/user"
                     android:textColor="@color/colorWhite"
@@ -453,7 +288,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/textViewUser"
-                    android:layout_alignStart="@id/spinnerRawType"
+                    android:layout_alignStart="@id/spinnerServiceType"
                     android:layout_alignEnd="@id/spinnerRawType"
                     android:layout_toEndOf="@id/textViewUser"
                     android:background="@color/colorHalfTransparent"
@@ -461,21 +296,12 @@
                     android:inputType="number"
                     android:labelFor="@id/editTextCustomer"
                     android:lines="1"
+                    android:maxLines="1"
                     android:maxWidth="280dp"
                     android:padding="10dp"
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/textViewCustomerInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/editTextCustomer"
-                    android:layout_alignStart="@id/editTextCustomer"
-                    android:gravity="center"
-                    tools:text="@string/guest"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="15sp" />
             </RelativeLayout>
 
         </RelativeLayout>

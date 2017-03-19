@@ -18,13 +18,14 @@ public class ManageApplication extends Application {
     public volatile String bedName = "";
     public volatile int workerID = 0;
     public volatile String workerName = "";
+    public volatile String customerName = "散客";
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
-    public final static String TABLE_NAME_USER_ACCOUNT = "userAccount";//保存工作人员账号的表名
+    public final static String TABLE_NAME_WORKER_ACCOUNT = "userAccount";//保存工作人员账号的表名
 
     //定义各种消息的值
     public final static int MESSAGE_TIME = 1;//更新时间UI
-    //public final static int MESSAGE_NETWORK_BAD = 2;//断网
+    public final static int MESSAGE_WORK_ERROR = 2;//工作出错
 
     public final static int MESSAGE_SERVER_CONNECTED = 4;//云端连接
     public final static int MESSAGE_SERVER_DISCONNECTED = 5;//云端断连
