@@ -21,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uestc.arbc.background.CloudManage;
+import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 
@@ -43,11 +43,17 @@ public class BeforeWorkActivity extends Activity {
     private EditText editTextCustomer;
 
     private int rawNum;
-    private int consumeTypeID;
-    private int herbTypeID;
+    private int serviceTypeID;
+    private int rawTypeID;
     private long customerID = 0;
-    private String customerName = "散客";
+    private String customerName = getString(R.string.guest);
     private TextView textViewCustomerInfo;
+
+    Button buttonOpen;
+    Spinner spinnerRawNum;
+    Spinner spinnerRawType;
+    Spinner spinnerServiceType;
+    ImageButton imageButtonCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,142 +66,139 @@ public class BeforeWorkActivity extends Activity {
     private void init() {
 
         //为艾草数选择框填充数据
-        Spinner spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
-        if (null != spinnerRawNum) {
-            String arr[] = new String[20];
-            for (int i = 0; i < 20; i++) {
-                arr[i] = i + 1 + "盒";
+        spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
+        String arr[] = new String[6];
+        for (int i = 0; i < 6; i++) {
+            arr[i] = "" + i + 1;
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRawNum.setAdapter(adapter);
+        spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                rawNum = i + 1;
+                L.d(TAG, "the raw num is:" + rawNum);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerRawNum.setAdapter(adapter);
-            spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                rawNum = 1;
+                L.d(TAG, "the raw num is:" + rawNum);
+            }
+        });
+
+        //为艾草类型和服务费类型选择框填充数据
+        spinnerRawType = (Spinner) findViewById(R.id.spinnerRawType);
+        spinnerServiceType = (Spinner) findViewById(R.id.spinnerServiceType);
+        try {
+            JSONObject jsonObject = Interface.getStartSetTypes();
+            if (null == jsonObject) {
+                Toast.makeText(this, R.string.trans_error, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            if (Interface.isError(jsonObject)) {
+                Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+
+
+            JSONObject jsonData = Interface.getData(jsonObject);
+
+            final int defaultServiceID = Interface.getDefaultServiceID(jsonData);
+            final int defaultRawID = Interface.getDefaultRawID(jsonData);
+            JSONArray jsonArrayServiceType = Interface.getServiceType(jsonData);
+            JSONArray jsonArrayRawType = Interface.getRawType(jsonData);
+            final JSONObject[] jsonObjectsServiceType = new JSONObject[jsonArrayServiceType.length()];
+            final JSONObject[] jsonObjectsRawType = new JSONObject[jsonArrayRawType.length()];
+
+            for (int i = 0; i < jsonArrayServiceType.length(); i++) {
+                jsonObjectsServiceType[i] = jsonArrayServiceType.getJSONObject(i);
+            }
+            for (int i = 0; i < jsonArrayRawType.length(); i++) {
+                jsonObjectsRawType[i] = jsonArrayRawType.getJSONObject(i);
+            }
+
+            String stringsServiceType[] = new String[jsonArrayServiceType.length()];
+            for (int i = 0; i < jsonArrayServiceType.length(); i++) {
+                stringsServiceType[i] = Interface.getServiceTypeName(jsonObjectsServiceType[i]);
+            }
+            String stringsRawType[] = new String[jsonArrayRawType.length()];
+            for (int i = 0; i < jsonArrayRawType.length(); i++) {
+                stringsRawType[i] = Interface.getRawTypeName(jsonObjectsRawType[i]);
+            }
+
+            ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsServiceType);
+            ArrayAdapter<String> rawAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsRawType);
+
+            serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            rawAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerServiceType.setAdapter(serviceAdapter);
+            spinnerRawType.setAdapter(rawAdapter);
+
+
+            spinnerServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    rawNum = i + 1;
-                    L.d(TAG, "the raw num is:" + rawNum);
+                    try {
+                        serviceTypeID = Interface.getServiceTypeID(jsonObjectsServiceType[i]);
+                        L.d(TAG, "the serviceTypeID is:" + serviceTypeID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    rawNum = 1;
-                    L.d(TAG, "the raw num is:" + rawNum);
+                    serviceTypeID = defaultServiceID;
+                    L.d(TAG, "the serviceTypeID is:" + serviceTypeID);
                 }
             });
-        }
-
-        //为艾草类型和服务费类型选择框填充数据
-        Spinner spinnerRawType = (Spinner) findViewById(R.id.spinnerRawType);
-        Spinner spinnerConsumeType = (Spinner) findViewById(R.id.spinnerServiceType);
-        if (null != spinnerRawType) {
-            try {
-                JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getRawType();
-                if (null == jsonObject) {
-                    Toast.makeText(this, "与云端通信异常！", Toast.LENGTH_SHORT).show();
-                    finish();
-                    return;
-                }
-                if (jsonObject.getInt("errorCode") != 0) {
-                    Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-
-
-                JSONObject jsonData = jsonObject.getJSONObject("data");
-                final int defaultConsumeID = jsonData.getInt("defaultConsumeID");
-                final int defaultHerbID = jsonData.getInt("defaultHerbID");
-                JSONArray jsonArrayConsumeType = jsonData.getJSONArray("consumeType");
-                JSONArray jsonArrayHerbType = jsonData.getJSONArray("herbType");
-                final JSONObject[] jsonObjectsConsumeType = new JSONObject[jsonArrayConsumeType.length()];
-                final JSONObject[] jsonObjectsHerbType = new JSONObject[jsonArrayHerbType.length()];
-
-                for (int i = 0; i < jsonArrayConsumeType.length(); i++) {
-                    jsonObjectsConsumeType[i] = jsonArrayConsumeType.getJSONObject(i);
-                }
-                for (int i = 0; i < jsonArrayHerbType.length(); i++) {
-                    jsonObjectsHerbType[i] = jsonArrayHerbType.getJSONObject(i);
-                }
-
-                String stringsConsumeType[] = new String[jsonArrayConsumeType.length()];
-                for (int i = 0; i < jsonArrayConsumeType.length(); i++) {
-                    stringsConsumeType[i] = jsonObjectsConsumeType[i].getString("name");
-                }
-                String stringsHerbType[] = new String[jsonArrayHerbType.length()];
-                for (int i = 0; i < jsonArrayHerbType.length(); i++) {
-                    stringsHerbType[i] = jsonObjectsHerbType[i].getString("name");
-                }
-
-                ArrayAdapter<String> consumeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsConsumeType);
-                ArrayAdapter<String> herbAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsHerbType);
-
-                consumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                herbAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                spinnerConsumeType.setAdapter(consumeAdapter);
-                spinnerRawType.setAdapter(herbAdapter);
-
-
-                spinnerConsumeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        try {
-                            consumeTypeID = jsonObjectsConsumeType[i].getInt("dataID");
-                            L.d(TAG, "the consumeTypeID is:" + consumeTypeID);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+            spinnerRawType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    try {
+                        rawTypeID = Interface.getRawTypeID(jsonObjectsRawType[i]);
+                        L.d(TAG, "the rawTypeID is:" + rawTypeID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                        consumeTypeID = defaultConsumeID;
-                        L.d(TAG, "the consumeTypeID is:" + consumeTypeID);
-                    }
-                });
-                spinnerRawType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        try {
-                            herbTypeID = jsonObjectsHerbType[i].getInt("dataID");
-                            L.d(TAG, "the herbTypeID is:" + herbTypeID);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    rawTypeID = defaultRawID;
+                    L.d(TAG, "the rawTypeID is:" + rawTypeID);
+                }
+            });
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                        herbTypeID = defaultHerbID;
-                        L.d(TAG, "the herbTypeID is:" + herbTypeID);
-                    }
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            finish();
+            return;
         }
 
         //为“开启”按钮设置按下行为
-        Button buttonOpen = (Button) findViewById(R.id.buttonOpen);
-        if (null != buttonOpen) {
-            buttonOpen.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    open();
-                }
-            });
-        }
+        buttonOpen = (Button) findViewById(R.id.buttonOpen);
+        buttonOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open();
+            }
+        });
+
 
         //为“关闭”按钮设置按下行为
-        ImageButton imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
-        if (null != imageButtonCancel) {
-            imageButtonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-        }
+        imageButtonCancel = (ImageButton) findViewById(R.id.imageButtonCancel);
+        imageButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
         imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
@@ -203,10 +206,10 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteMain = (ImageButton) findViewById(R.id.imageButtonIgniteMain);
         imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
 
-        setState(imageButtonHeatFront, true);
-        setState(imageButtonHeatBack, true);
-        setState(imageButtonIgniteMain, true);
-        setState(imageButtonIgniteBackup, false);
+        setHeatState(imageButtonHeatFront, true);
+        setHeatState(imageButtonHeatBack, true);
+        setIgniteState(imageButtonIgniteMain, true);
+        setIgniteState(imageButtonIgniteBackup, false);
 
         imageButtonHeatFront.setOnClickListener(heatListener);
         imageButtonHeatBack.setOnClickListener(heatListener);
@@ -233,30 +236,31 @@ public class BeforeWorkActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() == 11) {
                     try {
-                        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCustomerInfo(Long.parseLong(s.toString()));
+                        JSONObject jsonObject = Interface.getCustomerInfo(Long.parseLong(s.toString()));
                         if (null == jsonObject) {
-                            Toast.makeText(BeforeWorkActivity.this, "与云端通信异常！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BeforeWorkActivity.this, getString(R.string.trans_error), Toast.LENGTH_SHORT).show();
                             finish();
                             return;
                         }
-                        if (jsonObject.getInt("errorCode") == 0) {
-                            JSONObject jsonData = jsonObject.getJSONObject("data");
-                            Toast.makeText(BeforeWorkActivity.this, "欢迎 " + jsonData.getString("userName"), Toast.LENGTH_SHORT).show();
-                            textViewCustomerInfo.setText(jsonData.getString("userName") + "," + jsonData.getString("userSex") + "," + jsonData.getInt("userAge") + "岁");
-                            customerID = jsonData.getLong("userID");
-                            customerName = jsonData.getString("userName");
-                        } else if (jsonObject.getInt("errorCode") == -1){
-                            Toast.makeText(BeforeWorkActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        if (!Interface.isError(jsonObject)) {
+                            JSONObject jsonData = Interface.getData(jsonObject);
+                            customerName = Interface.getCustomerName(jsonData);
+                            customerID = Interface.getCustomerID(jsonData);
+                            textViewCustomerInfo.setText(customerName + "," + Interface.getCustomerSex(jsonData) + "," + Interface.getCustomerAge(jsonData) + getString(R.string.quantifier_age));
+                            Toast.makeText(BeforeWorkActivity.this, getString(R.string.welcome) + customerName, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(BeforeWorkActivity.this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             customerID = 0;
                             textViewCustomerInfo.setText("");
                             Intent intent = new Intent();
-                            intent.setClass(BeforeWorkActivity.this,CustomerSetActivity.class);
+                            intent.setClass(BeforeWorkActivity.this, CustomerSetActivity.class);
                             intent.putExtra("phone", Long.parseLong(s.toString()));
                             startActivityForResult(intent, ManageApplication.REQUEST_CODE_CUSTOMER_SET);
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        finish();
                     }
                 } else {
                     customerID = 0;
@@ -274,48 +278,72 @@ public class BeforeWorkActivity extends Activity {
                 customerID = 0;
                 editTextCustomer.setText("");
             } else {
-                String s = editTextCustomer.getText().toString();
-                //触发监听
-                editTextCustomer.setText("");
-                editTextCustomer.setText(s);
+                long phone;
+                if ((phone = data.getLongExtra("phone", -1)) == -1) {
+                    customerID = 0;
+                    editTextCustomer.setText("");
+                } else {
+                    //触发监听
+                    editTextCustomer.setText("");
+                    editTextCustomer.setText(String.valueOf(phone));
+                }
             }
         }
     }
 
-    private void setState(ImageButton imageButton, Boolean state) {
+    private void setHeatState(ImageButton imageButton, Boolean state) {
         if (state) {
             imageButton.setTag(1);
-            imageButton.setImageResource(R.drawable.pic_button_leftup_pressed);
+            imageButton.setImageResource(R.drawable.pic_button_heat_on);
         } else {
             imageButton.setTag(0);
-            imageButton.setImageResource(R.drawable.pic_button_leftup_released);
+            imageButton.setImageResource(R.drawable.pic_button_heat_off);
         }
     }
 
-    private void changeState(ImageButton imageButton) {
+    private void setIgniteState(ImageButton imageButton, Boolean state) {
+        if (state) {
+            imageButton.setTag(1);
+            imageButton.setImageResource(R.drawable.pic_button_ignite_on);
+        } else {
+            imageButton.setTag(0);
+            imageButton.setImageResource(R.drawable.pic_button_ignite_off);
+        }
+    }
+
+    private void changeHeatState(ImageButton imageButton) {
         int state = (int) imageButton.getTag();
         if (0 == state) {
-            setState(imageButton, true);
+            setHeatState(imageButton, true);
         } else {
-            setState(imageButton, false);
+            setHeatState(imageButton, false);
+        }
+    }
+
+    private void changeIgniteState(ImageButton imageButton) {
+        int state = (int) imageButton.getTag();
+        if (0 == state) {
+            setIgniteState(imageButton, true);
+        } else {
+            setIgniteState(imageButton, false);
         }
     }
 
     View.OnClickListener heatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            changeState((ImageButton) view);
+            changeHeatState((ImageButton) view);
         }
     };
 
     View.OnClickListener igniteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            changeState((ImageButton) view);
+            changeIgniteState((ImageButton) view);
             if (view.getId() == R.id.imageButtonIgniteMain) {
-                setState(imageButtonIgniteBackup, false);
+                setIgniteState(imageButtonIgniteBackup, false);
             } else {
-                setState(imageButtonIgniteMain, false);
+                setIgniteState(imageButtonIgniteMain, false);
             }
         }
     };
@@ -333,8 +361,8 @@ public class BeforeWorkActivity extends Activity {
             jsonObject.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("num", rawNum);
             jsonObject.put("userID", customerID);
-            jsonObject.put("herbID", herbTypeID);
-            jsonObject.put("consumeID", consumeTypeID);
+            jsonObject.put("herbID", rawTypeID);
+            jsonObject.put("consumeID", serviceTypeID);
 
             jsonTemp = new JSONObject();
             jsonTemp.put("switchID", 12);
@@ -361,37 +389,23 @@ public class BeforeWorkActivity extends Activity {
             }
             jsonObject.put("hotSet", hotSet);
             jsonObject.put("fireSet", fireSet);
+            jsonObject = Interface.getBedStartSetting(jsonObject);
 
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
-        L.i("TAG", "mainStart setting json data is:" + jsonObject.toString());
+
+        L.d("TAG", "mainStart setting json data is:" + jsonObject.toString());
         return jsonObject;
     }
 
     public void open() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject jsonData;
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Start_Set");
-            jsonData = getStartSetting();
-            if (null == jsonData) {
-                L.e(TAG, "启动数据获取失败");
-                return;
-            }
-            jsonObject.put("data", jsonData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            L.e(TAG, "启动数据时JSONException");
-            return;
-        }
-
-        new StartAsyncTask().execute(jsonObject);
+        new StartAsyncTask().execute();
     }
 
-    private class StartAsyncTask extends AsyncTask<JSONObject, Integer, Integer> {
+    private class StartAsyncTask extends AsyncTask<Integer, Integer, Integer> {
+        JSONObject jsonData;
         JSONObject jsonObjectResponse;
         ProgressDialog dialog = new ProgressDialog(BeforeWorkActivity.this);
 
@@ -406,16 +420,19 @@ public class BeforeWorkActivity extends Activity {
 
 
         @Override
-        protected Integer doInBackground(JSONObject... jsonObjects) {
-            JSONObject jsonObject = jsonObjects[0];
-            CloudManage cloudManage = ((ManageApplication) getApplication()).getCloudManage();
-            jsonObjectResponse = cloudManage.upload(jsonObject);
+        protected Integer doInBackground(Integer... integers) {
+            jsonData = getStartSetting();
+            if (null == jsonData) {
+                L.e(TAG, "getStartSetting() return null");
+                return -3;
+            }
+            jsonObjectResponse = Interface.bedStart(jsonData);
             if (null == jsonObjectResponse) {
                 return -2;//-2表示上传出错，没有得到服务器回应
             } else {
                 int errorCode;
                 try {
-                    errorCode = jsonObjectResponse.getInt("errorCode");
+                    errorCode = Interface.getErrorCode(jsonObjectResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return -2;
@@ -429,7 +446,7 @@ public class BeforeWorkActivity extends Activity {
             dialog.dismiss();
             switch (errorCode) {
                 case -2:
-                    Toast.makeText(BeforeWorkActivity.this, "启动失败，与服务器通信异常", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BeforeWorkActivity.this, getString(R.string.trans_error), Toast.LENGTH_LONG).show();
                     break;
                 case -1:
                     try {
@@ -437,11 +454,11 @@ public class BeforeWorkActivity extends Activity {
                         Toast.makeText(BeforeWorkActivity.this, msg, Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(BeforeWorkActivity.this, "启动失败，获取的服务器数据异常", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BeforeWorkActivity.this, getString(R.string.trans_error), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case 0:
-                    Toast.makeText(BeforeWorkActivity.this, "启动成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BeforeWorkActivity.this, getString(R.string.start_succeed), Toast.LENGTH_SHORT).show();
                     ManageApplication.getInstance().customerName = customerName;
                     Intent intent = new Intent();
                     intent.setClass(BeforeWorkActivity.this, WorkMainActivity.class);

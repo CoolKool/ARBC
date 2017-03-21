@@ -22,8 +22,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uestc.arbc.background.L;
-import uestc.arbc.background.ManageApplication;
+import uestc.arbc.background.Interface;
 import uestc.arbc.background.MyHandler;
 
 /**
@@ -89,7 +88,7 @@ public class FeedbackActivity extends Activity {
             public void run() {
                 Message msg = new Message();
                 msg.what = MESSAGE_DEVICE_INFO;
-                msg.obj = ManageApplication.getInstance().getCloudManage().getBedInfo();
+                msg.obj = Interface.getBedInfo();
                 handler.sendMessage(msg);
             }
         }).start();
@@ -98,55 +97,32 @@ public class FeedbackActivity extends Activity {
 
     private void setBedInfo(JSONObject jsonObject) {
         if (null == jsonObject) {
-            Toast.makeText(this, "获取信息失败 T_T", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.trans_error), Toast.LENGTH_SHORT).show();
             return;
         }
         try {
-            JSONObject jsonData = jsonObject.getJSONObject("data");
-            int bedID, boardID, padID, storeID, workNum;
-            String bedType, companyAddr, companyIntro, companyWeixin, serverTel, specification, storeAddr, storeName;
-            long companyQQ, companyTel, produceTime, workTotalTime;
-            double boardVer, padVer;
+            JSONObject jsonData = Interface.getData(jsonObject);
+            Interface.BedInfo bedInfo = new Interface.BedInfo(jsonData);
 
-            bedID = jsonData.getInt("bedID");
-            boardID = jsonData.getInt("boardID");
-            boardVer = jsonData.getDouble("boardVer");
-            companyQQ = jsonData.getLong("companyQQ");
-            companyTel = jsonData.getLong("companyTel");
-            padID = jsonData.getInt("padID");
-            padVer = jsonData.getDouble("padVer");
-            produceTime = jsonData.getLong("produceTime");
-            storeID = jsonData.getInt("storeID");
-            workNum = jsonData.getInt("workNum");
-            workTotalTime = jsonData.getLong("workTotalTime");
-            bedType = jsonData.getString("bedType");
-            companyAddr = jsonData.getString("companyAddr");
-            companyIntro = jsonData.getString("companyIntro");
-            companyWeixin = jsonData.getString("companyWeixin");
-            serverTel = jsonData.getString("serverTel");
-            specification = jsonData.getString("specification");
-            storeAddr = jsonData.getString("storeAddr");
-            storeName = jsonData.getString("storeName");
+            textViewInfoLeft.append(getString(R.string.bed_info_id) + bedInfo.bedID + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_type) + bedInfo.bedType + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_specification) + bedInfo.bedSpecification + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_produce_time) + bedInfo.bedProduceTime + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_board_id) + bedInfo.boardID + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_board_version) + bedInfo.boardVer + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_pad_id) + bedInfo.padID + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_pad_version) + bedInfo.padVer + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_store_id) + bedInfo.storeID + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_store_name) + bedInfo.storeName + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_store_address) + bedInfo.storeAddr + "\n");
+            textViewInfoLeft.append(getString(R.string.bed_info_store_tel) + bedInfo.storeTel);
 
-            textViewInfoLeft.append("艾灸床编号：" + bedID);
-            textViewInfoLeft.append("\n艾灸床型号：" + bedType);
-            textViewInfoLeft.append("\n艾灸床规格：" + specification);
-            textViewInfoLeft.append("\n艾灸床生产日期：" + produceTime);
-            textViewInfoLeft.append("\n电路板编号：" + boardID);
-            textViewInfoLeft.append("\n电路板版本：" + boardVer);
-            textViewInfoLeft.append("\n智能平板编号：" + padID);
-            textViewInfoLeft.append("\n智能平板版本：" + padVer);
-            textViewInfoLeft.append("\n商家编号：" + storeID);
-            textViewInfoLeft.append("\n商家名称：" + storeName);
-            textViewInfoLeft.append("\n商家地址：" + storeAddr);
-            textViewInfoLeft.append("\n商家服务电话：" + serverTel);
-
-            SpannableString spannableStringWorkTime = new SpannableString("" + workNum);
+            SpannableString spannableStringWorkTime = new SpannableString("" + bedInfo.workNum);
             spannableStringWorkTime.setSpan(new ForegroundColorSpan(0xffe8ba0e), 0, spannableStringWorkTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             textViewInfoLeft.append("\n共运行");
             textViewInfoLeft.append(spannableStringWorkTime);
 
-            SpannableString spannableStringWorkTotalTime = new SpannableString("" + workTotalTime);
+            SpannableString spannableStringWorkTotalTime = new SpannableString("" + bedInfo.workTotalTime);
             spannableStringWorkTotalTime.setSpan(new ForegroundColorSpan(0xffe8ba0e), 0, spannableStringWorkTotalTime.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             textViewInfoLeft.append("次，已工作");
             textViewInfoLeft.append(spannableStringWorkTotalTime);
@@ -154,19 +130,19 @@ public class FeedbackActivity extends Activity {
             SpannableString spannableStringCompany = new SpannableString("四川艾瑞本草科技有限公司");
             spannableStringCompany.setSpan(new AbsoluteSizeSpan(40, true), 0, spannableStringCompany.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             textViewInfoRight.append(spannableStringCompany);
-            textViewInfoRight.append(companyIntro);
+            textViewInfoRight.append(bedInfo.companyIntro);
 
             textViewInfoRight.append("\n");
-            textViewInfoRight.append(getImageSpannedString(" 公司地址：" + companyAddr, 0, R.drawable.pic_view_address));
+            textViewInfoRight.append(getImageSpannedString(" 公司地址：" + bedInfo.companyAddr, 0, R.drawable.pic_view_address));
 
             textViewInfoRight.append("\n");
-            textViewInfoRight.append(getImageSpannedString(" 服务/加盟热线电话：" + companyTel, 0, R.drawable.pic_view_phone));
+            textViewInfoRight.append(getImageSpannedString(" 服务/加盟热线电话：" + bedInfo.companyTel, 0, R.drawable.pic_view_phone));
 
             textViewInfoRight.append("\n");
-            textViewInfoRight.append(getImageSpannedString(" 服务QQ：" + companyQQ, 0, R.drawable.pic_view_qq));
+            textViewInfoRight.append(getImageSpannedString(" 服务QQ：" + bedInfo.companyQQ, 0, R.drawable.pic_view_qq));
 
             textViewInfoRight.append("\n");
-            textViewInfoRight.append(getImageSpannedString(" 微信公众号：" + companyWeixin, 0, R.drawable.pic_view_wechat));
+            textViewInfoRight.append(getImageSpannedString(" 微信公众号：" + bedInfo.companyWeixin, 0, R.drawable.pic_view_wechat));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -214,12 +190,12 @@ public class FeedbackActivity extends Activity {
         @Override
         protected Integer doInBackground(String... strings) {
             String stringProposal = strings[0];
-            jsonObjectResponse = ManageApplication.getInstance().getCloudManage().feedbackSubmit(stringProposal);
+            jsonObjectResponse = Interface.feedbackSubmit(stringProposal);
             if (null == jsonObjectResponse) {
                 return -2;//-2表示上传出错，没有得到服务器回应
             } else {
                 try {
-                    return jsonObjectResponse.getInt("errorCode");
+                    return Interface.getErrorCode(jsonObjectResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return -2;
@@ -236,7 +212,7 @@ public class FeedbackActivity extends Activity {
                     break;
                 case -1:
                     try {
-                        String msg = jsonObjectResponse.getString("message");
+                        String msg = Interface.getMessage(jsonObjectResponse);
                         Toast.makeText(FeedbackActivity.this, msg, Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -245,7 +221,7 @@ public class FeedbackActivity extends Activity {
                     break;
                 case 0:
                     try {
-                        Toast.makeText(FeedbackActivity.this, jsonObjectResponse.getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(FeedbackActivity.this, Interface.getMessage(jsonObjectResponse), Toast.LENGTH_LONG).show();
                         editTextFeedback.setText("");
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -103,7 +103,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
-                    android:src="@drawable/pic_button_mainbox_up_released" />
+                    android:src="@drawable/pic_button_motor_released" />
 
                 <ImageButton
                     android:id="@+id/imageButtonMainBoxCtrlDown"
@@ -115,7 +115,7 @@
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
                     android:rotation="180"
-                    android:src="@drawable/pic_button_mainbox_up_released" />
+                    android:src="@drawable/pic_button_motor_released" />
 
 
                 <View
@@ -146,7 +146,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
-                    android:src="@drawable/pic_button_backbox_up_released" />
+                    android:src="@drawable/pic_button_motor_released" />
 
                 <ImageButton
                     android:id="@+id/imageButtonBackBoxCtrlDown"
@@ -158,7 +158,7 @@
                     android:background="@color/colorTransparent"
                     android:contentDescription="@string/nothing"
                     android:rotation="180"
-                    android:src="@drawable/pic_button_backbox_up_released" />
+                    android:src="@drawable/pic_button_motor_released" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -180,7 +180,7 @@
                     android:layout_alignBottom="@id/viewHeatBoard"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/viewHeatBoard"
-                    android:text="@string/heat_board_switch"
+                    android:text="@string/heat_ctrl"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -230,7 +230,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="90"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -259,7 +259,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -288,7 +288,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -319,7 +319,7 @@
                     android:layout_alignBottom="@id/viewYellowBarRawBoxIgnite"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/viewYellowBarRawBoxIgnite"
-                    android:text="@string/ignite"
+                    android:text="@string/ignite_ctrl"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
@@ -340,7 +340,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -369,7 +369,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="90"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -398,7 +398,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="-90"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -427,7 +427,7 @@
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
                         android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -577,7 +577,7 @@
                     android:layout_toEndOf="@id/textViewRawBoxPosition"
                     android:layout_alignBottom="@id/textViewRawBoxPosition"
                     android:layout_marginStart="10dp"
-                    android:text="@string/cm"
+                    android:text="@string/quantifier_cm"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
             </RelativeLayout>
@@ -624,7 +624,7 @@
                     android:layout_toEndOf="@id/textViewTemperatureFL"
                     android:layout_alignBottom="@id/textViewTemperatureFL"
                     android:layout_marginStart="10dp"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
 
@@ -656,7 +656,7 @@
                     android:layout_toEndOf="@id/textViewTemperatureFR"
                     android:layout_alignBottom="@id/textViewTemperatureFR"
                     android:layout_marginStart="10dp"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
 
@@ -688,7 +688,7 @@
                     android:layout_toEndOf="@id/textViewTemperatureBL"
                     android:layout_alignBottom="@id/textViewTemperatureBL"
                     android:layout_marginStart="10dp"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
 
@@ -719,7 +719,7 @@
                     android:layout_toEndOf="@id/textViewTemperatureBR"
                     android:layout_alignBottom="@id/textViewTemperatureBR"
                     android:layout_marginStart="10dp"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
             </RelativeLayout>
@@ -745,7 +745,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:id="@+id/textViewHumidityFrontHint"
-                    android:text="@string/humidity_front"
+                    android:text="@string/stop"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
@@ -766,7 +766,7 @@
                     android:layout_toEndOf="@id/textViewHumidityFront"
                     android:layout_alignBottom="@id/textViewHumidityFront"
                     android:layout_marginStart="10dp"
-                    android:text="@string/percent"
+                    android:text="@string/quantifier_percent"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
 
@@ -777,7 +777,7 @@
                     android:layout_toEndOf="@id/imageViewHumidity"
                     android:layout_alignBottom="@id/textViewHumidityFrontHint"
                     android:layout_marginStart="250dp"
-                    android:text="@string/humidity_back"
+                    android:text="@string/stop"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"/>
 
@@ -798,7 +798,7 @@
                     android:layout_toEndOf="@id/textViewHumidityBack"
                     android:layout_alignBottom="@id/textViewHumidityBack"
                     android:layout_marginStart="10dp"
-                    android:text="@string/percent"
+                    android:text="@string/quantifier_percent"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite" />
             </RelativeLayout>

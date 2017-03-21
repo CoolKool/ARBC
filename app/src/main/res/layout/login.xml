@@ -60,7 +60,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/pic_view_user"
+                android:src="@drawable/pic_view_worker"
                 android:contentDescription="@string/nothing"/>
 
             <EditText
@@ -146,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/user_login"
+            android:text="@string/worker_login"
             android:textSize="30sp"
             android:textColor="@color/colorWhite"/>
 

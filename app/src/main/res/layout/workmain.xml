@@ -145,81 +145,16 @@
                     android:text="@string/main_box_ctrl"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
-                <!--
-                                <LinearLayout
-                                    android:id="@+id/LinearLayoutMainBoxCtrlUp"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignStart="@id/viewMainBox"
-                                    android:layout_below="@id/viewMainBox"
-                                    android:layout_marginStart="50dp"
-                                    android:layout_marginTop="20dp"
-                                    android:gravity="center"
-                                    android:orientation="horizontal">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginEnd="15dp"
-                                        android:text="@string/up"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonMainBoxCtrlUp"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:src="@drawable/pic_button_mainbox_up_released" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/LinearLayoutMainBoxCtrlUp"
-                                    android:layout_marginStart="80dp"
-                                    android:layout_toEndOf="@id/LinearLayoutMainBoxCtrlUp"
-                                    android:gravity="center"
-                                    android:orientation="horizontal">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonMainBoxCtrlDown"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="180"
-                                        android:src="@drawable/pic_button_mainbox_up_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="15dp"
-                                        android:text="@string/down"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-                -->
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutMainBoxCtrlUp"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutMainBoxCtrlUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/viewMainBox"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
+                    android:layout_marginStart="20dp"
                     tools:ignore="UseCompoundDrawables">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/up"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="15sp" />
 
                     <ImageButton
                         android:id="@+id/imageButtonMainBoxCtrlUp"
@@ -227,28 +162,28 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_mainbox_up_released" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutMainBoxCtrlDown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutMainBoxCtrlUp"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutMainBoxCtrlUp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                        android:src="@drawable/pic_button_motor_released" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/down"
+                        android:layout_toEndOf="@id/imageButtonMainBoxCtrlUp"
+                        android:layout_alignBottom="@id/imageButtonMainBoxCtrlUp"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/up"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutMainBoxCtrlDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutMainBoxCtrlUp"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutMainBoxCtrlUp"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
                         android:id="@+id/imageButtonMainBoxCtrlDown"
@@ -256,29 +191,28 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_mainbox_up_released"
+                        android:src="@drawable/pic_button_motor_released"
                         android:rotation="180" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutMainBoxCtrlStop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutMainBoxCtrlDown"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutMainBoxCtrlDown"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/short_stop"
+                        android:layout_toEndOf="@id/imageButtonMainBoxCtrlDown"
+                        android:layout_alignBottom="@id/imageButtonMainBoxCtrlDown"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/down"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutMainBoxCtrlDown"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutMainBoxCtrlDown"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
                         android:id="@+id/imageButtonMainBoxCtrlStop"
@@ -286,8 +220,18 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_stop_released" />
-                </LinearLayout>
+                        android:src="@drawable/pic_button_motor_stop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonMainBoxCtrlStop"
+                        android:layout_alignBottom="@id/imageButtonMainBoxCtrlStop"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/short_stop"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+                </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -309,28 +253,18 @@
                     android:layout_alignBottom="@id/viewIgnite"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/viewIgnite"
-                    android:text="@string/ignite_switch"
+                    android:text="@string/ignite_ctrl"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
-                <LinearLayout
-                    android:id="@+id/LinearLayoutIgniteMain"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIgniteMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/viewIgnite"
                     android:layout_below="@id/viewIgnite"
-                    android:layout_marginStart="50dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/ignite_main"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="15sp" />
+                    android:layout_marginStart="20dp">
 
                     <ImageButton
                         android:id="@+id/imageButtonIgniteMain"
@@ -338,17 +272,26 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
-                </LinearLayout>
+                        android:src="@drawable/pic_button_ignite_off" />
 
-                <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonIgniteMain"
+                        android:layout_alignBottom="@id/imageButtonIgniteMain"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/ignite_main"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIgniteBackup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/LinearLayoutIgniteMain"
-                    android:layout_marginStart="80dp"
-                    android:layout_toEndOf="@id/LinearLayoutIgniteMain"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_alignTop="@id/relativeLayoutIgniteMain"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutIgniteMain">
 
                     <ImageButton
                         android:id="@+id/imageButtonIgniteBackup"
@@ -356,133 +299,45 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/imageButtonIgniteBackup"
+                        android:layout_alignBottom="@id/imageButtonIgniteBackup"
+                        android:layout_marginStart="10dp"
                         android:text="@string/ignite_backup"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
-                </LinearLayout>
-                <!--
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutIgniteFL"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignStart="@id/viewIgnite"
-                                    android:layout_below="@id/viewIgnite"
-                                    android:layout_marginTop="20dp"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
+                </RelativeLayout>
 
-                                    <ImageButton
-                                        android:id="@+id/imageButtonIgniteFL"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:src="@drawable/pic_button_leftup_released" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutIgniteMain"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutIgniteBackup">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/front_left"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/imageButtonIgniteStop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:src="@drawable/pic_button_ignite_stop" />
 
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutIgniteFR"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutIgniteFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutIgniteFL"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonIgniteStop"
+                        android:layout_alignBottom="@id/imageButtonIgniteStop"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/short_stop"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
 
-                                    <ImageButton
-                                        android:id="@+id/imageButtonIgniteFR"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="90"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/front_right"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutIgniteBL"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutIgniteFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutIgniteFR"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonIgniteBL"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:src="@drawable/pic_button_leftup_released"
-                                        android:rotation="-90" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/back_left"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutIgniteBR"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutIgniteFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutIgniteBL"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonIgniteBR"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="180"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/back_right"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-                -->
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -505,28 +360,18 @@
                     android:layout_alignBottom="@id/viewHeat"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/viewHeat"
-                    android:text="@string/heat_board_switch"
+                    android:text="@string/heat_ctrl"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
-                <LinearLayout
-                    android:id="@+id/LinearLayoutHeatFront"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutHeatFront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/viewHeat"
                     android:layout_below="@id/viewHeat"
-                    android:layout_marginStart="50dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/heat_front"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="15sp" />
+                    android:layout_marginStart="20dp">
 
                     <ImageButton
                         android:id="@+id/imageButtonHeatFront"
@@ -534,17 +379,26 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
-                </LinearLayout>
+                        android:src="@drawable/pic_button_heat_off" />
 
-                <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonHeatFront"
+                        android:layout_alignBottom="@id/imageButtonHeatFront"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/heat_front"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutHeatBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/LinearLayoutHeatFront"
-                    android:layout_marginStart="80dp"
-                    android:layout_toEndOf="@id/LinearLayoutHeatFront"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_alignTop="@id/relativeLayoutHeatFront"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutHeatFront">
 
                     <ImageButton
                         android:id="@+id/imageButtonHeatBack"
@@ -552,135 +406,47 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/imageButtonHeatBack"
+                        android:layout_alignBottom="@id/imageButtonHeatBack"
+                        android:layout_marginStart="10dp"
                         android:text="@string/heat_back"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
-                </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutHeatFront"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutHeatBack">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonHeatStop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorTransparent"
+                        android:contentDescription="@string/nothing"
+                        android:src="@drawable/pic_button_heat_stop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonHeatStop"
+                        android:layout_alignBottom="@id/imageButtonHeatStop"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/short_stop"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
 
 
-                <!--
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutHeatFL"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_below="@id/viewHeatBoard"
-                                    android:layout_marginTop="20dp"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonHeatFL"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/front_left"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutHeatFR"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutHeatFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutHeatFL"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonHeatFR"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="90"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/front_right"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutHeatBL"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutHeatFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutHeatFR"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonHeatBL"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="-90"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/back_left"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutHeatBR"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignTop="@id/linearLayoutHeatFL"
-                                    android:layout_marginStart="30dp"
-                                    android:layout_toEndOf="@id/linearLayoutHeatBL"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <ImageButton
-                                        android:id="@+id/imageButtonHeatBR"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@color/colorTransparent"
-                                        android:contentDescription="@string/nothing"
-                                        android:rotation="180"
-                                        android:src="@drawable/pic_button_leftup_released" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:text="@string/back_right"
-                                        android:textColor="@color/colorBlack"
-                                        android:textSize="15sp" />
-                                </LinearLayout>
-                                -->
             </RelativeLayout>
 
             <RelativeLayout
@@ -706,24 +472,15 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
-                <LinearLayout
-                    android:id="@+id/linearLayoutFanOn"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutFanOn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/viewFan"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
+                    android:layout_marginStart="20dp"
                     tools:ignore="UseCompoundDrawables">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/on"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="15sp" />
 
                     <ImageButton
                         android:id="@+id/imageButtonFanOn"
@@ -731,28 +488,28 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_on_released" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutFanOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutFanOn"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutFanOn"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                        android:src="@drawable/pic_button_fan_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/off"
+                        android:layout_toEndOf="@id/imageButtonFanOn"
+                        android:layout_alignBottom="@id/imageButtonFanOn"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/on"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutFanOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutFanOn"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutFanOn"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
                         android:id="@+id/imageButtonFanOff"
@@ -760,28 +517,28 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_off_released" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutFanStop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/linearLayoutFanOn"
-                    android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/linearLayoutFanOff"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                        android:rotation="-90"
+                        android:src="@drawable/pic_button_fan_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/short_stop"
+                        android:layout_toEndOf="@id/imageButtonFanOff"
+                        android:layout_alignBottom="@id/imageButtonFanOff"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/off"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/relativeLayoutFanOn"
+                    android:layout_marginStart="30dp"
+                    android:layout_toEndOf="@id/relativeLayoutFanOff"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageButton
                         android:id="@+id/imageButtonFanStop"
@@ -789,8 +546,18 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_stop_released" />
-                </LinearLayout>
+                        android:src="@drawable/pic_button_fan_stop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/imageButtonFanStop"
+                        android:layout_alignBottom="@id/imageButtonFanStop"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/short_stop"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -883,7 +650,7 @@
                     android:layout_alignBottom="@id/textViewWorkTimeMin"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/textViewWorkTimeMin"
-                    android:text="@string/work_time_min"
+                    android:text="@string/quantifier_minutes"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
@@ -904,7 +671,7 @@
                     android:layout_alignBottom="@id/textViewWorkTimeSec"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/textViewWorkTimeSec"
-                    android:text="@string/work_time_sec"
+                    android:text="@string/quantifier_seconds"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
             </RelativeLayout>
@@ -951,7 +718,7 @@
                     android:layout_alignBottom="@id/textViewBedTemperatureFront"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/textViewBedTemperatureFront"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
@@ -983,7 +750,7 @@
                     android:layout_alignBottom="@id/textViewBedTemperatureBack"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/textViewBedTemperatureBack"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
@@ -1032,7 +799,7 @@
                     android:layout_alignBottom="@id/textViewDegreeBody"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@id/textViewDegreeBody"
-                    android:text="@string/celsius"
+                    android:text="@string/quantifier_celsius"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 

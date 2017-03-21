@@ -63,13 +63,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="@string/heat_board"
+                    android:text="@string/heat_ctrl"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
 
                 <LinearLayout
-                    android:id="@+id/LinearLayoutHeatFront"
+                    android:id="@+id/relativeLayoutHeatFront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/textViewHeatBoardSwitch"
@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -100,10 +100,10 @@
                     android:id="@+id/linearLayoutHeatBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/LinearLayoutHeatFront"
+                    android:layout_alignTop="@id/relativeLayoutHeatFront"
                     android:layout_below="@id/textViewHeatBoardSwitch"
                     android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/LinearLayoutHeatFront"
+                    android:layout_toEndOf="@id/relativeLayoutHeatFront"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
@@ -114,8 +114,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_heat_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -133,12 +132,12 @@
                     android:layout_alignStart="@id/textViewHeatBoardSwitch"
                     android:layout_below="@id/textViewHeatBoardSwitch"
                     android:layout_marginTop="150dp"
-                    android:text="@string/ignite"
+                    android:text="@string/ignite_ctrl"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 
                 <LinearLayout
-                    android:id="@+id/LinearLayoutIgniteMain"
+                    android:id="@+id/relativeLayoutIgniteMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/textViewRawBoxIgnite"
@@ -154,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -166,13 +165,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/LinearLayoutIgniteBackup"
+                    android:id="@+id/relativeLayoutIgniteBackup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/LinearLayoutIgniteMain"
+                    android:layout_alignTop="@id/relativeLayoutIgniteMain"
                     android:layout_below="@id/textViewRawBoxIgnite"
                     android:layout_marginStart="30dp"
-                    android:layout_toEndOf="@id/LinearLayoutIgniteMain"
+                    android:layout_toEndOf="@id/relativeLayoutIgniteMain"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
@@ -183,8 +182,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorTransparent"
                         android:contentDescription="@string/nothing"
-                        android:rotation="180"
-                        android:src="@drawable/pic_button_leftup_released" />
+                        android:src="@drawable/pic_button_ignite_off" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -214,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
-                    android:text="@string/serve_type"
+                    android:text="@string/service_type"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 

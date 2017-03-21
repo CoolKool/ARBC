@@ -16,8 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/pic_view_title_customerset"
-            android:contentDescription="@string/nothing" />
+            android:contentDescription="@string/nothing"
+            android:src="@drawable/pic_view_title_customerset" />
 
         <ImageButton
             android:id="@+id/imageButtonCancel"
@@ -35,84 +35,86 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="470">
+        android:layout_weight="470"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/textViewCustomerPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
-            android:textColor="@color/colorYellow"
-            android:textSize="20sp"
-            tools:text="手机号：18200122222的客户信息设置" />
+            android:text="@string/customer_set_phone"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/editTextCustomerPhone"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewCustomerPhone"
+            android:layout_toEndOf="@id/textViewCustomerPhone"
+            android:inputType="phone"
+            android:labelFor="@id/editTextCustomerPhone"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/textViewCustomerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_below="@id/textViewCustomerPhone"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp">
+            android:layout_marginTop="70dp"
+            android:text="@string/customer_set_name"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/name"
-                android:textColor="@color/colorBlack"
-                android:textSize="25sp" />
+        <EditText
+            android:id="@+id/editTextCustomerName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewCustomerName"
+            android:layout_toEndOf="@id/textViewCustomerName"
+            android:inputType="text"
+            android:labelFor="@id/editTextCustomerName"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
-            <EditText
-                android:id="@+id/editTextName"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/textViewName"
-                android:layout_toEndOf="@id/textViewName"
-                android:inputType="text"
-                android:textColor="@color/colorBlack"
-                android:textSize="25sp"
-                android:labelFor="@id/editTextName" />
+        <TextView
+            android:id="@+id/textViewCustomerSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewCustomerName"
+            android:layout_marginTop="70dp"
+            android:text="@string/customer_set_sex"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/textViewSex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewName"
-                android:layout_marginTop="70dp"
-                android:text="@string/sex"
-                android:textColor="@color/colorBlack"
-                android:textSize="25sp" />
+        <Spinner
+            android:id="@+id/spinnerCustomerSex"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/textViewCustomerSex"
+            android:layout_toEndOf="@id/textViewCustomerSex" />
 
-            <Spinner
-                android:id="@+id/spinnerSex"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/textViewSex"
-                android:layout_toEndOf="@id/textViewSex" />
+        <TextView
+            android:id="@+id/textViewCustomerAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewCustomerSex"
+            android:layout_marginTop="70dp"
+            android:text="@string/customer_set_age"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/textViewAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewSex"
-                android:layout_marginTop="70dp"
-                android:text="@string/age"
-                android:textColor="@color/colorBlack"
-                android:textSize="25sp" />
-
-            <EditText
-                android:id="@+id/editTextAge"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/textViewAge"
-                android:layout_toEndOf="@id/textViewAge"
-                android:inputType="number"
-                android:textColor="@color/colorBlack"
-                android:textSize="25sp"
-                android:labelFor="@id/editTextAge" />
-        </RelativeLayout>
+        <EditText
+            android:id="@+id/editTextCustomerAge"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textViewCustomerAge"
+            android:layout_toEndOf="@id/textViewCustomerAge"
+            android:inputType="number"
+            android:labelFor="@id/editTextCustomerAge"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
 
     </RelativeLayout>
 

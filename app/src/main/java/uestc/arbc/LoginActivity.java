@@ -16,9 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import uestc.arbc.background.DataSQL;
+import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
-import uestc.arbc.background.CloudManage;
 
 /**
  * LoginActivity
@@ -48,27 +48,27 @@ public class LoginActivity extends Activity {
         EditText editTextAccount = (EditText) findViewById(R.id.editTextAccount);
         loginMode = getIntent().getIntExtra("RequestCode", -1);
         if (-1 == loginMode) {
-            L.e(TAG, "loginMode wrong,未知的登录请求");
+            L.e(TAG, "loginMode wrong");
             finish();
         }
         if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
             textViewTitle.setText("设备首次使用注册");
             editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
-        } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode){
+        } else if (ManageApplication.REQUEST_CODE_WORKER_LOGIN == loginMode) {
             textViewTitle.setText("智能艾灸床登录");
             editTextAccount.setInputType(InputType.TYPE_CLASS_TEXT);
 
-            JSONObject jsonObject = dataSQL.getJson(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
-            if (null != jsonObject) {
+            JSONObject jsonData = dataSQL.getJson(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
+            if (null != jsonData) {
                 try {
-                    String account = jsonObject.getString("account");
+                    String account = jsonData.getString(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
                     editTextAccount.setText(account);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            L.e(TAG, "loginMode wrong,未知的登录请求");
+            L.e(TAG, "loginMode wrong");
             finish();
         }
 
@@ -102,39 +102,7 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        JSONObject data = new JSONObject();
-        JSONObject jsonObject = new JSONObject();
-        if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
-            L.d(TAG, "device sign");
-
-            try {
-                data.put("account", stringAccount);
-                data.put("code", stringPassword);
-                jsonObject.put("token", "0");
-                jsonObject.put("require", "PAD_DeviceSign");
-                jsonObject.put("data", data);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                L.e(TAG, "device sign,create JSONObject failed");
-            }
-        } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
-            L.d(TAG, "user login");
-
-            try {
-                data.put("storeID",ManageApplication.getInstance().storeID);
-                data.put("bedID",ManageApplication.getInstance().bedID);
-                data.put("account",stringAccount);
-                data.put("code", stringPassword);
-                jsonObject.put("token", "0");
-                jsonObject.put("require", "PAD_Start_Login");
-                jsonObject.put("data", data);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                L.e(TAG, "user login,create JSONObject failed");
-            }
-        }
-
-        new LoginAsyncTask().execute(jsonObject);
+        new LoginAsyncTask().execute();
 
     }
 
@@ -145,23 +113,33 @@ public class LoginActivity extends Activity {
         @Override
         protected void onPreExecute() {
 
-            dialog.setTitle("登录提示");
-            dialog.setMessage("正在登录...");
+            if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
+                dialog.setTitle("注册提示");
+                dialog.setMessage("正在注册...");
+            } else if (ManageApplication.REQUEST_CODE_WORKER_LOGIN == loginMode) {
+                dialog.setTitle("登录提示");
+                dialog.setMessage("正在登录...");
+            }
             dialog.setCancelable(false);
             dialog.show();
         }
 
         @Override
         protected Integer doInBackground(JSONObject... jsonObjects) {
-            JSONObject jsonObject = jsonObjects[0];
-            CloudManage cloudManage = ((ManageApplication) getApplication()).getCloudManage();
-            jsonObjectResponse = cloudManage.upload(jsonObject);
+            if (ManageApplication.REQUEST_CODE_DEVICE_SIGN == loginMode) {
+                jsonObjectResponse = Interface.deviceSign(stringAccount, stringPassword);
+            } else if (ManageApplication.REQUEST_CODE_WORKER_LOGIN == loginMode) {
+                jsonObjectResponse = Interface.workerLogin(stringAccount, stringPassword);
+            } else {
+                return -3;
+            }
+
             if (null == jsonObjectResponse) {
                 return -2;//-2表示上传出错，没有得到服务器回应
             } else {
                 int errorCode;
                 try {
-                    errorCode = jsonObjectResponse.getInt("errorCode");
+                    errorCode = Interface.getErrorCode(jsonObjectResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return -2;
@@ -174,13 +152,17 @@ public class LoginActivity extends Activity {
         protected void onPostExecute(Integer errorCode) {
             dialog.dismiss();
             switch (errorCode) {
+                case -3:
+                    L.e(TAG, "loginMode error");
+                    finish();
+                    break;
                 case -2:
                     Toast.makeText(LoginActivity.this, "登录失败，与服务器通信异常", Toast.LENGTH_LONG).show();
                     setResult(ManageApplication.RESULT_CODE_FAILED, null);
                     break;
                 case -1:
                     try {
-                        String msg = jsonObjectResponse.getString("message");
+                        String msg = Interface.getMessage(jsonObjectResponse);
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -199,9 +181,6 @@ public class LoginActivity extends Activity {
 
                         try {
                             JSONObject jsonData = jsonObjectResponse.getJSONObject("data");
-                            /*if (stringAccount.contains("store")) {
-                                jsonData.put("bedID", 0);
-                            }*/
                             jsonData.put("password", stringPassword);
                             L.d(TAG, "deviceInfo is:" + jsonData.toString());
                             dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
@@ -210,19 +189,20 @@ public class LoginActivity extends Activity {
                             e.printStackTrace();
                         }
                         finish();
-                    } else if (ManageApplication.REQUEST_CODE_USER_LOGIN == loginMode) {
+                    } else if (ManageApplication.REQUEST_CODE_WORKER_LOGIN == loginMode) {
                         //工作人员登录成功
                         dataSQL.deleteTable(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
                         dataSQL.createJsonTable(ManageApplication.TABLE_NAME_WORKER_ACCOUNT);
                         JSONObject jsonObject = new JSONObject();
                         try {
-                            jsonObject.put("account",stringAccount);
+                            jsonObject.put(ManageApplication.TABLE_NAME_WORKER_ACCOUNT, stringAccount);
                             dataSQL.pushJson(ManageApplication.TABLE_NAME_WORKER_ACCOUNT, jsonObject);
-                            JSONObject jsonData = jsonObjectResponse.getJSONObject("data");
-                            ManageApplication.getInstance().workerID = jsonData.getInt("workerID");
-                            ManageApplication.getInstance().workerName = jsonData.getString("workerName");
+                            JSONObject jsonData = Interface.getData(jsonObjectResponse);
+                            ManageApplication.getInstance().workerID = Interface.getWorkerID(jsonData);
+                            ManageApplication.getInstance().workerName = Interface.getWorkerName(jsonData);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            finish();
                         }
                         Intent intent = new Intent();
                         intent.setClass(LoginActivity.this,BeforeWorkActivity.class);

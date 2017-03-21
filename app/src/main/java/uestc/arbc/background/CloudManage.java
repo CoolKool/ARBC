@@ -464,206 +464,207 @@ public class CloudManage {
         }
     }
 
-    //获取主界面信息
-    public JSONObject getMainInfo() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
+    /*
+        //获取主界面信息
+        public JSONObject getMainInfo() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
 
-        try {
-            jsonObject.put("token", 0);
-            jsonObject.put("require", "PAD_Main_Info");
-            data.put("storeID", deviceInfo.getInt("storeID"));
-            data.put("bedID", deviceInfo.getInt("bedID"));
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            try {
+                jsonObject.put("token", 0);
+                jsonObject.put("require", "PAD_Main_Info");
+                data.put("storeID", deviceInfo.getInt("storeID"));
+                data.put("bedID", deviceInfo.getInt("bedID"));
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        //启动请求
+        public JSONObject mainStart() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
 
-    //启动请求
-    public JSONObject mainStart() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
+            try {
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Main_Start");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Main_Start");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        //获取艾草类型
+        public JSONObject getRawType() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
 
-    //获取艾草类型
-    public JSONObject getRawType() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
+            try {
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Start_GetType");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Start_GetType");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
 
+        //获取艾灸机设备的传感器数据
+        public JSONObject getDeviceState() {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                // 获取设备传感器数据的指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Monitor");
 
-    //获取艾灸机设备的传感器数据
-    public JSONObject getDeviceState() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            // 获取设备传感器数据的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Monitor");
+                JSONObject jsonData = new JSONObject();
+                jsonData.put("storeID", ManageApplication.getInstance().storeID);
+                jsonData.put("bedID", ManageApplication.getInstance().bedID);
 
-            JSONObject jsonData = new JSONObject();
-            jsonData.put("storeID", ManageApplication.getInstance().storeID);
-            jsonData.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", jsonData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", jsonData);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
 
+        public JSONObject getCustomerInfo(long phone) {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                //获取客户的的指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_User_Info");
+                data.put("phone", phone);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-    public JSONObject getCustomerInfo(long phone) {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //获取客户的的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_User_Info");
-            data.put("phone", phone);
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject bedControl(String operateType, int targetState) {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                //控制指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Control");
+                data.put("operateType", operateType);
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
+                data.put("state", targetState);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-    public JSONObject bedControl(String operateType, int targetState) {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //控制指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Control");
-            data.put("operateType", operateType);
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
-            data.put("state", targetState);
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject getBedInfo() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                //获取设备信息的指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Bed_Info");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
 
-    public JSONObject getBedInfo() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //获取设备信息的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Bed_Info");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject feedbackSubmit(String content) {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                //提交反馈的指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Proposal");
+                data.put("content", content);
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
 
-    public JSONObject feedbackSubmit(String content) {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //提交反馈的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Proposal");
-            data.put("content", content);
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject getCheckoutInfo() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Check_Info");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
 
-    public JSONObject getCheckoutInfo() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Check_Info");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject checkoutSubmit() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Check_Submit");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
 
-    public JSONObject checkoutSubmit() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Check_Submit");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
 
-        return upload(jsonObject);
-    }
+        public JSONObject devicePause() {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject data = new JSONObject();
+            try {
+                //暂停的指令
+                jsonObject.put("token", "0");
+                jsonObject.put("require", "PAD_Work_Pause");
+                data.put("storeID", ManageApplication.getInstance().storeID);
+                data.put("bedID", ManageApplication.getInstance().bedID);
 
-    public JSONObject devicePause() {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            //暂停的指令
-            jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_Work_Pause");
-            data.put("storeID", ManageApplication.getInstance().storeID);
-            data.put("bedID", ManageApplication.getInstance().bedID);
+                jsonObject.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            jsonObject.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return upload(jsonObject);
         }
-
-        return upload(jsonObject);
-    }
-
+    */
     public DeviceState makeDeviceState(MyHandler handler) {
         return new DeviceState(handler);
     }
@@ -680,7 +681,7 @@ public class CloudManage {
 
         public void getOnce() {
             try {
-                JSONObject jsonObjectDeviceState = getDeviceState();
+                JSONObject jsonObjectDeviceState = Interface.getDeviceState();
                 if (null != jsonObjectDeviceState) {
                     failedTime = 0;
                     if (jsonObjectDeviceState.getInt("errorCode") == 0) {

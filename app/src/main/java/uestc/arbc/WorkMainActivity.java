@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uestc.arbc.background.CloudManage;
+import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
@@ -47,9 +48,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     ImageButton imageButtonHeatFront;
     ImageButton imageButtonHeatBack;
+    ImageButton imageButtonHeatStop;
 
     ImageButton imageButtonIgniteMain;
     ImageButton imageButtonIgniteBackup;
+    ImageButton imageButtonIgniteStop;
 
     ImageButton imageButtonFanOn;
     ImageButton imageButtonFanOff;
@@ -141,7 +144,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
                 case ManageApplication.MESSAGE_WORK_ERROR:
                     try {
-                        Toast.makeText(WorkMainActivity.this, ((JSONObject) msg.obj).getString("errorCode"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(WorkMainActivity.this, Interface.getMessage((JSONObject) msg.obj), Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(WorkMainActivity.this, "error！", Toast.LENGTH_LONG).show();
@@ -198,6 +201,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
         imageButtonIgniteBackup.setTag(1);
         imageButtonIgniteBackup.setOnClickListener(this);
+        imageButtonIgniteStop = (ImageButton) findViewById(R.id.imageButtonIgniteStop);
+        imageButtonIgniteStop.setOnClickListener(this);
 
         imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
         imageButtonHeatFront.setTag(1);
@@ -205,6 +210,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
         imageButtonHeatBack.setTag(1);
         imageButtonHeatBack.setOnClickListener(this);
+        imageButtonHeatStop = (ImageButton) findViewById(R.id.imageButtonHeatStop);
+        imageButtonHeatStop.setOnClickListener(this);
 
         imageButtonFanOn = (ImageButton) findViewById(R.id.imageButtonFanOn);
         imageButtonFanOn.setOnClickListener(this);
@@ -253,213 +260,192 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     private void updateDeviceState(JSONObject jsonObject) {
 
         try {
-            JSONObject jsonData = jsonObject.getJSONObject("data");
+            JSONObject jsonData = Interface.getData(jsonObject);
 
-            int tmp;
+            Interface.MonitorInfo monitorInfo = new Interface.MonitorInfo(jsonData);
 
-            tmp = jsonData.getInt("isWork");
-            if (0 == tmp) {
+            if (!monitorInfo.isWork) {
                 finish();
             }
 
-            tmp = jsonData.getInt("degreeBack");
-            textViewBedTemperatureBack.setText(String.valueOf(tmp));
+            textViewBedTemperatureBack.setText(String.valueOf(monitorInfo.degreeBack));
 
-            tmp = jsonData.getInt("degreeFore");
-            textViewBedTemperatureFront.setText(String.valueOf(tmp));
+            textViewBedTemperatureFront.setText(String.valueOf(monitorInfo.degreeFore));
 
-            tmp = jsonData.getInt("posMainMotor");
-            textViewMainBoxPosition.setText(String.valueOf(tmp));
+            textViewMainBoxPosition.setText(String.valueOf(monitorInfo.posMainMotor));
 
-            tmp = jsonData.getInt("stateDianBackLeft");
             Boolean ignite3;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateIgniteBL) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
                 ignite3 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateIgniteBL) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
                 ignite3 = true;
             } else {
-                L.e(TAG, "value of stateDianBackLeft is" + tmp);
+                L.e(TAG, "value of stateDianBackLeft is" + monitorInfo.stateIgniteBL);
                 ignite3 = null;
             }
 
-            tmp = jsonData.getInt("stateDianBackRight");
             Boolean ignite4;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateIgniteBR) {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
                 ignite4 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateIgniteBR) {
                 imageViewIgniteBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
                 ignite4 = true;
             } else {
-                L.e(TAG, "value of stateDianBackRight is" + tmp);
+                L.e(TAG, "value of stateDianBackRight is" + monitorInfo.stateIgniteBR);
                 ignite4 = null;
             }
 
-            tmp = jsonData.getInt("stateDianForeLeft");
             Boolean ignite1;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateIgniteFL) {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
                 ignite1 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateIgniteFL) {
                 imageViewIgniteBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
                 ignite1 = true;
             } else {
-                L.e(TAG, "value of stateDianForeLeft is" + tmp);
+                L.e(TAG, "value of stateDianForeLeft is" + monitorInfo.stateIgniteFL);
                 ignite1 = null;
             }
 
-            tmp = jsonData.getInt("stateDianForeRight");
             Boolean ignite2;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateIgniteFR) {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
                 ignite2 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateIgniteFR) {
                 imageViewIgniteBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
                 ignite2 = true;
             } else {
-                L.e(TAG, "value of stateDianForeRight is" + tmp);
+                L.e(TAG, "value of stateDianForeRight is" + monitorInfo.stateIgniteFR);
                 ignite2 = null;
             }
 
             if (null != ignite1 && null != ignite2 && null != ignite3 && null != ignite4) {
                 if (ignite1 || ignite3) {
-                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_ignite_on);
                     imageButtonIgniteMain.setTag(0);
                 } else {
-                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonIgniteMain.setImageResource(R.drawable.pic_button_ignite_off);
                     imageButtonIgniteMain.setTag(1);
                 }
 
                 if (ignite2 || ignite4) {
-                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_ignite_on);
                     imageButtonIgniteBackup.setTag(0);
                 } else {
-                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonIgniteBackup.setImageResource(R.drawable.pic_button_ignite_off);
                     imageButtonIgniteBackup.setTag(1);
                 }
             }
 
-            tmp = jsonData.getInt("stateHotBackLeft");
             Boolean heat3;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateHeatBL) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);
                 heat3 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateHeatBL) {
                 imageViewHeatBoardWorkStateBL.setImageResource(R.drawable.pic_view_lighton);
                 heat3 = true;
             } else {
-                L.e(TAG, "value of stateHotBackLeft is" + tmp);
+                L.e(TAG, "value of stateHotBackLeft is" + monitorInfo.stateHeatBL);
                 heat3 = null;
             }
 
-            tmp = jsonData.getInt("stateHotBackRight");
             Boolean heat4;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateHeatBR) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lightoff);
                 heat4 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateHeatBR) {
                 imageViewHeatBoardWorkStateBR.setImageResource(R.drawable.pic_view_lighton);
                 heat4 = true;
             } else {
-                L.e(TAG, "value of stateHotBackRight is" + tmp);
+                L.e(TAG, "value of stateHotBackRight is" + monitorInfo.stateHeatBR);
                 heat4 = null;
             }
 
-            tmp = jsonData.getInt("stateHotForeLeft");
             Boolean heat1;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateHeatFL) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lightoff);
                 heat1 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateHeatFL) {
                 imageViewHeatBoardWorkStateFL.setImageResource(R.drawable.pic_view_lighton);
                 heat1 = true;
             } else {
-                L.e(TAG, "value of stateHotForeLeft is" + tmp);
+                L.e(TAG, "value of stateHotForeLeft is" + monitorInfo.stateHeatFL);
                 heat1 = null;
             }
 
-            tmp = jsonData.getInt("stateHotForeRight");
             Boolean heat2;
-            if (0 == tmp) {
+            if (0 == monitorInfo.stateHeatFR) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lightoff);
                 heat2 = false;
-            } else if (1 == tmp) {
+            } else if (1 == monitorInfo.stateHeatFR) {
                 imageViewHeatBoardWorkStateFR.setImageResource(R.drawable.pic_view_lighton);
                 heat2 = true;
             } else {
-                L.e(TAG, "value of stateHotForeRight is" + tmp);
+                L.e(TAG, "value of stateHotForeRight is" + monitorInfo.stateHeatFR);
                 heat2 = null;
             }
 
             if (null != heat1 && null != heat2 && null != heat3 && null != heat4) {
                 if (heat1 || heat2) {
-                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_heat_on);
                     imageButtonHeatFront.setTag(0);
                 } else {
-                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonHeatFront.setImageResource(R.drawable.pic_button_heat_off);
                     imageButtonHeatFront.setTag(1);
                 }
                 if (heat3 || heat4) {
-                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_pressed);
+                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_heat_on);
                     imageButtonHeatBack.setTag(0);
                 } else {
-                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_leftup_released);
+                    imageButtonHeatBack.setImageResource(R.drawable.pic_button_heat_off);
                     imageButtonHeatBack.setTag(1);
                 }
             }
 
-            long time = jsonData.getLong("currentTime") - jsonData.getLong("startTime");
+            long time = monitorInfo.currentTime - monitorInfo.startTime;
             textViewWorkTimeMin.setText(String.valueOf(time / 60));
             textViewWorkTimeSec.setText(String.valueOf(time % 60));
 
-            tmp = jsonData.getInt("stateWind");
-            if (0 == tmp) {
-                imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_pressed);
-                imageButtonFanOn.setImageResource(R.drawable.pic_button_on_released);
-                imageButtonFanOff.setImageResource(R.drawable.pic_button_off_released);
+            if (0 == monitorInfo.stateWind) {
+                imageButtonFanOn.setImageResource(R.drawable.pic_button_fan_off);
+                imageButtonFanOff.setImageResource(R.drawable.pic_button_fan_off);
 
                 imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lighton);
                 imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lightoff);
-            } else if (1 == tmp) {
-                imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_released);
-                imageButtonFanOn.setImageResource(R.drawable.pic_button_on_pressed);
-                imageButtonFanOff.setImageResource(R.drawable.pic_button_off_released);
+            } else if (1 == monitorInfo.stateWind) {
+                imageButtonFanOn.setImageResource(R.drawable.pic_button_fan_on);
+                imageButtonFanOff.setImageResource(R.drawable.pic_button_fan_off);
 
                 imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lighton);
                 imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lightoff);
-            } else if (2 == tmp) {
-                imageButtonFanStop.setImageResource(R.drawable.pic_button_stop_released);
-                imageButtonFanOn.setImageResource(R.drawable.pic_button_on_released);
-                imageButtonFanOff.setImageResource(R.drawable.pic_button_off_pressed);
+            } else if (2 == monitorInfo.stateWind) {
+                imageButtonFanOn.setImageResource(R.drawable.pic_button_fan_off);
+                imageButtonFanOff.setImageResource(R.drawable.pic_button_fan_on);
 
                 imageViewFanWorkStateStop.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOn.setImageResource(R.drawable.pic_view_lightoff);
                 imageViewFanWorkStateOff.setImageResource(R.drawable.pic_view_lighton);
             } else {
-                L.e(TAG, "value of stateWind is" + tmp);
+                L.e(TAG, "value of stateWind is" + monitorInfo.stateWind);
             }
 
-            tmp = jsonData.getInt("stateMainMotor");
-            if (0 == tmp) {
-                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_pressed);
-            } else if (1 == tmp) {
-                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_pressed);
-                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_released);
-            } else if (2 == tmp) {
-                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_mainbox_up_released);
-                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_mainbox_up_pressed);
-                imageButtonMainBoxCtrlStop.setImageResource(R.drawable.pic_button_stop_released);
+            if (0 == monitorInfo.stateMainMotor) {
+                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_motor_released);
+                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_motor_released);
+            } else if (1 == monitorInfo.stateMainMotor) {
+                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_motor_pressed);
+                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_motor_released);
+            } else if (2 == monitorInfo.stateMainMotor) {
+                imageButtonMainBoxCtrlUP.setImageResource(R.drawable.pic_button_motor_released);
+                imageButtonMainBoxCtrlDown.setImageResource(R.drawable.pic_button_motor_pressed);
             } else {
-                L.e(TAG, "value of stateMainMotor is" + tmp);
+                L.e(TAG, "value of stateMainMotor is" + monitorInfo.stateMainMotor);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -473,11 +459,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         JSONObject jsonObject;
         switch (view.getId()) {
             case R.id.buttonPause:
-                jsonObject = ManageApplication.getInstance().getCloudManage().devicePause();
+                jsonObject = Interface.devicePause();
                 if (null != jsonObject) {
                     try {
-                        if (jsonObject.getInt("errorCode") != 0) {
-                            Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        if (Interface.isError(jsonObject)) {
+                            Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -494,22 +480,22 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.imageButtonMainBoxCtrlUp:
-                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 1);
+                Interface.bedControlMainMotorUp();
                 break;
 
             case R.id.imageButtonMainBoxCtrlDown:
-                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 2);
+                Interface.bedControlMainMotorDown();
                 break;
 
             case R.id.imageButtonMainBoxCtrlStop:
-                ManageApplication.getInstance().getCloudManage().bedControl("MAINMOTOR", 0);
+                Interface.bedControlMainMotorStop();
                 break;
 
             case R.id.imageButtonIgniteMain:
-                jsonObject = ManageApplication.getInstance().getCloudManage().bedControl("FIRE_MAIN", (int) view.getTag());
+                jsonObject = Interface.bedControlIgniteMainOn();
                 try {
-                    if (jsonObject.getInt("errorCode") != 0) {
-                        Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    if (Interface.isError(jsonObject)) {
+                        Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -517,34 +503,52 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.imageButtonIgniteBackup:
-                jsonObject = ManageApplication.getInstance().getCloudManage().bedControl("FIRE_TMP", (int) view.getTag());
+                jsonObject = Interface.bedControlIgniteBackupOn();
                 try {
-                    if (jsonObject.getInt("errorCode") != 0) {
-                        Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    if (Interface.isError(jsonObject)) {
+                        Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
 
+            case R.id.imageButtonIgniteStop:
+                Interface.bedControlIgniteMainOff();
+                Interface.bedControlIgniteBackupOff();
+                break;
+
             case R.id.imageButtonHeatFront:
-                ManageApplication.getInstance().getCloudManage().bedControl("HOT_PREV", (int) view.getTag());
+                if ((int) view.getTag() == 1) {
+                    Interface.bedControlHeatFrontOn();
+                } else {
+                    Interface.bedControlHeatFrontOff();
+                }
                 break;
 
             case R.id.imageButtonHeatBack:
-                ManageApplication.getInstance().getCloudManage().bedControl("HOT_NEXT", (int) view.getTag());
+                if ((int) view.getTag() == 1) {
+                    Interface.bedControlHeatBackOn();
+                } else {
+                    Interface.bedControlHeatBackOff();
+                }
+                break;
+
+            case R.id.imageButtonHeatStop:
+                Interface.bedControlHeatFrontOff();
+                Interface.bedControlHeatBackOff();
                 break;
 
             case R.id.imageButtonFanOn:
-                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 1);
+                Interface.bedControlFanOn();
                 break;
 
             case R.id.imageButtonFanOff:
-                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 2);
+                Interface.bedControlFanOff();
                 break;
 
             case R.id.imageButtonFanStop:
-                ManageApplication.getInstance().getCloudManage().bedControl("WIND", 0);
+                Interface.bedControlFanStop();
                 break;
 
             default:
@@ -554,33 +558,34 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     }
 
     void checkout() {
-        //// TODO: 2017/3/10
         try {
-            JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().getCheckoutInfo();
+            JSONObject jsonObject = Interface.getCheckoutInfo();
             if (null == jsonObject) {
                 L.e(TAG, "get checkout info fail: jsonObject is null");
                 return;
             }
-            if (jsonObject.getInt("errorCode") != 0) {
-                Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+            if (Interface.isError(jsonObject)) {
+                Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_LONG).show();
                 return;
             }
-            JSONObject jsonData = jsonObject.getJSONObject("data");
+            JSONObject jsonData = Interface.getData(jsonObject);
             if (null == jsonData) {
                 L.e(TAG, "get checkout info fail: jsonData is null");
                 return;
             }
 
+            Interface.CheckoutInfo checkoutInfo = new Interface.CheckoutInfo(jsonData);
+
             listCheckoutInfo.clear();
-            listCheckoutInfo.add(new CheckoutInfo("客户信息", jsonData.getString("userInfo")));
-            listCheckoutInfo.add(new CheckoutInfo("保健床名", jsonData.getString("bedName")));
-            listCheckoutInfo.add(new CheckoutInfo("开始时间", TimeThread.getTime(jsonData.getLong("startTime") * 1000)));
-            listCheckoutInfo.add(new CheckoutInfo("工作时间", jsonData.getLong("workTime") / 60 + "分" + jsonData.getLong("workTime") % 60 + "秒"));
-            listCheckoutInfo.add(new CheckoutInfo("艾绒类型", jsonData.getString("productName")));
-            listCheckoutInfo.add(new CheckoutInfo("艾绒价格", String.valueOf(jsonData.getDouble("productMoney"))));
-            listCheckoutInfo.add(new CheckoutInfo("服务项目", jsonData.getString("serveItem")));
-            listCheckoutInfo.add(new CheckoutInfo("服务价格", String.valueOf(jsonData.getDouble("serveMoney"))));
-            listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(String.valueOf(jsonData.getDouble("totalMoney")))));
+            listCheckoutInfo.add(new CheckoutInfo("客户信息", checkoutInfo.CustomerInfo));
+            listCheckoutInfo.add(new CheckoutInfo("保健床名", checkoutInfo.bedName));
+            listCheckoutInfo.add(new CheckoutInfo("开始时间", TimeThread.getTime(checkoutInfo.startTime * 1000)));
+            listCheckoutInfo.add(new CheckoutInfo("工作时间", checkoutInfo.workTime / 60 + getString(R.string.quantifier_minutes) + checkoutInfo.workTime % 60 + getString(R.string.quantifier_seconds)));
+            listCheckoutInfo.add(new CheckoutInfo("艾绒类型", checkoutInfo.rawType));
+            listCheckoutInfo.add(new CheckoutInfo("艾绒价格", String.valueOf(checkoutInfo.rawPrice)));
+            listCheckoutInfo.add(new CheckoutInfo("服务项目", checkoutInfo.serviceType));
+            listCheckoutInfo.add(new CheckoutInfo("服务价格", String.valueOf(checkoutInfo.servicePrice)));
+            listCheckoutInfo.add(new CheckoutInfo("结帐价格", String.valueOf(checkoutInfo.totalPrice)));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             View layout = getLayoutInflater().inflate(R.layout.checkout_frame, null);
@@ -598,7 +603,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    final JSONObject jsonObjectSubmit = ManageApplication.getInstance().getCloudManage().checkoutSubmit();
+                    final JSONObject jsonObjectSubmit = Interface.checkoutSubmit();
                     if (null == jsonObjectSubmit) {
                         L.e(TAG, "checkout submit fail: jsonObjectSubmit is null");
                         return;
@@ -608,8 +613,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void run() {
                             try {
-                                if (jsonObjectSubmit.getInt("errorCode") != 0) {
-                                    Toast.makeText(WorkMainActivity.this, jsonObjectSubmit.getString("message"), Toast.LENGTH_LONG).show();
+                                if (Interface.isError(jsonObjectSubmit)) {
+                                    Toast.makeText(WorkMainActivity.this, Interface.getMessage(jsonObjectSubmit), Toast.LENGTH_LONG).show();
                                     return;
                                 }
                                 Toast.makeText(WorkMainActivity.this, "结帐成功!", Toast.LENGTH_LONG).show();

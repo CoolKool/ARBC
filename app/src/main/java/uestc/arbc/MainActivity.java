@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uestc.arbc.background.DataSQL;
+import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
@@ -109,23 +110,22 @@ public class MainActivity extends Activity {
     private void getMainInfo() {
         //Log.i(TAG, "getMainInfo() started");
 
-        JSONObject jsonObjectMainInfo = ManageApplication.getInstance().getCloudManage().getMainInfo();
-        JSONObject jsonData;
+        JSONObject jsonObjectMainInfo = Interface.getMainInfo();
+
 
         if (null == jsonObjectMainInfo) {
             L.e(TAG, "getMainInfo failed: server returned null");
             return;
         }
         try {
-            if (jsonObjectMainInfo.getInt("errorCode") == -1) {
-                Toast.makeText(MainActivity.this, jsonObjectMainInfo.getString("message"), Toast.LENGTH_LONG).show();
-                return;
-            } else if (jsonObjectMainInfo.getInt("errorCode") == 0) {
-                jsonData = jsonObjectMainInfo.getJSONObject("data");
-                ManageApplication.getInstance().storeID = jsonData.getInt("storeID");
-                ManageApplication.getInstance().storeName = jsonData.getString("storeName");
+            if (Interface.isError(jsonObjectMainInfo)) {
+                Toast.makeText(MainActivity.this, Interface.getMessage(jsonObjectMainInfo), Toast.LENGTH_LONG).show();
+            } else {
+                JSONObject jsonData = Interface.getData(jsonObjectMainInfo);
+                ManageApplication.getInstance().storeID = Interface.getStoreID(jsonData);
+                ManageApplication.getInstance().storeName = Interface.getStoreName(jsonData);
 
-                if (jsonData.getInt("boardConnect") == 0) {
+                if (Interface.isBedConnected(jsonData)) {
                     textViewLocalConnect.setText(getString(R.string.local_connect_successful));
                     isDeviceConnected = true;
                     if (isServerConnected) {
@@ -136,10 +136,10 @@ public class MainActivity extends Activity {
                     isDeviceConnected = false;
                     buttonStart.setEnabled(false);
                 }
-                int localBedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
+                int localBedID = Interface.getBedID(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO));
                 if (0 == localBedID) {
 
-                    JSONArray jsonArrayBedList = jsonData.getJSONArray("bedList");
+                    JSONArray jsonArrayBedList = Interface.getBedList(jsonData);
                     bedList.clear();
                     for (int i = 0; i < jsonArrayBedList.length(); i++) {
                         JSONObject jsonObjectTmp = jsonArrayBedList.getJSONObject(i);
@@ -148,11 +148,11 @@ public class MainActivity extends Activity {
                         }
                     }
                     bedAdapter.notifyDataSetChanged();
-                    if (ManageApplication.getInstance().bedID == 0) {
+                    if (0 == ManageApplication.getInstance().bedID) {
                         selectBed();
                     }
                 } else {
-                    String localBedName = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getString("bedName");
+                    String localBedName = Interface.getBedName(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO));
                     ManageApplication.getInstance().bedID = localBedID;
                     ManageApplication.getInstance().bedName = localBedName;
                     textViewSelectBed.setText(localBedName);
@@ -165,7 +165,7 @@ public class MainActivity extends Activity {
 
     private void selectBed() {
         try {
-            int localBedID = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO).getInt("bedID");
+            int localBedID = Interface.getBedID(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO));
             if (0 != localBedID) {
                 return;
             }
@@ -216,8 +216,8 @@ public class MainActivity extends Activity {
             }
 
             try {
-                final int bedID = bedList.get(position).getInt("bedID");
-                final String bedName = bedList.get(position).getString("bedName");
+                final int bedID = Interface.getBedID(bedList.get(position));
+                final String bedName = Interface.getBedName(bedList.get(position));
                 viewHolder.bedID.setText(String.valueOf(bedID));
                 viewHolder.bedName.setText(bedName);
                 convertView.setOnClickListener(new View.OnClickListener() {
@@ -382,25 +382,25 @@ public class MainActivity extends Activity {
     //"启动/start"被按下时
     public void start() {
         Intent intent = new Intent();
-        JSONObject jsonObject = ManageApplication.getInstance().getCloudManage().mainStart();
+        JSONObject jsonObject = Interface.mainStart();
         if (null == jsonObject) {
             Toast.makeText(this, "通信失败", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
-            if (jsonObject.getInt("errorCode") == -1) {
+            if (Interface.isError(jsonObject)) {
                 Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 return;
-            } else if (jsonObject.getInt("errorCode") == 0) {
-                JSONObject data = jsonObject.optJSONObject("data");
-                if (null == data) {
+            } else {
+                JSONObject jsonData = Interface.getData(jsonObject);
+                if (null == jsonData) {
                     Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (data.getInt("state") == 0) {
+                if (Interface.getState(jsonData) == 0) {
                     intent.setClass(this, LoginActivity.class);
-                    intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_USER_LOGIN);
-                } else if (data.getInt("state") == 1) {
+                    intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_WORKER_LOGIN);
+                } else if (Interface.getState(jsonData) == 1) {
                     intent.setClass(this, WorkMainActivity.class);
                 } else {
                     Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();

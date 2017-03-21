@@ -21,7 +21,7 @@ public class ManageApplication extends Application {
     public volatile String customerName = "散客";
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
-    public final static String TABLE_NAME_WORKER_ACCOUNT = "userAccount";//保存工作人员账号的表名
+    public final static String TABLE_NAME_WORKER_ACCOUNT = "workerAccount";//保存工作人员账号的表名
 
     //定义各种消息的值
     public final static int MESSAGE_TIME = 1;//更新时间UI
@@ -35,7 +35,7 @@ public class ManageApplication extends Application {
 
     //定义请求码和结果码，用于activity间startActivityForResult()
     public final static int REQUEST_CODE_DEVICE_SIGN = 1;
-    public final static int REQUEST_CODE_USER_LOGIN = 2;
+    public final static int REQUEST_CODE_WORKER_LOGIN = 2;
     public final static int REQUEST_CODE_CUSTOMER_SET = 3;
 
     public final static int RESULT_CODE_SUCCEED = 1;
