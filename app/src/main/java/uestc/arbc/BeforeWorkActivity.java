@@ -46,7 +46,7 @@ public class BeforeWorkActivity extends Activity {
     private int serviceTypeID;
     private int rawTypeID;
     private long customerID = 0;
-    private String customerName = getString(R.string.guest);
+    private String customerName;
     private TextView textViewCustomerInfo;
 
     Button buttonOpen;
@@ -65,11 +65,13 @@ public class BeforeWorkActivity extends Activity {
 
     private void init() {
 
+        customerName = getString(R.string.guest);
+
         //为艾草数选择框填充数据
         spinnerRawNum = (Spinner) findViewById(R.id.spinnerRawNum);
         String arr[] = new String[6];
         for (int i = 0; i < 6; i++) {
-            arr[i] = "" + i + 1;
+            arr[i] = "" + (i + 1);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -360,9 +362,9 @@ public class BeforeWorkActivity extends Activity {
             jsonObject.put("workerID", ManageApplication.getInstance().workerID);
             jsonObject.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("num", rawNum);
-            jsonObject.put("userID", customerID);
+            jsonObject.put("customerID", customerID);
             jsonObject.put("herbID", rawTypeID);
-            jsonObject.put("consumeID", serviceTypeID);
+            jsonObject.put("serviceID", serviceTypeID);
 
             jsonTemp = new JSONObject();
             jsonTemp.put("switchID", 12);

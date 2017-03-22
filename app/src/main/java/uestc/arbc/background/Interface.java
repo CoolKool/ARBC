@@ -416,7 +416,7 @@ public class Interface {
     }
 
     public static int getDefaultServiceID(@NonNull JSONObject jsonData) throws JSONException {
-        return jsonData.getInt("DefaultConsumeID");
+        return jsonData.getInt("defaultConsumeID");
     }
 
     public static int getDefaultRawID(@NonNull JSONObject jsonData) throws JSONException {
