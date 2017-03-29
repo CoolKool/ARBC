@@ -33,7 +33,8 @@
     <string name="password">密码</string>
     <string name="login">登录</string>
     <string name="raw_type">艾草类型：</string>
-    <string name="raw_num">艾草数：</string>
+    <string name="raw_num">艾草数量：</string>
+    <string name="customer_info">用户信息：</string>
     <string name="service_type">服务类型：</string>
     <string name="heat_board">加热板：</string>
     <string name="select_all">全选</string>
@@ -41,7 +42,7 @@
     <string name="front_right">前右</string>
     <string name="back_left">后左</string>
     <string name="back_right">后右</string>
-    <string name="user">用户：</string>
+    <string name="customer_phone">用户手机：</string>
     <string name="guest">散客</string>
     <string name="main_box_ctrl">艾箱控制</string>
     <string name="work_time">已工作：</string>

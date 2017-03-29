@@ -40,7 +40,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     TextView textViewStoreID;
     TextView textViewStoreName;
     TextView textViewBedID;
-    TextView textViewCustomer;
+    TextView textViewCustomerName;
 
     ImageButton imageButtonMainBoxCtrlUP;
     ImageButton imageButtonMainBoxCtrlDown;
@@ -205,10 +205,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         imageButtonIgniteStop.setOnClickListener(this);
 
         imageButtonHeatFront = (ImageButton) findViewById(R.id.imageButtonHeatFront);
-        imageButtonHeatFront.setTag(1);
         imageButtonHeatFront.setOnClickListener(this);
         imageButtonHeatBack = (ImageButton) findViewById(R.id.imageButtonHeatBack);
-        imageButtonHeatBack.setTag(1);
         imageButtonHeatBack.setOnClickListener(this);
         imageButtonHeatStop = (ImageButton) findViewById(R.id.imageButtonHeatStop);
         imageButtonHeatStop.setOnClickListener(this);
@@ -230,8 +228,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         textViewStoreName.setText(ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
         textViewBedID.setText("床号：" + String.valueOf(ManageApplication.getInstance().bedID));
-        textViewCustomer = (TextView) findViewById(R.id.textViewCustomer);
-        textViewCustomer.setText(ManageApplication.getInstance().customerName);
+        textViewCustomerName = (TextView) findViewById(R.id.textViewCustomerName);
+        textViewCustomerName.setText(ManageApplication.getInstance().customerName);
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -391,17 +389,13 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             if (null != heat1 && null != heat2 && null != heat3 && null != heat4) {
                 if (heat1 || heat2) {
                     imageButtonHeatFront.setImageResource(R.drawable.pic_button_heat_on);
-                    imageButtonHeatFront.setTag(0);
                 } else {
                     imageButtonHeatFront.setImageResource(R.drawable.pic_button_heat_off);
-                    imageButtonHeatFront.setTag(1);
                 }
                 if (heat3 || heat4) {
                     imageButtonHeatBack.setImageResource(R.drawable.pic_button_heat_on);
-                    imageButtonHeatBack.setTag(0);
                 } else {
                     imageButtonHeatBack.setImageResource(R.drawable.pic_button_heat_off);
-                    imageButtonHeatBack.setTag(1);
                 }
             }
 
@@ -446,6 +440,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             } else {
                 L.e(TAG, "value of stateMainMotor is" + monitorInfo.stateMainMotor);
             }
+
+            textViewCustomerName.setText(monitorInfo.customerName);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -514,29 +510,19 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.imageButtonIgniteStop:
-                Interface.bedControlIgniteMainOff();
-                Interface.bedControlIgniteBackupOff();
+                Interface.bedControlIgniteOff();
                 break;
 
             case R.id.imageButtonHeatFront:
-                if ((int) view.getTag() == 1) {
-                    Interface.bedControlHeatFrontOn();
-                } else {
-                    Interface.bedControlHeatFrontOff();
-                }
+                Interface.bedControlHeatFrontOn();
                 break;
 
             case R.id.imageButtonHeatBack:
-                if ((int) view.getTag() == 1) {
-                    Interface.bedControlHeatBackOn();
-                } else {
-                    Interface.bedControlHeatBackOff();
-                }
+                Interface.bedControlHeatBackOn();
                 break;
 
             case R.id.imageButtonHeatStop:
-                Interface.bedControlHeatFrontOff();
-                Interface.bedControlHeatBackOff();
+                Interface.bedControlHeatOff();
                 break;
 
             case R.id.imageButtonFanOn:

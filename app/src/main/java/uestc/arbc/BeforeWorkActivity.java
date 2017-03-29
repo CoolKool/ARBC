@@ -40,7 +40,7 @@ public class BeforeWorkActivity extends Activity {
     private ImageButton imageButtonIgniteMain;
     private ImageButton imageButtonIgniteBackup;
 
-    private EditText editTextCustomer;
+    private EditText editTextCustomerPhone;
 
     private int rawNum;
     private int serviceTypeID;
@@ -73,7 +73,7 @@ public class BeforeWorkActivity extends Activity {
         for (int i = 0; i < 6; i++) {
             arr[i] = "" + (i + 1);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arr);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.my_spinner, arr);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRawNum.setAdapter(adapter);
         spinnerRawNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -132,8 +132,8 @@ public class BeforeWorkActivity extends Activity {
                 stringsRawType[i] = Interface.getRawTypeName(jsonObjectsRawType[i]);
             }
 
-            ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsServiceType);
-            ArrayAdapter<String> rawAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringsRawType);
+            ArrayAdapter<String> serviceAdapter = new ArrayAdapter<>(this, R.layout.my_spinner, stringsServiceType);
+            ArrayAdapter<String> rawAdapter = new ArrayAdapter<>(this, R.layout.my_spinner, stringsRawType);
 
             serviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             rawAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -208,8 +208,8 @@ public class BeforeWorkActivity extends Activity {
         imageButtonIgniteMain = (ImageButton) findViewById(R.id.imageButtonIgniteMain);
         imageButtonIgniteBackup = (ImageButton) findViewById(R.id.imageButtonIgniteBackup);
 
-        setHeatState(imageButtonHeatFront, true);
-        setHeatState(imageButtonHeatBack, true);
+        setHeatState(imageButtonHeatFront, false);
+        setHeatState(imageButtonHeatBack, false);
         setIgniteState(imageButtonIgniteMain, true);
         setIgniteState(imageButtonIgniteBackup, false);
 
@@ -221,9 +221,9 @@ public class BeforeWorkActivity extends Activity {
 
         //为用户输入框添加监听
         textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
-        textViewCustomerInfo.setText("");
-        editTextCustomer = (EditText) findViewById(R.id.editTextCustomer);
-        editTextCustomer.addTextChangedListener(new TextWatcher() {
+        textViewCustomerInfo.setText(getString(R.string.guest));
+        editTextCustomerPhone = (EditText) findViewById(R.id.editTextCustomerPhone);
+        editTextCustomerPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -253,7 +253,7 @@ public class BeforeWorkActivity extends Activity {
                         } else {
                             Toast.makeText(BeforeWorkActivity.this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                             customerID = 0;
-                            textViewCustomerInfo.setText("");
+                            textViewCustomerInfo.setText(getString(R.string.guest));
                             Intent intent = new Intent();
                             intent.setClass(BeforeWorkActivity.this, CustomerSetActivity.class);
                             intent.putExtra("phone", Long.parseLong(s.toString()));
@@ -266,7 +266,7 @@ public class BeforeWorkActivity extends Activity {
                     }
                 } else {
                     customerID = 0;
-                    textViewCustomerInfo.setText("");
+                    textViewCustomerInfo.setText(getString(R.string.guest));
                 }
             }
         });
@@ -278,16 +278,16 @@ public class BeforeWorkActivity extends Activity {
         if (ManageApplication.REQUEST_CODE_CUSTOMER_SET == requestCode) {
             if (ManageApplication.RESULT_CODE_FAILED == resultCode) {
                 customerID = 0;
-                editTextCustomer.setText("");
+                editTextCustomerPhone.setText("");
             } else {
                 long phone;
                 if ((phone = data.getLongExtra("phone", -1)) == -1) {
                     customerID = 0;
-                    editTextCustomer.setText("");
+                    editTextCustomerPhone.setText("");
                 } else {
                     //触发监听
-                    editTextCustomer.setText("");
-                    editTextCustomer.setText(String.valueOf(phone));
+                    editTextCustomerPhone.setText("");
+                    editTextCustomerPhone.setText(String.valueOf(phone));
                 }
             }
         }

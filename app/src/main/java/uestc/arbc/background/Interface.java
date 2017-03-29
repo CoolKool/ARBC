@@ -220,19 +220,14 @@ public class Interface {
         return bedControl("FIRE_MAIN", 1);
     }
 
-    //控制指令：主点燃关闭
-    public static JSONObject bedControlIgniteMainOff() {
-        return bedControl("FIRE_MAIN", 0);
-    }
-
     //控制指令：备用点燃打开
     public static JSONObject bedControlIgniteBackupOn() {
         return bedControl("FIRE_TMP", 1);
     }
 
-    //控制指令：备用点燃关闭
-    public static JSONObject bedControlIgniteBackupOff() {
-        return bedControl("FIRE_TMP", 0);
+    //控制指令：点燃关闭
+    public static JSONObject bedControlIgniteOff() {
+        return bedControl("FIRE_STOP", 1);
     }
 
     //控制指令：前加热打开
@@ -240,19 +235,14 @@ public class Interface {
         return bedControl("HOT_PREV", 1);
     }
 
-    //控制指令：前加热关闭
-    public static JSONObject bedControlHeatFrontOff() {
-        return bedControl("HOT_PREV", 0);
-    }
-
     //控制指令：后加热打开
     public static JSONObject bedControlHeatBackOn() {
         return bedControl("HOT_NEXT", 1);
     }
 
-    //控制指令：后加热关闭
-    public static JSONObject bedControlHeatBackOff() {
-        return bedControl("HOT_NEXT", 0);
+    //控制指令：加热关闭
+    public static JSONObject bedControlHeatOff() {
+        return bedControl("HOT_STOP", 1);
     }
 
     //控制指令：风扇开
@@ -533,8 +523,9 @@ public class Interface {
 
     public static class MonitorInfo {
         public boolean isWork;
-        public int degreeBack, degreeFore, posMainMotor, stateIgniteFL, stateIgniteFR, stateIgniteBL, stateIgniteBR, stateHeatFL, stateHeatFR, stateHeatBL, stateHeatBR, stateWind, stateMainMotor;
+        public int degreeBack, degreeFore, posMainMotor, stateIgniteFL, stateIgniteFR, stateIgniteBL, stateIgniteBR, stateHeatFL, stateHeatFR, stateHeatBL, stateHeatBR, stateWind, stateMainMotor, customerAge;
         public long startTime, currentTime;
+        public String customerName, customerSex;
 
         public MonitorInfo(@NonNull JSONObject jsonData) throws JSONException {
 
@@ -561,6 +552,10 @@ public class Interface {
 
             this.stateWind = jsonData.getInt("stateWind");
             this.stateMainMotor = jsonData.getInt("stateMainMotor");
+
+            this.customerName = jsonData.getString("userName");
+            this.customerSex = jsonData.getString("userSex");
+            this.customerAge = jsonData.getInt("userAge");
         }
     }
 

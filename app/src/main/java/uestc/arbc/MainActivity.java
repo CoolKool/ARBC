@@ -375,7 +375,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         L.i(TAG, "onDestroy()");
-        ((ManageApplication) getApplication()).close();
+        ManageApplication.getInstance().close();
         super.onDestroy();
     }
 

@@ -32,14 +32,6 @@
             android:src="@drawable/pic_button_cancel" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textViewCustomerInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="@string/guest"
-        android:textColor="@color/colorWhite"
-        android:textSize="30sp" />
 
     <LinearLayout
         android:id="@+id/linearLayoutPanel"
@@ -63,9 +55,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp"
                     android:text="@string/heat_ctrl"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
 
                 <LinearLayout
@@ -93,7 +86,7 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/heat_front"
                         android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -122,7 +115,7 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/heat_back"
                         android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <TextView
@@ -134,7 +127,7 @@
                     android:layout_marginTop="150dp"
                     android:text="@string/ignite_ctrl"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <LinearLayout
                     android:id="@+id/relativeLayoutIgniteMain"
@@ -161,7 +154,7 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/ignite_main"
                         android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -190,7 +183,7 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/ignite_backup"
                         android:textColor="@color/colorWhite"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -207,14 +200,39 @@
                 android:layout_centerInParent="true">
 
                 <TextView
-                    android:id="@+id/textViewServiceType"
+                    android:id="@+id/textViewCustomerInfoHint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/customer_info"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/textViewCustomerInfo"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/textViewCustomerInfoHint"
+                    android:layout_alignBaseline="@id/textViewCustomerInfoHint"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/colorHalfTransparent"
+                    android:padding="10dp"
+                    tools:text="@string/guest"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/textViewServiceType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewCustomerInfoHint"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="50dp"
                     android:text="@string/service_type"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <Spinner
                     android:id="@+id/spinnerServiceType"
@@ -236,7 +254,7 @@
                     android:layout_marginTop="50dp"
                     android:text="@string/raw_type"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <Spinner
                     android:id="@+id/spinnerRawType"
@@ -257,7 +275,7 @@
                     android:layout_marginTop="50dp"
                     android:text="@string/raw_num"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <Spinner
                     android:id="@+id/spinnerRawNum"
@@ -271,34 +289,33 @@
 
 
                 <TextView
-                    android:id="@+id/textViewUser"
+                    android:id="@+id/textViewCustomerPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/textViewRawNum"
                     android:layout_alignStart="@id/textViewRawNum"
                     android:layout_marginTop="50dp"
-                    android:text="@string/user"
+                    android:text="@string/customer_phone"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <EditText
-                    android:id="@+id/editTextCustomer"
+                    android:id="@+id/editTextCustomerPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/textViewUser"
+                    android:layout_alignBaseline="@id/textViewCustomerPhone"
                     android:layout_alignStart="@id/spinnerServiceType"
                     android:layout_alignEnd="@id/spinnerRawType"
-                    android:layout_toEndOf="@id/textViewUser"
+                    android:layout_toEndOf="@id/textViewCustomerPhone"
                     android:background="@color/colorHalfTransparent"
-                    android:hint="@string/guest"
                     android:inputType="number"
-                    android:labelFor="@id/editTextCustomer"
+                    android:labelFor="@id/editTextCustomerPhone"
                     android:lines="1"
                     android:maxLines="1"
                     android:maxWidth="280dp"
                     android:padding="10dp"
                     android:textColor="@color/colorWhite"
-                    android:textSize="15sp" />
+                    android:textSize="25sp" />
 
             </RelativeLayout>
 

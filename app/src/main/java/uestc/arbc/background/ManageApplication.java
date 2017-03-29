@@ -12,13 +12,13 @@ import android.os.Message;
 public class ManageApplication extends Application {
     private final static String TAG = "ManageApplication";
 
-    public volatile int storeID = 0;
-    public volatile int bedID = 0;
-    public volatile String storeName = "";
-    public volatile String bedName = "";
-    public volatile int workerID = 0;
-    public volatile String workerName = "";
-    public volatile String customerName = "散客";
+    public volatile int storeID;
+    public volatile int bedID;
+    public volatile String storeName;
+    public volatile String bedName;
+    public volatile int workerID;
+    public volatile String workerName;
+    public volatile String customerName;
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_WORKER_ACCOUNT = "workerAccount";//保存工作人员账号的表名
@@ -67,6 +67,8 @@ public class ManageApplication extends Application {
     }
 
     public void init() {
+
+        initValues();
         dataSQL = new DataSQL();
         if (!dataSQL.isStartSucceed()) {
             dataSQL = null;
@@ -91,6 +93,17 @@ public class ManageApplication extends Application {
         closeTimeThread();
         cloudManage.close();
         dataSQL.close();
+        initValues();
+    }
+
+    private void initValues() {
+        storeID = 0;
+        bedID = 0;
+        storeName = "";
+        bedName = "";
+        workerID = 0;
+        workerName = "";
+        customerName = "散客";
     }
 
     //activity或线程启动时将其handler发送到此保存，用以和activity通信
