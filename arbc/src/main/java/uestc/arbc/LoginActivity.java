@@ -184,6 +184,7 @@ public class LoginActivity extends Activity {
                             jsonData.put("password", stringPassword);
                             L.d(TAG, "deviceInfo is:" + jsonData.toString());
                             dataSQL.pushJson(ManageApplication.TABLE_NAME_DEVICE_INFO, jsonData);
+                            ManageApplication.getInstance().storeID = Interface.getStoreID(jsonData);
                             setResult(ManageApplication.RESULT_CODE_SUCCEED, null);
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -21,13 +21,11 @@ public class Interface {
     public static JSONObject getMainInfo() {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
-        JSONObject deviceInfo = ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
-
         try {
             jsonObject.put("token", 0);
             jsonObject.put("require", "PAD_Main_Info");
-            data.put("storeID", deviceInfo.getInt("storeID"));
-            data.put("bedID", deviceInfo.getInt("bedID"));
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -386,7 +384,7 @@ public class Interface {
     }
 
     public static boolean isBedConnected(@NonNull JSONObject jsonData) throws JSONException {
-        return jsonData.getInt("boardConnect") == 0;
+        return jsonData.getInt("boardConnect") == 1;
     }
 
     public static int getWorkerID(@NonNull JSONObject jsonData) throws JSONException {

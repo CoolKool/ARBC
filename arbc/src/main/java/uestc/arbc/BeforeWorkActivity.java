@@ -461,7 +461,6 @@ public class BeforeWorkActivity extends Activity {
                     break;
                 case 0:
                     Toast.makeText(BeforeWorkActivity.this, getString(R.string.start_succeed), Toast.LENGTH_SHORT).show();
-                    ManageApplication.getInstance().customerName = customerName;
                     Intent intent = new Intent();
                     intent.setClass(BeforeWorkActivity.this, WorkMainActivity.class);
                     startActivity(intent);

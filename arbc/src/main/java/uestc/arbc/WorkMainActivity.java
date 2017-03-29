@@ -37,10 +37,9 @@ import uestc.arbc.background.TimeThread;
 public class WorkMainActivity extends Activity implements View.OnClickListener {
     private final static String TAG = "WorkMainActivity";
 
-    TextView textViewStoreID;
     TextView textViewStoreName;
     TextView textViewBedID;
-    TextView textViewCustomerName;
+    TextView textViewCustomerInfo;
 
     ImageButton imageButtonMainBoxCtrlUP;
     ImageButton imageButtonMainBoxCtrlDown;
@@ -221,15 +220,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
         L.d(TAG, "button init done");
 
-        //信息显示面板
-        textViewStoreID = (TextView) findViewById(R.id.textViewStoreID);
-        textViewStoreID.setText("店铺号：" + String.valueOf(ManageApplication.getInstance().storeID));
         textViewStoreName = (TextView) findViewById(R.id.textViewStoreName);
         textViewStoreName.setText(ManageApplication.getInstance().storeName);
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
         textViewBedID.setText("床号：" + String.valueOf(ManageApplication.getInstance().bedID));
-        textViewCustomerName = (TextView) findViewById(R.id.textViewCustomerName);
-        textViewCustomerName.setText(ManageApplication.getInstance().customerName);
+        textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -441,7 +436,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 L.e(TAG, "value of stateMainMotor is" + monitorInfo.stateMainMotor);
             }
 
-            textViewCustomerName.setText(monitorInfo.customerName);
+            textViewCustomerInfo.setText(monitorInfo.customerName + " " + monitorInfo.customerSex + " " + monitorInfo.customerAge + getString(R.string.quantifier_age));
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -65,18 +65,7 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/textViewStoreID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/textViewStoreName"
-            android:layout_toEndOf="@id/imageViewLogo"
-            android:layout_toStartOf="@id/textViewStoreName"
-            android:text="@string/store_id"
-            android:textColor="@color/colorWhite"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/textViewCustomerName"
+            android:id="@+id/textViewCustomerInfo"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -87,7 +76,7 @@
             android:gravity="center"
             android:text="@string/guest"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/textViewBedID"
@@ -96,7 +85,7 @@
             android:layout_alignBaseline="@id/textViewStoreName"
             android:layout_marginEnd="150dp"
             android:layout_toEndOf="@id/textViewStoreName"
-            android:layout_toStartOf="@id/textViewCustomerName"
+            android:layout_toStartOf="@id/textViewCustomerInfo"
             android:gravity="end"
             android:text="@string/bedID"
             android:textColor="@color/colorYellow"

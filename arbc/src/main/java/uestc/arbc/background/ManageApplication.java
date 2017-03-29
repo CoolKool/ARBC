@@ -3,6 +3,9 @@ package uestc.arbc.background;
 import android.app.Application;
 import android.os.Message;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * 用于保存全局数据，APP可以在任何地方通过此类获得全局数据
@@ -18,7 +21,6 @@ public class ManageApplication extends Application {
     public volatile String bedName;
     public volatile int workerID;
     public volatile String workerName;
-    public volatile String customerName;
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_WORKER_ACCOUNT = "workerAccount";//保存工作人员账号的表名
@@ -68,7 +70,7 @@ public class ManageApplication extends Application {
 
     public void init() {
 
-        initValues();
+
         dataSQL = new DataSQL();
         if (!dataSQL.isStartSucceed()) {
             dataSQL = null;
@@ -76,8 +78,8 @@ public class ManageApplication extends Application {
 
         cloudManage = new CloudManage();
         cloudManage.init();
-
         startTimeThread();
+        initValues();
     }
 
     public DataSQL getDataSQL() {
@@ -90,20 +92,36 @@ public class ManageApplication extends Application {
 
     public void close () {
         L.i(TAG, "close()");
+        initValues();
         closeTimeThread();
         cloudManage.close();
         dataSQL.close();
-        initValues();
     }
 
     private void initValues() {
-        storeID = 0;
-        bedID = 0;
-        storeName = "";
-        bedName = "";
+        if (dataSQL.isTableExists(ManageApplication.TABLE_NAME_DEVICE_INFO)) {
+            try {
+                JSONObject jsonData = dataSQL.getJson(ManageApplication.TABLE_NAME_DEVICE_INFO);
+                storeID = Interface.getStoreID(jsonData);
+                bedID = Interface.getBedID(jsonData);
+                storeName = Interface.getStoreName(jsonData);
+                bedName = Interface.getBedName(jsonData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                storeID = 0;
+                bedID = 0;
+
+            }
+        } else {
+            storeID = 0;
+            bedID = 0;
+            storeName = "";
+            bedName = "";
+        }
+
+
         workerID = 0;
         workerName = "";
-        customerName = "散客";
     }
 
     //activity或线程启动时将其handler发送到此保存，用以和activity通信

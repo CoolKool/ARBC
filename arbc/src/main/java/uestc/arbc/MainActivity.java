@@ -229,6 +229,7 @@ public class MainActivity extends Activity {
                         if (null != alertDialogSelectBed) {
                             alertDialogSelectBed.dismiss();
                             alertDialogSelectBed = null;
+                            buttonStart.setEnabled(false);
                         }
                     }
                 });
