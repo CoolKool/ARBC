@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorHalfTransparent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewConnectState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/ble_disconnected"
+        android:textSize="25sp"
+        android:textColor="@color/colorBlack" />
+
+    <Button
+        android:id="@+id/buttonScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/ble_scan"
+        android:textSize="35sp"
+        android:textColor="@color/colorGreen" />
+
+    <Button
+        android:id="@+id/buttonDisconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/ble_disconnect"
+        android:textSize="35sp"
+        android:textColor="@color/colorGreen" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/ble_cancel"
+        android:textSize="35sp"
+        android:textColor="@color/colorGreen" />
+
+</LinearLayout>

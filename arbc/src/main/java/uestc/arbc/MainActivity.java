@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.KeyEvent;
@@ -28,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import uestc.arbc.background.BLEManage;
 import uestc.arbc.background.DataSQL;
 import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
@@ -52,6 +52,8 @@ public class MainActivity extends Activity {
 
     private long tmpTime = 0L;//记录上一次按下退出键的时间，实现按两次退出键才退出程序的功能
     private DataSQL dataSQL;
+
+    BLEManage bleManage;
 
     private boolean isServerConnected = false;
     private boolean isDeviceConnected = false;
@@ -164,6 +166,9 @@ public class MainActivity extends Activity {
     }
 
     private void selectBed() {
+        if (!isServerConnected) {
+            return;
+        }
         try {
             int localBedID = Interface.getBedID(ManageApplication.getInstance().getDataSQL().getJson(ManageApplication.TABLE_NAME_DEVICE_INFO));
             if (0 != localBedID) {
@@ -318,28 +323,19 @@ public class MainActivity extends Activity {
                 test();
             }
         });
+
+        bleManage = new BLEManage();
+        bleManage.init(getApplicationContext());
+        bleManage.showFloatBall(true);
     }
 
-    private void test() {
-        Resources resources = getResources();
-        int resIdShow = resources.getIdentifier("config_showNavigationBar", "bool", "android");
-        boolean hasNavigationBar = false;
-        if (resIdShow > 0) {
-            hasNavigationBar = resources.getBoolean(resIdShow);//是否显示底部navigationBar
-        }
-        if (hasNavigationBar) {
-            int resIdNavigationBar = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-            if (resIdNavigationBar > 0) {
-                int navigationBarHeight = resources.getDimensionPixelSize(resIdNavigationBar);//navigationBar高度
-                L.e("TEST", "height of navigationBar:" + navigationBarHeight);
-            }
 
-        }
+    private void test() {
 
     }
 
     private void gotoFeedback() {
-        if (isServerConnected) {
+        if (isServerConnected || true) {
             Intent intent = new Intent();
             intent.setClass(this, FeedbackActivity.class);
             startActivity(intent);
@@ -348,13 +344,15 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        ManageApplication.getInstance().removeCurrentHandler();
+        ManageApplication.getInstance().removeCurrentHandler(handler);
+        ManageApplication.getInstance().removeCurrentActivity(this);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        ManageApplication.getInstance().setCurrentActivity(this);
         ManageApplication.getInstance().setCurrentActivityHandler(handler);
     }
 
@@ -376,6 +374,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         L.i(TAG, "onDestroy()");
+        bleManage.close();
         ManageApplication.getInstance().close();
         super.onDestroy();
     }

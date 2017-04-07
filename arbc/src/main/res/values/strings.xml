@@ -139,4 +139,9 @@
     <string name="ignite_backup">备</string>
     <string name="heat_front">前</string>
     <string name="heat_back">后</string>
+    <string name="ble_scan">扫描</string>
+    <string name="ble_connected">已连接</string>
+    <string name="ble_disconnected">未连接</string>
+    <string name="ble_disconnect">断开</string>
+    <string name="ble_cancel">取消</string>
 </resources>

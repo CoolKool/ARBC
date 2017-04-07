@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import uestc.arbc.background.Interface;
+import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
 
 /**
@@ -232,5 +233,17 @@ public class FeedbackActivity extends Activity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ManageApplication.getInstance().setCurrentActivity(this);
+    }
+
+    @Override
+    protected void onPause() {
+        ManageApplication.getInstance().removeCurrentActivity(this);
+        super.onPause();
     }
 }

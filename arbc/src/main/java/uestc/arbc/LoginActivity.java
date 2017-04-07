@@ -218,4 +218,16 @@ public class LoginActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ManageApplication.getInstance().setCurrentActivity(this);
+    }
+
+    @Override
+    protected void onPause() {
+        ManageApplication.getInstance().removeCurrentActivity(this);
+        super.onPause();
+    }
+
 }

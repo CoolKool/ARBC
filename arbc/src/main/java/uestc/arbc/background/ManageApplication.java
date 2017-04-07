@@ -1,5 +1,6 @@
 package uestc.arbc.background;
 
+import android.app.Activity;
 import android.app.Application;
 import android.os.Message;
 
@@ -50,6 +51,7 @@ public class ManageApplication extends Application {
     private CloudManage cloudManage = null;//管理网络连接的类
 
     private volatile MyHandler currentActivityHandler;
+    private volatile Activity currentActivity;
 
 
 
@@ -131,12 +133,29 @@ public class ManageApplication extends Application {
     }
 
     //activity或线程退出时移出其handler
-    public void removeCurrentHandler() {
-        currentActivityHandler = null;
-        L.d(TAG, "current handler has set to null");
+    public void removeCurrentHandler(MyHandler handler) {
+        if (currentActivityHandler.equals(handler)) {
+            currentActivityHandler = null;
+            L.d(TAG, "current handler has set to null");
+        }
     }
 
 
+    public void setCurrentActivity(Activity activity) {
+        currentActivity = activity;
+        L.d(TAG, "current activity has set to: " + activity.getLocalClassName());
+    }
+
+    public void removeCurrentActivity(Activity activity) {
+        if (currentActivity.equals(activity)) {
+            currentActivity = null;
+            L.d(TAG, "current activity has set to null");
+        }
+    }
+
+    public Activity getCurrentActivity() {
+        return currentActivity;
+    }
 
     //开启更新时间线程
     private void startTimeThread() {

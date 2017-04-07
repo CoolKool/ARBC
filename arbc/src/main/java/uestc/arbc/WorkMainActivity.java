@@ -671,7 +671,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onPause() {
-        ((ManageApplication) getApplication()).removeCurrentHandler();
+        ManageApplication.getInstance().removeCurrentHandler(handler);
+        ManageApplication.getInstance().removeCurrentActivity(this);
         deviceState.stopLoop();
         super.onPause();
     }
@@ -679,6 +680,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        ManageApplication.getInstance().setCurrentActivity(this);
         ManageApplication.getInstance().setCurrentActivityHandler(handler);
         deviceState.startLoop();
     }
