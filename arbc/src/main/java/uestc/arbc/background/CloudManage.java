@@ -43,7 +43,7 @@ public class CloudManage {
     private final static int BROADCAST_PORT = 61688;
 
     private final static int LOCAL_SERVER_PORT = 6681;
-    private final static int TIME_OUT = 1000;
+    private final static int TIME_OUT = 2000;
 
     //整个CloudManage继续运行的标志
     private volatile boolean cloudManageKeepRunning = true;
@@ -72,26 +72,21 @@ public class CloudManage {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    int connectDelay = 0;
+
                     int disconnectDelay = 0;
 
                     L.i(TAG, "connectionStateWatcher is running");
                     while (cloudManageKeepRunning && isRunning) {
 
                         if (isServerConnected) {
-                            connectDelay++;
                             disconnectDelay = 0;
                             isServerConnected = false;
-                            if (connectDelay > 3) {
-                                connectDelay = 0;
-                                Message connected = new Message();
-                                connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
-                                ManageApplication.getInstance().sendMessage(connected);
-                            }
+                            Message connected = new Message();
+                            connected.what = ManageApplication.MESSAGE_SERVER_CONNECTED;
+                            ManageApplication.getInstance().sendMessage(connected);
                         } else {
-                            connectDelay = 0;
                             disconnectDelay++;
-                            if (disconnectDelay > 10) {
+                            if (disconnectDelay > 20) {
                                 Message disconnected = new Message();
                                 disconnected.what = ManageApplication.MESSAGE_SERVER_DISCONNECTED;
                                 ManageApplication.getInstance().sendMessage(disconnected);
@@ -136,7 +131,7 @@ public class CloudManage {
                         // 广播处理
                         if (strings.length == 4 && strings[0].equals("AiRuiYun")) {
                             //获取服务器ip地址
-                            SERVER_IP_ADDRESS = udpPacket.getAddress().toString().substring(1);
+                            SERVER_IP_ADDRESS = strings[3];
                             //int storeID = Integer.parseInt(strings[1]);
                             //Log.i(TAG, "cloud ip is:" + SERVER_IP_ADDRESS);
                             //Log.i(TAG, "cloud broadcast data is:" + string);

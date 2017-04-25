@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">艾瑞本草</string>
-    <string name="nothing">.</string>
+    <string name="nothing"> </string>
     <string name="time_initiating">time initiating…</string>
     <string name="qr_code">欢迎关注艾瑞本草</string>
     <string name="start">启动 / start</string>
@@ -28,7 +28,6 @@
     <string name="bed_info_store_name">商家名称：</string>
     <string name="bed_info_store_address">商家地址：</string>
     <string name="bed_info_store_tel">商家服务电话：</string>
-
     <string name="account">帐号</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
@@ -86,22 +85,6 @@
     <string name="fan_test">风扇测试</string>
     <string name="temperature_test">温度传感器测试</string>
     <string name="humidity_test">湿度传感器测试</string>
-    <string name="num1">1</string>
-    <string name="num2">2</string>
-    <string name="num3">3</string>
-    <string name="num4">4</string>
-    <string name="num5">5</string>
-    <string name="num6">6</string>
-    <string name="num7">7</string>
-    <string name="num8">8</string>
-    <string name="num9">9</string>
-    <string name="num10">10</string>
-    <string name="num11">11</string>
-    <string name="num12">12</string>
-    <string name="num13">13</string>
-    <string name="num14">14</string>
-    <string name="num15">15</string>
-    <string name="num16">16</string>
     <string name="state_good">正常</string>
     <string name="state_bad">故障</string>
     <string name="toast_quit">再按一次退出</string>
@@ -130,7 +113,7 @@
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="short_stop">停</string>
-    <string name="degree_body">体温</string>
+    <string name="degree_body">手腕温度</string>
     <string name="heart_rate">心率</string>
     <string name="fan_work_state">风机阀门状态</string>
     <string name="bed_temperature_front">床前温度</string>

@@ -25,6 +25,7 @@ public class ManageApplication extends Application {
 
     public final static String TABLE_NAME_DEVICE_INFO = "deviceInfo";//保存设备信息的表名
     public final static String TABLE_NAME_WORKER_ACCOUNT = "workerAccount";//保存工作人员账号的表名
+    public final static String TABLE_NAME_WATCH_ADDRESS = "watchAddress";//保存上次连接手环地址的表名
 
     //定义各种消息的值
     public final static int MESSAGE_TIME = 1;//更新时间UI

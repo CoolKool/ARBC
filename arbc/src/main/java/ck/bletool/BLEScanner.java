@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -80,6 +81,15 @@ public class BLEScanner {
             Log.e(BLEScanner.TAG, "startScan(): bleScanCallBack was not set yet");
         }
 
+        int tryTime = 0;
+        while (!mBluetoothAdapter.isEnabled()) {
+            if (tryTime > 5) {
+                return;
+            }
+            mBluetoothAdapter.enable();
+            SystemClock.sleep(1000);
+            tryTime++;
+        }
         if (ble.getBLEChecker().isUpperVersion()) {
             mBluetoothAdapter.getBluetoothLeScanner().startScan(mScanCallBack);
         } else {

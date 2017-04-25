@@ -13,9 +13,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +32,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,6 +97,20 @@ public class BLEManage {
                 if (0x00 == value[4]) {
                     Toast.makeText(context, "连接成功！", Toast.LENGTH_SHORT).show();
                     isDeviceConnected = true;
+                    DataSQL dataSQL = ManageApplication.getInstance().getDataSQL();
+                    if (null != dataSQL) {
+                        dataSQL.deleteTable(ManageApplication.TABLE_NAME_WATCH_ADDRESS);
+                        dataSQL.createJsonTable(ManageApplication.TABLE_NAME_WATCH_ADDRESS);
+                        BluetoothDevice bluetoothDevice = bleConnector.getBluetoothDevice();
+
+                        try {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put(ManageApplication.TABLE_NAME_WATCH_ADDRESS, bluetoothDevice.getAddress());
+                            dataSQL.pushJson(ManageApplication.TABLE_NAME_WATCH_ADDRESS, jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     cmdSetTime();
                 } else {
                     Toast.makeText(context, "登录出错：" + RESPONSE_MESSAGE[value[4]], Toast.LENGTH_SHORT).show();
@@ -155,6 +176,26 @@ public class BLEManage {
 
         this.context = context;
 
+        ble = new BLE(context);
+        if (!ble.getBLEChecker().bluetoothCheck()) {
+            return;
+        }
+        ble.getBLEScanner().setBLEScanCallBack(new BLEScanner.BLEScanCallBack() {
+            @Override
+            public void onScan(final BluetoothDevice bluetoothDevice, int rssi, byte[] scanRecord) {
+                if (!bluetoothDeviceList.contains(bluetoothDevice)) {
+                    bluetoothDeviceList.add(bluetoothDevice);
+                    ManageApplication.getInstance().getCurrentActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bluetoothDeviceAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                }
+            }
+        });
+
         broadcastReceiver = new MyBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(BLEManage.ACTION_CHARACTERISTIC_CHANGE);
@@ -201,6 +242,7 @@ public class BLEManage {
                 }
             }
         });
+        showFloatBall(true);
     }
 
     private void updateUI() {
@@ -224,7 +266,7 @@ public class BLEManage {
         }
     }
 
-    public void showFloatBall(boolean show) {
+    private void showFloatBall(boolean show) {
         if (null == viewFloatBall || null == windowManager) {
             return;
         }
@@ -331,9 +373,26 @@ public class BLEManage {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            String watchAddr = bluetoothDeviceList.get(position).getAddress();
             viewHolder.deviceName.setText(bluetoothDeviceList.get(position).getName());
-            viewHolder.deviceAddr.setText(bluetoothDeviceList.get(position).getAddress());
+            viewHolder.deviceAddr.setText(watchAddr);
+            DataSQL dataSQL = ManageApplication.getInstance().getDataSQL();
+            if (null != dataSQL) {
+                if (dataSQL.isTableExists(ManageApplication.TABLE_NAME_WATCH_ADDRESS)) {
+                    if (!dataSQL.isTableEmpty(ManageApplication.TABLE_NAME_WATCH_ADDRESS)) {
+                        try {
+                            String lastWatchAddress = dataSQL.getJson(ManageApplication.TABLE_NAME_WATCH_ADDRESS).getString(ManageApplication.TABLE_NAME_WATCH_ADDRESS);
+                            if (watchAddr.equals(lastWatchAddress)) {
+                                SpannableString spannableString = new SpannableString("(上次连接)");
+                                spannableString.setSpan(new ForegroundColorSpan(Color.GREEN), 0, "(上次连接)".length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                viewHolder.deviceAddr.append(spannableString);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -359,9 +418,9 @@ public class BLEManage {
             super.onConnectionStateChange(gatt, status, newState);
 
             L.i("Gatt", "onConnectionStateChange()");
-            if (status == BluetoothGatt.GATT_SUCCESS) {
+            if (status == BLEConnector.STATUS_SUCCESS) {
                 failedTime = 0;
-                if (newState == BluetoothGatt.STATE_CONNECTED) {
+                if (newState == BLEConnector.STATE_CONNECTED) {
                     L.i("Gatt", "connected:" + gatt.getDevice().getName() + " " + gatt.getDevice().getAddress());
                     L.i("Gatt", "discovering services");
                     bleConnector.setBluetoothGatt(gatt);
@@ -412,6 +471,16 @@ public class BLEManage {
             super.onServicesDiscovered(gatt, status);
             if (BLEConnector.STATUS_SUCCESS == status) {
                 L.i("Gatt", "onServicesDiscovered() succeed");
+                if (gatt.getService(SERVICE_UUID) == null) {
+                    ManageApplication.getInstance().getCurrentActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "该蓝牙设备不是配套设备！", Toast.LENGTH_SHORT).show();
+                            disconnectDevice();
+                        }
+                    });
+                    return;
+                }
                 if (bleConnector.enableNotify(SERVICE_UUID, CHARACTERISTIC_UUID, DESCRIPTOR_UUID)) {
                     L.i("Gatt", "enableNotify() succeed");
                 } else {
@@ -512,22 +581,26 @@ public class BLEManage {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        disconnectDevice();
+        try {
+            disconnectDevice();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (null != broadcastReceiver) {
             context.unregisterReceiver(broadcastReceiver);
         }
         try {
-            alertDialogDeviceList.cancel();
+            cancelDeviceList();
         } catch (Exception e) {
             L.i(TAG, "alertDialogDeviceList cancel error");
         }
         try {
-            windowManager.removeView(viewBLEMenu);
+            cancelBLEMenu();
         } catch (Exception e) {
             L.i(TAG, "viewBLEMenu remove error");
         }
         try {
-            windowManager.removeView(viewFloatBall);
+            showFloatBall(false);
         } catch (Exception e) {
             L.i(TAG, "viewFloatBall remove error");
         }

@@ -21,7 +21,11 @@ public class TimeThread extends Thread {
         L.i(TAG, "initialed");
     }
 
-    public static String getTime(@Nullable Long currentTime) {
+    public static long getTimeInMillis() {
+        return System.currentTimeMillis();
+    }
+
+    public static String getStringTime(@Nullable Long currentTime) {
         Calendar calendar = Calendar.getInstance();
         if (null != currentTime) {
             calendar.setTimeInMillis(currentTime);
@@ -61,7 +65,7 @@ public class TimeThread extends Thread {
 
         while (keepRunning) {
             Message message = new Message();
-            message.obj = getTime(null);
+            message.obj = getStringTime(null);
             message.what = ManageApplication.MESSAGE_TIME;
 
             ManageApplication.getInstance().sendMessage(message);

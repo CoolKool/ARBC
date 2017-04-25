@@ -560,7 +560,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             listCheckoutInfo.clear();
             listCheckoutInfo.add(new CheckoutInfo("客户信息", checkoutInfo.CustomerInfo));
             listCheckoutInfo.add(new CheckoutInfo("保健床名", checkoutInfo.bedName));
-            listCheckoutInfo.add(new CheckoutInfo("开始时间", TimeThread.getTime(checkoutInfo.startTime * 1000)));
+            listCheckoutInfo.add(new CheckoutInfo("开始时间", TimeThread.getStringTime(checkoutInfo.startTime * 1000)));
             listCheckoutInfo.add(new CheckoutInfo("工作时间", checkoutInfo.workTime / 60 + getString(R.string.quantifier_minutes) + checkoutInfo.workTime % 60 + getString(R.string.quantifier_seconds)));
             listCheckoutInfo.add(new CheckoutInfo("艾绒类型", checkoutInfo.rawType));
             listCheckoutInfo.add(new CheckoutInfo("艾绒价格", String.valueOf(checkoutInfo.rawPrice)));

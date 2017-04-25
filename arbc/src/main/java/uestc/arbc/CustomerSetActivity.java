@@ -110,10 +110,6 @@ public class CustomerSetActivity extends Activity {
             return;
         }
 
-        if (editTextCustomerPhone.toString().length() != 11) {
-            Toast.makeText(this, "请输入11位手机号", Toast.LENGTH_SHORT).show();
-            return;
-        }
         new CustomerSetAsyncTask().execute();
     }
 

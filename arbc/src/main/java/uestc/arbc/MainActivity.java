@@ -33,6 +33,7 @@ import uestc.arbc.background.Interface;
 import uestc.arbc.background.L;
 import uestc.arbc.background.ManageApplication;
 import uestc.arbc.background.MyHandler;
+import uestc.arbc.background.TimeThread;
 
 
 public class MainActivity extends Activity {
@@ -57,8 +58,13 @@ public class MainActivity extends Activity {
 
     private boolean isServerConnected = false;
     private boolean isDeviceConnected = false;
+
+
+    private boolean isDeviceSigned;
+    private boolean isSigning = false;
     private MyHandler handler = new MyHandler(TAG) {
 
+        private long lastGetTime = 0;
 
         @Override
         public void handleMessage(Message msg) {
@@ -74,15 +80,19 @@ public class MainActivity extends Activity {
                     }
 
                     //如果DeviceId不存在则需要登录
-                    if (null != dataSQL) {
-                        if (!dataSQL.isTableExists(ManageApplication.TABLE_NAME_DEVICE_INFO)) {
+                    if (!isDeviceSigned) {
+                        if (!isSigning) {
                             Intent intent = new Intent();
                             L.i(TAG, "deviceInfo is not exist");
                             intent.setClass(MainActivity.this, LoginActivity.class);
                             intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_DEVICE_SIGN);
+                            isSigning = true;
                             startActivityForResult(intent, ManageApplication.REQUEST_CODE_DEVICE_SIGN);
-                        } else {
+                        }
+                    } else {
+                        if (TimeThread.getTimeInMillis() - lastGetTime > 2000) {
                             getMainInfo();
+                            lastGetTime = TimeThread.getTimeInMillis();
                         }
                     }
                     break;
@@ -326,7 +336,7 @@ public class MainActivity extends Activity {
 
         bleManage = new BLEManage();
         bleManage.init(getApplicationContext());
-        bleManage.showFloatBall(true);
+        isDeviceSigned = dataSQL.isTableExists(ManageApplication.TABLE_NAME_DEVICE_INFO);
     }
 
 
@@ -418,13 +428,17 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case ManageApplication.RESULT_CODE_FAILED:
-                finish();
+        switch (requestCode) {
+            case ManageApplication.REQUEST_CODE_DEVICE_SIGN:
+                if (resultCode == ManageApplication.RESULT_CODE_FAILED) {
+                    finish();
+                } else {
+                    isDeviceSigned = true;
+                }
+                isSigning = false;
+
                 break;
-            case ManageApplication.RESULT_CODE_SUCCEED:
-                //nothing need to do
-                break;
+
             default:
                 break;
         }

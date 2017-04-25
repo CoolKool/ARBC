@@ -35,6 +35,14 @@ public class BLEConnector {
         this.bluetoothDevice = bluetoothDevice;
     }
 
+    public BluetoothDevice getBluetoothDevice() {
+        return bluetoothDevice;
+    }
+
+    public BluetoothGatt getBluetoothGatt() {
+        return bluetoothGatt;
+    }
+
     public void setBluetoothGatt(BluetoothGatt bluetoothGatt) {
         this.bluetoothGatt = bluetoothGatt;
     }
