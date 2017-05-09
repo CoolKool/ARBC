@@ -122,9 +122,11 @@ public class BLEManage {
                 }
             } else if (CMD_HEART_BACK == cmd) {
                 L.i(TAG, "心率返回：" + value[4]);
+                Interface.sendHealthData(0, (int) value[4], 0, 0);
             } else if (CMD_TEMP_BACK == cmd) {
                 float temp = (value[5] * 0xFF + value[4]) / 10.0F;
                 L.i(TAG, "体温返回：" + temp + "====Raw:" + BLE.bytesToHexString(value));
+                Interface.sendHealthData(temp, 0, 0, 0);
             } else {
                 L.i(TAG, BLE.bytesToHexString(value));
             }

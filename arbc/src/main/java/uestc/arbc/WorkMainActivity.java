@@ -267,6 +267,14 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
             textViewMainBoxPosition.setText(String.valueOf(monitorInfo.posMainMotor));
 
+            if (monitorInfo.bodyTemperature != 0) {
+                textViewDegreeBody.setText(String.valueOf(monitorInfo.bodyTemperature));
+            }
+
+            if (monitorInfo.heartRate != 0) {
+                textViewDegreeBody.setText(String.valueOf(monitorInfo.heartRate));
+            }
+
             Boolean ignite3;
             if (0 == monitorInfo.stateIgniteBL) {
                 imageViewIgniteBoardWorkStateBL.setImageResource(R.drawable.pic_view_lightoff);

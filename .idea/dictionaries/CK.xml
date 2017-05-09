@@ -4,11 +4,14 @@
       <w>addr</w>
       <w>airui</w>
       <w>arbc</w>
+      <w>bedlist</w>
       <w>customerset</w>
       <w>dhcp</w>
       <w>inet</w>
       <w>mainmotor</w>
+      <w>settime</w>
       <w>sqlite</w>
+      <w>sulogin</w>
       <w>weixin</w>
     </words>
   </dictionary>

@@ -351,6 +351,29 @@ public class Interface {
         return upload(jsonObject);
     }
 
+    //提交手环监控数据
+    public static JSONObject sendHealthData(float bodyTemperature, int heartRate, int bloodPressure, int stepCount) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+
+        try {
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "HEALTH_Monitor");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+            data.put("bodyTemperature", bodyTemperature);
+            data.put("heartRate", heartRate);
+            data.put("bloodPressure", bloodPressure);
+            data.put("walkStep", stepCount);
+
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
     public static int getErrorCode(@NonNull JSONObject jsonObject) throws JSONException {
         return jsonObject.getInt("errorCode");
     }
@@ -521,8 +544,9 @@ public class Interface {
 
     public static class MonitorInfo {
         public boolean isWork;
-        public int degreeBack, degreeFore, posMainMotor, stateIgniteFL, stateIgniteFR, stateIgniteBL, stateIgniteBR, stateHeatFL, stateHeatFR, stateHeatBL, stateHeatBR, stateWind, stateMainMotor, customerAge;
+        public int degreeBack, degreeFore, heartRate, posMainMotor, stateIgniteFL, stateIgniteFR, stateIgniteBL, stateIgniteBR, stateHeatFL, stateHeatFR, stateHeatBL, stateHeatBR, stateWind, stateMainMotor, customerAge;
         public long startTime, currentTime;
+        public float bodyTemperature;
         public String customerName, customerSex;
 
         public MonitorInfo(@NonNull JSONObject jsonData) throws JSONException {
@@ -554,6 +578,9 @@ public class Interface {
             this.customerName = jsonData.getString("userName");
             this.customerSex = jsonData.getString("userSex");
             this.customerAge = jsonData.getInt("userAge");
+
+            this.bodyTemperature = (float) jsonData.getDouble("degreeBody");
+            this.heartRate = jsonData.getInt("numHeart");
         }
     }
 
