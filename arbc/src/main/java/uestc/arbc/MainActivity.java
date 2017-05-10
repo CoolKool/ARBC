@@ -407,7 +407,7 @@ public class MainActivity extends Activity {
                     Toast.makeText(this, "数据错误", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (Interface.getState(jsonData) == 0) {
+                if (Interface.getState(jsonData) == 0 || true) {
                     intent.setClass(this, LoginActivity.class);
                     intent.putExtra("RequestCode", ManageApplication.REQUEST_CODE_WORKER_LOGIN);
                 } else if (Interface.getState(jsonData) == 1) {

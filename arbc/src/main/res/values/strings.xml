@@ -127,4 +127,11 @@
     <string name="ble_disconnected">未连接</string>
     <string name="ble_disconnect">断开</string>
     <string name="ble_cancel">取消</string>
+    <string name="customer_add">添加客户</string>
+    <string name="customer_set_search">搜索：</string>
+    <string name="search">搜索</string>
+    <string name="customer_set_ill">病情描述</string>
+    <string name="customer_set_raw_num">通体悬灸添加艾绒</string>
+    <string name="quantifier_block">块</string>
+
 </resources>

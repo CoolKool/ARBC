@@ -39,17 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BeforeWorkActivity"
-            android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
-
-        </activity>
-        <activity
-            android:name=".CustomerSetActivity"
-            android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
-
-        </activity>
         <activity android:name=".FeedbackActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
@@ -60,6 +49,12 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
 
         </activity>
+
+        <activity
+            android:name=".CustomerSetActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+
         <activity android:name=".TestActivity"
             android:screenOrientation="landscape">
 

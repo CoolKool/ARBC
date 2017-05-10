@@ -3,6 +3,7 @@ package uestc.arbc;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -142,12 +143,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     break;
 
                 case ManageApplication.MESSAGE_WORK_ERROR:
-                    try {
-                        Toast.makeText(WorkMainActivity.this, Interface.getMessage((JSONObject) msg.obj), Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(WorkMainActivity.this, "error！", Toast.LENGTH_LONG).show();
-                    }
+
+                    Toast.makeText(WorkMainActivity.this, Interface.getMessage((JSONObject) msg.obj), Toast.LENGTH_LONG).show();
                     finish();
                     break;
 
@@ -225,6 +222,14 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
         textViewBedID = (TextView) findViewById(R.id.textViewBedID);
         textViewBedID.setText("床号：" + String.valueOf(ManageApplication.getInstance().bedID));
         textViewCustomerInfo = (TextView) findViewById(R.id.textViewCustomerInfo);
+        textViewCustomerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(WorkMainActivity.this, CustomerSetActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         textViewMainBoxPosition = (TextView) findViewById(R.id.textViewMainBoxPosition);
@@ -272,7 +277,7 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             }
 
             if (monitorInfo.heartRate != 0) {
-                textViewDegreeBody.setText(String.valueOf(monitorInfo.heartRate));
+                textViewHeartRate.setText(String.valueOf(monitorInfo.heartRate));
             }
 
             Boolean ignite3;
@@ -402,9 +407,11 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                 }
             }
 
-            long time = monitorInfo.currentTime - monitorInfo.startTime;
-            textViewWorkTimeMin.setText(String.valueOf(time / 60));
-            textViewWorkTimeSec.setText(String.valueOf(time % 60));
+            if (monitorInfo.startTime != 0) {
+                long time = monitorInfo.currentTime - monitorInfo.startTime;
+                textViewWorkTimeMin.setText(String.valueOf(time / 60));
+                textViewWorkTimeSec.setText(String.valueOf(time % 60));
+            }
 
             if (0 == monitorInfo.stateWind) {
                 imageButtonFanOn.setImageResource(R.drawable.pic_button_fan_off);
@@ -460,12 +467,8 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
             case R.id.buttonPause:
                 jsonObject = Interface.devicePause();
                 if (null != jsonObject) {
-                    try {
-                        if (Interface.isError(jsonObject)) {
-                            Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (Interface.isError(jsonObject)) {
+                        Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -492,24 +495,18 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
 
             case R.id.imageButtonIgniteMain:
                 jsonObject = Interface.bedControlIgniteMainOn();
-                try {
-                    if (Interface.isError(jsonObject)) {
-                        Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (Interface.isError(jsonObject)) {
+                    Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
+
                 break;
 
             case R.id.imageButtonIgniteBackup:
                 jsonObject = Interface.bedControlIgniteBackupOn();
-                try {
-                    if (Interface.isError(jsonObject)) {
-                        Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (Interface.isError(jsonObject)) {
+                    Toast.makeText(this, Interface.getMessage(jsonObject), Toast.LENGTH_SHORT).show();
                 }
+
                 break;
 
             case R.id.imageButtonIgniteStop:
@@ -601,16 +598,14 @@ public class WorkMainActivity extends Activity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                if (Interface.isError(jsonObjectSubmit)) {
-                                    Toast.makeText(WorkMainActivity.this, Interface.getMessage(jsonObjectSubmit), Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-                                Toast.makeText(WorkMainActivity.this, "结帐成功!", Toast.LENGTH_LONG).show();
-                                finish();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                            if (Interface.isError(jsonObjectSubmit)) {
+                                Toast.makeText(WorkMainActivity.this, Interface.getMessage(jsonObjectSubmit), Toast.LENGTH_LONG).show();
+                                return;
                             }
+                            Toast.makeText(WorkMainActivity.this, "结帐成功!", Toast.LENGTH_LONG).show();
+                            finish();
+
                         }
                     });
                 }

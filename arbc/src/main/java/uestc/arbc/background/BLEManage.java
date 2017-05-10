@@ -217,13 +217,13 @@ public class BLEManage {
             }
         });
         LayoutParams layoutParams = new LayoutParams();
-        layoutParams.type = LayoutParams.TYPE_SYSTEM_ALERT;
+        layoutParams.type = LayoutParams.TYPE_PHONE;
         layoutParams.format = PixelFormat.RGBA_8888;
         layoutParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL;
         layoutParams.width = LayoutParams.WRAP_CONTENT;
         layoutParams.height = LayoutParams.WRAP_CONTENT;
         layoutParams.x = 30;
-        layoutParams.y = 150;
+        layoutParams.y = 250;
         layoutParams.gravity = Gravity.END | Gravity.TOP;
         viewFloatBall.setTag(layoutParams);
 

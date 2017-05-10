@@ -161,13 +161,8 @@ public class LoginActivity extends Activity {
                     setResult(ManageApplication.RESULT_CODE_FAILED, null);
                     break;
                 case -1:
-                    try {
-                        String msg = Interface.getMessage(jsonObjectResponse);
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "登录失败，获取的服务器数据异常", Toast.LENGTH_LONG).show();
-                    }
+                    String msg = Interface.getMessage(jsonObjectResponse);
+                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                     setResult(ManageApplication.RESULT_CODE_FAILED, null);
                     break;
                 case 0:
@@ -205,8 +200,11 @@ public class LoginActivity extends Activity {
                             e.printStackTrace();
                             finish();
                         }
+                        if (Interface.isError(Interface.workBed())) {
+                            return;
+                        }
                         Intent intent = new Intent();
-                        intent.setClass(LoginActivity.this,BeforeWorkActivity.class);
+                        intent.setClass(LoginActivity.this, WorkMainActivity.class);
                         startActivity(intent);
                         finish();
                     }

@@ -1,10 +1,16 @@
 package uestc.arbc.background;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * use to define cloud interface
@@ -64,6 +70,26 @@ public class Interface {
             data.put("bedID", ManageApplication.getInstance().bedID);
             data.put("account", account);
             data.put("code", password);
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return upload(jsonObject);
+    }
+
+    //进入工作主界面请求
+    public static JSONObject workBed() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject data = new JSONObject();
+
+        try {
+            jsonObject.put("token", "0");
+            jsonObject.put("require", "STORE_WORKBED");
+            data.put("operateType", "OPEN");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+            data.put("workerID", ManageApplication.getInstance().workerID);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -141,34 +167,90 @@ public class Interface {
         return upload(jsonObject);
     }
 
+    public static class Customer {
+        public long id;
+        public String name;
+        public String sex;
+        public int age;
+        public long phone;
+    }
+
     //获取客户信息的指令
-    public static JSONObject getCustomerInfo(long phone) {
+    public static List<Customer> getCustomerInfo(final Activity activity, String info) {
         JSONObject jsonObject = new JSONObject();
+        final JSONObject jsonResponse;
         JSONObject data = new JSONObject();
         try {
 
             jsonObject.put("token", "0");
-            jsonObject.put("require", "PAD_User_Info");
-            data.put("phone", phone);
+            jsonObject.put("require", "SEARCH");
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("operateType", "USER");
+            data.put("data", info);
             jsonObject.put("data", data);
+
+            jsonResponse = upload(jsonObject);
+            if (null == jsonResponse) {
+                return null;
+            }
+            if (isError(jsonResponse)) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, getMessage(jsonResponse), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return null;
+            }
+
+            if ((data = getData(jsonResponse)) == null) {
+                return null;
+            }
+
+            List<Customer> customers = new ArrayList<>();
+
+            int num = data.getInt("num");
+            JSONArray jsonArrayList = data.getJSONArray("dataList");
+            JSONObject jsonObjectCustomer;
+            int i;
+            for (i = 0; i < num; i++) {
+                jsonObjectCustomer = jsonArrayList.getJSONObject(i);
+                Customer customer = new Customer();
+                customer.id = jsonObjectCustomer.getLong("userID");
+                customer.name = jsonObjectCustomer.getString("name");
+                customer.sex = jsonObjectCustomer.getString("sex");
+                customer.age = jsonObjectCustomer.getInt("age");
+                customer.phone = jsonObjectCustomer.getLong("phone");
+                customers.add(customer);
+            }
+
+            return customers;
+
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
 
-        return upload(jsonObject);
+
     }
 
-    public static JSONObject setCustomerInfo(@NonNull String customerName, @NonNull String customerSex, int customerAge, long phone) {
+    public static JSONObject setCustomerInfo(long userID, @NonNull String customerName, @NonNull String customerSex, int customerAge, long phone, @Nullable String illDescription, int rawNum) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         try {
             jsonObject.put("token", 0);
-            jsonObject.put("require", "PAD_User_Set");
+            jsonObject.put("require", "WORKBED_USER");
 
+            data.put("storeID", ManageApplication.getInstance().storeID);
+            data.put("bedID", ManageApplication.getInstance().bedID);
+            data.put("userID", userID);
             data.put("userName", customerName);
             data.put("userSex", customerSex);
             data.put("userAge", customerAge);
             data.put("userPhone", phone);
+            data.put("description", null == illDescription ? "" : illDescription);
+            data.put("addNum", rawNum);
+
             jsonObject.put("data", data);
 
         } catch (JSONException e) {
@@ -378,12 +460,25 @@ public class Interface {
         return jsonObject.getInt("errorCode");
     }
 
-    public static boolean isError(@NonNull JSONObject jsonObject) throws JSONException {
-        return getErrorCode(jsonObject) != 0;
+    public static boolean isError(@NonNull JSONObject jsonObject) {
+        boolean isError;
+        try {
+            isError = getErrorCode(jsonObject) != 0;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            isError = true;
+        }
+        return isError;
     }
 
-    public static String getMessage(@NonNull JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("message");
+    public static String getMessage(@NonNull JSONObject jsonObject) {
+        String message = "";
+        try {
+            message = jsonObject.getString("message");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     public static JSONObject getData(@NonNull JSONObject jsonObject) throws JSONException {
@@ -551,7 +646,7 @@ public class Interface {
 
         public MonitorInfo(@NonNull JSONObject jsonData) throws JSONException {
 
-            this.isWork = (1 == jsonData.getInt("isWork"));
+            this.isWork = !(0 == jsonData.getInt("isWork"));
 
             this.degreeBack = jsonData.getInt("degreeBack");
 

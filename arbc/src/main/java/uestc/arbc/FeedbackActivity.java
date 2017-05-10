@@ -212,22 +212,12 @@ public class FeedbackActivity extends Activity {
                     Toast.makeText(FeedbackActivity.this, "提交失败，与服务器通信异常 T_T", Toast.LENGTH_SHORT).show();
                     break;
                 case -1:
-                    try {
-                        String msg = Interface.getMessage(jsonObjectResponse);
-                        Toast.makeText(FeedbackActivity.this, msg, Toast.LENGTH_LONG).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(FeedbackActivity.this, "提交失败，获取的服务器数据异常 T_T", Toast.LENGTH_SHORT).show();
-                    }
+                    String msg = Interface.getMessage(jsonObjectResponse);
+                    Toast.makeText(FeedbackActivity.this, msg, Toast.LENGTH_LONG).show();
                     break;
                 case 0:
-                    try {
-                        Toast.makeText(FeedbackActivity.this, Interface.getMessage(jsonObjectResponse), Toast.LENGTH_LONG).show();
-                        editTextFeedback.setText("");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    Toast.makeText(FeedbackActivity.this, Interface.getMessage(jsonObjectResponse), Toast.LENGTH_LONG).show();
+                    editTextFeedback.setText("");
                     break;
                 default:
                     break;
