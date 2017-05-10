@@ -219,7 +219,7 @@ public class BLEManage {
         LayoutParams layoutParams = new LayoutParams();
         layoutParams.type = LayoutParams.TYPE_PHONE;
         layoutParams.format = PixelFormat.RGBA_8888;
-        layoutParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        layoutParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
         layoutParams.width = LayoutParams.WRAP_CONTENT;
         layoutParams.height = LayoutParams.WRAP_CONTENT;
         layoutParams.x = 30;
